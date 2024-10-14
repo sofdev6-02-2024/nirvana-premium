@@ -1,0 +1,78 @@
+root = true
+
+[*]
+charset = utf-8
+max_line_length = 100
+trim_trailing_whitespace = true
+
+[*.cs]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+insert_final_newline = true
+
+# .NET Coding Conventions
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+
+csharp_using_directive_placement = inside_namespace
+csharp_style_namespace_declarations = file_scoped
+
+# Specific Rule Overrides
+
+# Namespace should match with the directory structure
+dotnet_diagnostic.IDE0130.severity = warning
+# New expression simplified
+dotnet_diagnostic.IDE0090.severity = warning
+# Prefer primary constructors
+dotnet_diagnostic.IDE0290.severity = warning
+# Remove unnecessary usings
+dotnet_diagnostic.IDE0005.severity = warning
+# Use explicit type instead of var
+dotnet_diagnostic.IDE0008.severity = warning
+# File Scoped Namespace
+dotnet_diagnostic.IDE0161.severity = warning
+# Using inside namespace
+dotnet_diagnostic.IDE0065.severity = warning
+# Use block body for methods
+dotnet_diagnostic.IDE0022.severity = warning
+# Remove warning about missing documentation
+dotnet_diagnostic.CS1591.severity = none
+# Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = none
+# Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = none
+# Properties should not return arrays
+dotnet_diagnostic.CA1819.severity = none
+# General or reserved exceptions should never be thrown
+dotnet_diagnostic.S112.severity = none
+# Valid empty interfaces
+dotnet_diagnostic.CA1040.severity = none
+# Make Name methods events
+dotnet_diagnostic.CA1030.severity = none
+# Consider calling ConfigureAwait on the awaited task
+dotnet_diagnostic.CA2007.severity = none
+# Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = none
+# Implement IDisposable Correctly
+dotnet_diagnostic.CA1063.severity = none
+# Convert to conditional expression
+dotnet_diagnostic.IDE0046.severity = none
+# Identifiers should not match keywords
+dotnet_diagnostic.CA1716.severity = none
+# Operator overloads have named alternates
+dotnet_diagnostic.CA2225.severity = none
+# Do not declare static members on generic types
+dotnet_diagnostic.CA1000.severity = none
+# Use the LoggerMessage delegates
+dotnet_diagnostic.CA1848.severity = none
+# Avoid uninstantiated internal classes
+dotnet_diagnostic.CA1812.severity = none
+# Type names should not match namespaces
+dotnet_diagnostic.CA1724.severity = none
+# Remove comments
+dotnet_diagnostic.S125.severity = none
+
+[**/Migrations/*]
+dotnet_diagnostic.IDE0005.severity = none
+generated_code = true
