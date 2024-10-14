@@ -1,16 +1,16 @@
 import { Job } from "@/lib/types";
 import JobListItem from "@/components/JobListItem";
-import path from "path";
-import fs from "fs/promises";
 import { Metadata } from "next";
 import Link from "next/link";
+import { getAllJobs } from "@/lib/jobUtils";
 
 export const metadata: Metadata = {
   title: "All Jobs",
 };
 
 export default async function JobsPage() {
-  const jobs = await getJobs();
+  const jobs: Job[] = await getAllJobs();
+
   return (
     <main className="max-w-5xl m-auto px-3 my-10 space-y-10">
       <div className="space-y-5 text-center">
@@ -30,15 +30,4 @@ export default async function JobsPage() {
       </section>
     </main>
   );
-}
-
-async function getJobs(): Promise<Job[]> {
-  try {
-    const jsonPath = path.join(process.cwd(), "src", "data", "jobs.json");
-    const jsonData = await fs.readFile(jsonPath, "utf8");
-    return JSON.parse(jsonData) as Job[];
-  } catch (error) {
-    console.error("Error reading jobs data:", error);
-    throw new Error("Failed to fetch jobs data");
-  }
 }

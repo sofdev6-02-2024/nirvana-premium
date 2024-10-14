@@ -15,7 +15,7 @@ export default function Markdown({ children }: MarkdownProps) {
         ),
       }}
     >
-      {children}
+    {children}
     </ReactMarkdown>
   );
 }

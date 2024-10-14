@@ -29,7 +29,7 @@ export async function createJobPosting(formData: FormData) {
     title: title.trim(),
     type,
     companyName: companyName.trim(),
-    companyLogoUrl, // Placeholder
+    companyLogoUrl,
     locationType,
     location,
     applicationEmail: applicationEmail?.trim(),
@@ -39,7 +39,7 @@ export async function createJobPosting(formData: FormData) {
   };
 
   try {
-    const response = await fetch("/api/jobs", {
+    const response = await fetch("http://localhost:5001/jobs", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
