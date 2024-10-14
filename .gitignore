@@ -1,36 +1,38 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Git ignore Configuration
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-.yarn/install-state.gz
+## Git
+.git/
 
-# testing
-/coverage
+## Editors Configurations
+.vscode/
+.idea/
+.zod/
 
-# next.js
-/.next/
-/out/
+## Build Outputs
+build/
+bin/
+obj/
+.next/
 
-# production
-/build
+## Files
+*.binlog
 
-# misc
-.DS_Store
-*.pem
+## Docker
+.containers/
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+## Enviroment Variables
+firebase.json
+.env
 
-# local env files
-.env*.local
+# Dependencies
+node_modules/
 
-# vercel
+# Testing
+coverage/
+
+# Vercel
 .vercel
 
-# typescript
+# Typescript
 *.tsbuildinfo
 next-env.d.ts
