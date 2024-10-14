@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import { getJobBySlug, getAllJobs } from "@/lib/jobUtils";
+import { Job } from "@/lib/types";
 
 interface PageProps {
   params: { slug: string };
@@ -17,9 +18,9 @@ const getJob = cache(async (slug: string) => {
   return job;
 });
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const jobs = await getAllJobs();
-  return jobs.map(({ slug }): { slug: any } => ({ slug }));
+  return jobs.map(({ slug }: Job) => ({ slug }));
 }
 
 export async function generateMetadata({

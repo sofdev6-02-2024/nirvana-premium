@@ -4,7 +4,6 @@ import { createJobSchema } from "@/lib/validation";
 import { redirect } from "next/navigation";
 import { nanoid } from "nanoid";
 import { toSlug } from "@/lib/utils";
-import path from "path";
 
 export async function createJobPosting(formData: FormData) {
   const values = Object.fromEntries(formData.entries());
