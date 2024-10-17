@@ -1,0 +1,9 @@
+{
+  "name": "users-jobs-service",
+  "scripts": {
+    "build": "docker compose down && docker compose build",
+    "dev": "docker compose up",
+    "down": "docker compose down",
+    "migrate": "rm -Rf ./src/Infrastructure/Migrations && dotnet ef migrations add Migrations --project ./src/Infrastructure/ --startup-project ./src/Users.Jobs.Service.Api/"
+  }
+}
