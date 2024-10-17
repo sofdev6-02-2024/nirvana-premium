@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { jobTypes, locationTypes } from "./job-types";
+import { roles } from "./types";
 
 const requiredString = z.string().min(1, "Required");
 const numericRequiredString = requiredString.regex(/^\d+$/, "Must be a number");
@@ -60,3 +61,38 @@ export const createJobSchema = z
   .and(locationSchema);
 
 export type CreateJobValues = z.infer<typeof createJobSchema>;
+
+
+export const LoginSchema = z.object({
+  email: z.string().email({
+    message:  "Email is required"
+  }),
+  password: z.string().min(1, {
+    message: "Password is required"
+  })
+});
+
+export type LoginValues = z.infer<typeof LoginSchema>;
+
+
+export const RegisterSchema = z.object({
+  email: z.string().email({
+    message:  "Email is required"
+  }),
+  password: z.string().min(8, {
+    message: "Minimum 8 characters required"
+  }),
+  firstName: z.string().min(1, {
+    message: "First Name is Required"
+  }),
+  lastName: z.string().min(1, {
+    message: "Last Name is Required"
+  }),
+  role: requiredString.refine(
+    (value) => roles.includes(value), "Invalid User"
+  )
+});
+
+export type RegisterValues = z.infer<typeof RegisterSchema>;
+
+
