@@ -3,22 +3,44 @@ networks:
     driver: bridge
 
 services:
-  chamba_db:
+  chamba_iam_db:
     image: postgres:16.0
-    container_name: chamba_db
+    container_name: chamba_iam_db
     restart: always
     environment:
-      POSTGRES_DB: chamba_db
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chamba_iam_db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      TZ: 'UTC-4'
+    command: -p 3030
+    ports:
+      - 3030:3030
+    volumes:
+      - chamba-iam-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -h chamba_iam_db -p 3030 -d chamba_iam_db']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - chamba_network
+
+  chamba_users_jobs_db:
+    image: postgres:16.0
+    container_name: chamba_users_jobs_db
+    restart: always
+    environment:
+      POSTGRES_DB: chamba_users_jobs_db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
       TZ: 'UTC-4'
     command: -p 4040
     ports:
       - 4040:4040
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - chamba-users-jobs-data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -h chamba_db -p 4040 -d chamba_db']
+      test: ['CMD-SHELL', 'pg_isready -h chamba_users_jobs_db -p 4040 -d chamba_users_jobs_db']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -36,16 +58,18 @@ services:
     ports:
       - 5050:5050
     volumes:
-      - pgadmin-data:/var/lib/pgadmin
+      - chamba-db-admin-data:/var/lib/pgadmin
     depends_on:
-      chamba_db:
+      chamba_iam_db:
+        condition: service_healthy
+      chamba_users_jobs_db:
         condition: service_healthy
     networks:
       - chamba_network
 
-  seq:
+  chamba_seq:
     image: datalust/seq:2024
-    container_name: seq
+    container_name: chamba_seq
     environment:
       - ACCEPT_EULA=Y
     ports:
@@ -53,6 +77,17 @@ services:
     networks:
       - chamba_network
 
+  consul:
+    image: hashicorp/consul:1.20
+    container_name: consul
+    command: consul agent -dev -log-level=warn -ui -client=0.0.0.0
+    hostname: consul
+    ports:
+      - '8500:8500'
+    networks:
+      - chamba_network
+
 volumes:
-  pgadmin-data:
-  postgres-data:
+  chamba-iam-data:
+  chamba-users-jobs-data:
+  chamba-db-admin-data:

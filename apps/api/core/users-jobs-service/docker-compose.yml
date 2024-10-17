@@ -1,0 +1,32 @@
+networks:
+  nirvana-premium_chamba_network:
+    external: true
+
+services:
+  usersjobsservice1.api:
+    image: usersjobsservice.api:latest
+    container_name: usersjobsservice1.api
+    restart: on-failure
+    hostname: usersjobsservice1.api
+    build:
+      context: ../..
+      dockerfile: core/users-jobs-service/src/Users.Jobs.Service.Api/Dockerfile
+    volumes:
+      - ../../../../.env:/app/.env:ro
+      - ../../../../firebase.json:/app/firebase.json:ro
+    networks:
+      - nirvana-premium_chamba_network
+
+  usersjobsservice2.api:
+    image: usersjobsservice.api:latest
+    container_name: usersjobsservice2.api
+    restart: on-failure
+    hostname: usersjobsservice2.api
+    build:
+      context: ../..
+      dockerfile: core/users-jobs-service/src/Users.Jobs.Service.Api/Dockerfile
+    volumes:
+      - ../../../../.env:/app/.env:ro
+      - ../../../../firebase.json:/app/firebase.json:ro
+    networks:
+      - nirvana-premium_chamba_network

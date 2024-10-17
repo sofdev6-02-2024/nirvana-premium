@@ -1,7 +1,0 @@
-services:
-  web-api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Staging
-      - ASPNETCORE_HTTP_PORTS=5001
-    ports:
-      - '5001:5001'

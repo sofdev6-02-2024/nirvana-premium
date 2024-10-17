@@ -1,0 +1,79 @@
+{
+  "Routes": [
+    {
+      "Servicename": "IamService",
+      "SwaggerKey": "IamService",
+
+      "DownstreamPathTemplate": "/api/auth/{everything}",
+      "UpstreamPathTemplate": "/api/auth/{everything}",
+
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+    },
+    {
+      "ServiceName": "UsersJobsService",
+      "SwaggerKey": "UsersJobsService",
+
+      "DownstreamPathTemplate": "/{everything}",
+      "UpstreamPathTemplate": "/{everything}",
+
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+    }
+  ],
+
+  "SwaggerEndPoints": [
+    {
+      "Key": "IamService",
+
+      "Config": [
+        {
+          "Name": "IAM Service API",
+          "Version": "v1",
+          "Service": {
+            "Name": "IamService",
+            "Path": "/swagger/v1/swagger.json"
+          }
+        }
+      ]
+    },
+
+    {
+      "Key": "UsersJobsService",
+
+      "Config": [
+        {
+          "Name": "Users Jobs Service API",
+          "Version": "v1",
+          "Service": {
+            "Name": "UsersJobsService",
+            "Path": "/swagger/v1/swagger.json"
+          }
+        }
+      ]
+    }
+  ],
+
+  "GlobalConfiguration": {
+    "RequestIdKey": "OcelotRequestId",
+    "DownstreamScheme": "http",
+
+    "UseServiceDiscovery": true,
+    "RouteIsCaseSensitive": false,
+
+    "LoadBalancerOptions": {
+      "Type": "LeastConnection"
+    },
+
+    "QoSOptions": {
+      "ExceptionsAllowedBeforeBreaking": 3,
+      "DurationOfBreak": 5000,
+      "TimeoutValue": 2000
+    },
+
+    "ServiceDiscoveryProvider": {
+      "Host": "consul",
+      "Port": 8500,
+      "Type": "PollConsul",
+      "PollingInterval": 100
+    }
+  }
+}

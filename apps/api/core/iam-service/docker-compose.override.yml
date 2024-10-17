@@ -1,0 +1,24 @@
+services:
+  iamservice1.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+      - ApplyMigrations=true
+      - ServiceConfig__Id=IamService.Api-9100
+      - ServiceConfig__Name=IamService
+      - ServiceConfig__ApiHost=iamservice1.api
+      - ServiceConfig__Port=8080
+      - ServiceConfig__ConsulUrl=http://consul:8500
+    ports:
+      - 9100:8080
+
+  iamservice2.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+      - ApplyMigrations=false
+      - ServiceConfig__Id=IamService.Api-9200
+      - ServiceConfig__Name=IamService
+      - ServiceConfig__ApiHost=iamservice2.api
+      - ServiceConfig__Port=8080
+      - ServiceConfig__ConsulUrl=http://consul:8500
+    ports:
+      - 9200:8080

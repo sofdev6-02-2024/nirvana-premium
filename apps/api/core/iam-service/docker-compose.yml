@@ -1,0 +1,32 @@
+networks:
+  nirvana-premium_chamba_network:
+    external: true
+
+services:
+  iamservice1.api:
+    image: iamservice.api:latest
+    container_name: iamservice1.api
+    restart: on-failure
+    hostname: iamservice1.api
+    build:
+      context: ../..
+      dockerfile: core/iam-service/src/Iam.Service.Api/Dockerfile
+    volumes:
+      - ../../../../.env:/app/.env:ro
+      - ../../../../firebase.json:/app/firebase.json:ro
+    networks:
+      - nirvana-premium_chamba_network
+
+  iamservice2.api:
+    image: iamservice.api:latest
+    container_name: iamservice2.api
+    restart: on-failure
+    hostname: iamservice2.api
+    build:
+      context: ../..
+      dockerfile: core/iam-service/src/Iam.Service.Api/Dockerfile
+    volumes:
+      - ../../../../.env:/app/.env:ro
+      - ../../../../firebase.json:/app/firebase.json:ro
+    networks:
+      - nirvana-premium_chamba_network

@@ -1,0 +1,24 @@
+services:
+  usersjobsservice1.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+      - ApplyMigrations=true
+      - ServiceConfig__Id=UsersJobsService.Api-9300
+      - ServiceConfig__Name=UsersJobsService
+      - ServiceConfig__ApiHost=usersjobsservice1.api
+      - ServiceConfig__Port=8080
+      - ServiceConfig__ConsulUrl=http://consul:8500
+    ports:
+      - '9300:8080'
+
+  usersjobsservice2.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+      - ApplyMigrations=false
+      - ServiceConfig__Id=UsersJobsService.Api-9400
+      - ServiceConfig__Name=UsersJobsService
+      - ServiceConfig__ApiHost=usersjobsservice2.api
+      - ServiceConfig__Port=8080
+      - ServiceConfig__ConsulUrl=http://consul:8500
+    ports:
+      - '9400:8080'

@@ -1,9 +1,0 @@
-{
-  "name": "api",
-  "scripts": {
-    "build": "dotnet build",
-    "dev:watch": "dotnet watch run --project ./src/Web.Api/Web.Api.csproj",
-    "dev": "docker compose down && docker compose build && docker compose up",
-    "migrate": "rm -Rf ./src/Infrastructure/Migrations && dotnet ef migrations add Migrations --project ./src/Infrastructure/ --startup-project ./src/Web.Api/"
-  }
-}
