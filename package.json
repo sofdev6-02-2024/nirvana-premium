@@ -7,7 +7,7 @@
     "build": "pnpm --parallel build",
     "dev": "docker compose down && docker compose up -d && pnpm --parallel dev",
     "down": "pnpm -F=api-gateway -F=iam-service -F=users-jobs-service down",
-    "migrate": "docker compose down && docker volume rm --force nirvana-premium_chamba-users-jobs-data && docker volume rm --force nirvana-premium_chamba-iam-data && docker compose up -d && pnpm -F=users-jobs-service migrate && pnpm -F=iam-service migrate"
+    "reset:db": "docker compose down && pnpm -F=users-jobs-service -F=iam-service reset:db && docker compose up -d"
   },
   "keywords": [
     "api",
