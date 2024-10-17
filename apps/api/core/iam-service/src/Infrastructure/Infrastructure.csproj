@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Application/Application.csproj"></ProjectReference>
+    <ProjectReference Include="../../../../libs/SharedKernel/src/SkInfrastructure/SkInfrastructure.csproj"></ProjectReference>
+  </ItemGroup>
+</Project>
