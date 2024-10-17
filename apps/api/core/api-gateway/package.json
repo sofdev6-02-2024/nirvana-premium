@@ -1,0 +1,8 @@
+{
+  "name": "api-gateway",
+  "scripts": {
+    "build": "docker compose down && docker compose build",
+    "dev": "docker compose up",
+    "down": "docker compose down"
+  }
+}

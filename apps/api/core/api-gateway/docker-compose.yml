@@ -1,0 +1,15 @@
+networks:
+  nirvana-premium_chamba_network:
+    external: true
+
+services:
+  api.gateway:
+    image: api.gateway:latest
+    container_name: api.gateway
+    restart: on-failure
+    hostname: api.gateway
+    build:
+      context: ../..
+      dockerfile: core/api-gateway/src/Api.Gateway/Dockerfile
+    networks:
+      - nirvana-premium_chamba_network
