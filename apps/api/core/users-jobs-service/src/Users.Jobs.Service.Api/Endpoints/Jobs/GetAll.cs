@@ -11,12 +11,17 @@ internal sealed class GetAll : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         _ = app.MapGet(
-                "jobs",
-                static async (ISender sender, CancellationToken cancellationToken) =>
+                "api/users-jobs/jobs",
+                static async (
+                    int page,
+                    int pageSize,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) =>
                 {
-                    GetJobsQuery query = new();
+                    GetJobsQuery query = new(page, pageSize);
 
-                    Result<IList<Response>> result = await sender.Send(query, cancellationToken);
+                    Result<Response> result = await sender.Send(query, cancellationToken);
 
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }

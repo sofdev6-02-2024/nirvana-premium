@@ -13,8 +13,8 @@
       "ServiceName": "UsersJobsService",
       "SwaggerKey": "UsersJobsService",
 
-      "DownstreamPathTemplate": "/{everything}",
-      "UpstreamPathTemplate": "/{everything}",
+      "DownstreamPathTemplate": "/api/users-jobs/{everything}",
+      "UpstreamPathTemplate": "/api/users-jobs/{everything}",
 
       "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
     }

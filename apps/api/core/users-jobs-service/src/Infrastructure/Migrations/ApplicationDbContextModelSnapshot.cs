@@ -96,47 +96,6 @@ namespace Infrastructure.Migrations
 
                     b.ToTable("jobs", "public");
                 });
-
-            modelBuilder.Entity("Domain.Users.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("first_name");
-
-                    b.Property<string>("IdentityId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("identity_id");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("last_name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_users");
-
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasDatabaseName("ix_users_email");
-
-                    b.HasIndex("IdentityId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_users_identity_id");
-
-                    b.ToTable("users", "public");
-                });
 #pragma warning restore 612, 618
         }
     }

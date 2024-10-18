@@ -16,7 +16,6 @@ public static class DependencyInjection
         return services
             .AddDatabase<IApplicationDbContext, ApplicationDbContext>(configuration)
             .AddHealthChecksInternal(configuration)
-            .AddFirebase(configuration)
             .AddAuthenticationInternal()
             .AddAuthorizationInternal();
     }
