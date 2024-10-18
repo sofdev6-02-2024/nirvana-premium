@@ -22,8 +22,9 @@ export const login = async (values: LoginValues) => {
             const errorData = await response.json(); 
             return { error: errorData.detail || "Login failed" }; 
         }
-
-        return { success: "Logged in successfully" };
+        const responseData = await response.json()
+        console.log(responseData.token);
+        return { success: "Login successfully" };
 
     } catch (error) {
         return { error: "Login failed. Please try again." };
