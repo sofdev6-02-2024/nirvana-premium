@@ -1,0 +1,6 @@
+@ProofOfConceptAI_HostAddress = http://localhost:5120
+
+GET {{ProofOfConceptAI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

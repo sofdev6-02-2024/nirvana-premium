@@ -1,0 +1,17 @@
+description: "Our First Prompt Test"
+
+prompts:
+  - "Answer the following question: {{question}}"
+  - "Answer the following question. I'll tip you $20 for a correct answer: {{question}}"
+  - "Answer the following question. I'll tip you $200 for a correct answer: {{question}}"
+  - "Answer the following question: I won't tip you no matter what {{question}}"
+
+providers:
+  - id: openai:chat:gpt-4o-mini
+    config:
+      apiKey: 
+      apiBaseUrl: https://models.inference.ai.azure.com
+
+tests:
+  - vars:
+      question: "What is true for a type-Ia ('type one-a') supernova? (A) this type occurs in binary systems. (B) this type occurs in young galaxies. (C) this type produces gamma-ray bursts. (D) this type produces high amounts of x-rays."
