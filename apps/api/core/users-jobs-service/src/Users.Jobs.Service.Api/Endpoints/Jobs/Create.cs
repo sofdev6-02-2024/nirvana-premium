@@ -26,7 +26,7 @@ internal sealed class Create : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         _ = app.MapPost(
-                "jobs",
+                "api/users-jobs/jobs",
                 static async (
                     Request request,
                     ISender sender,
@@ -54,6 +54,7 @@ internal sealed class Create : IEndpoint
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }
             )
-            .WithTags(Tags.Jobs);
+            .WithTags(Tags.Jobs)
+            .RequireAuthorization();
     }
 }

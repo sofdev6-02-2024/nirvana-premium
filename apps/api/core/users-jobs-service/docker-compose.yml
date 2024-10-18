@@ -13,7 +13,6 @@ services:
       dockerfile: core/users-jobs-service/src/Users.Jobs.Service.Api/Dockerfile
     volumes:
       - ../../../../.env:/app/.env:ro
-      - ../../../../firebase.json:/app/firebase.json:ro
     networks:
       - nirvana-premium_chamba_network
 
@@ -27,6 +26,5 @@ services:
       dockerfile: core/users-jobs-service/src/Users.Jobs.Service.Api/Dockerfile
     volumes:
       - ../../../../.env:/app/.env:ro
-      - ../../../../firebase.json:/app/firebase.json:ro
     networks:
       - nirvana-premium_chamba_network

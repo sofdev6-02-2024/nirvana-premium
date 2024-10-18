@@ -2,7 +2,7 @@ namespace Application.Jobs.GetBySlug;
 
 using Domain.Jobs;
 
-public sealed record Response(Job Job)
+public sealed class Response(Job Job)
 {
     public Guid Id { get; } = Job.Id;
     public string Slug { get; } = Job.Slug;

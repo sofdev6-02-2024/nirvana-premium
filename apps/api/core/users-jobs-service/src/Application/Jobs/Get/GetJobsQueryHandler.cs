@@ -7,22 +7,33 @@ using SkApplication.Contracts;
 using SkDomain.Results;
 
 internal sealed class GetJobsQueryHandler(IApplicationDbContext context)
-    : IQueryHandler<GetJobsQuery, IList<Response>>
+    : IQueryHandler<GetJobsQuery, Response>
 {
-    public async Task<Result<IList<Response>>> Handle(
+    public async Task<Result<Response>> Handle(
         GetJobsQuery query,
         CancellationToken cancellationToken
     )
     {
-        IEnumerable<Job> domainJobs = await context.Jobs.ToListAsync(cancellationToken);
+        IQueryable<Job> domainJobs = context.Jobs;
 
-        List<Response> jobs = domainJobs.Select(j => new Response(j)).ToList();
-
-        if (jobs.Count == 0)
+        if (!await domainJobs.AnyAsync(cancellationToken))
         {
-            return Result.Failure<IList<Response>>(JobErrors.NotJobsFound);
+            return Result.Failure<Response>(JobErrors.NotJobsFound);
         }
 
-        return jobs;
+        int totalCount = await domainJobs.CountAsync(cancellationToken);
+
+        IQueryable<JobResponse> jobs = domainJobs
+            .Skip((query.Page - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .Select(j => new JobResponse(j));
+
+        return new Response()
+        {
+            Jobs = await jobs.ToListAsync(cancellationToken),
+            Page = query.Page,
+            PageSize = query.PageSize,
+            TotalCount = totalCount,
+        };
     }
 }
