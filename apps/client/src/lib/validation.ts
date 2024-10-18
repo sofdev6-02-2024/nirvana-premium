@@ -82,6 +82,9 @@ export const RegisterSchema = z.object({
   password: z.string().min(8, {
     message: "Minimum 8 characters required"
   }),
+  confirmPassword: z.string().min(8, {
+    message: "Confirm password must be at least 8 characters long",
+  }),
   firstName: z.string().min(1, {
     message: "First Name is Required"
   }),
@@ -89,9 +92,13 @@ export const RegisterSchema = z.object({
     message: "Last Name is Required"
   }),
   role: requiredString.refine(
-    (value) => roles.includes(value), "Invalid User"
-  )
-});
+    (value) => roles.includes(value), "Invalid role"
+  ),
+})
+.refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"], 
+});;
 
 export type RegisterValues = z.infer<typeof RegisterSchema>;
 

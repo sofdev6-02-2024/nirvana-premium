@@ -23,7 +23,7 @@ import { roles } from "@/lib/types"
 
 export const RegisterForm = () => {
     const [error, setError] = useState<string | undefined>("")
-    const [success, setSucess] = useState<string | undefined>("")
+    const [success, setSuccess] = useState<string | undefined>("")
 
     const [isPending, startTransition] = useTransition();
     const form = useForm<RegisterValues>({
@@ -33,30 +33,25 @@ export const RegisterForm = () => {
             password: "",
             firstName: "",
             lastName: "",
-            role: ""
+            role: "",
+            confirmPassword:"",
 
         }
     });
 
-
     async function onSubmit(values: RegisterValues) {
         setError("");
-        setSucess("");
-        const formData = new FormData();
-        Object.entries(values).forEach(([key, value]) => {
-          if (value) {
-            formData.append(key, value);
+        setSuccess("");
+        startTransition(async () => {
+          const result = await register(values);
+          if (result.error) {
+            setError(result.error);
+          } else if (result.success) {
+            setSuccess(result.success);
           }
         });
-        startTransition(() => {
-            register(values)
-                .then((data) => {
-                    setError(data.error);
-                    setSucess(data.success);
-                });
+      }
 
-        })
-    }
     return (
         <CardWrapper
             title="Sign In"
@@ -70,6 +65,24 @@ export const RegisterForm = () => {
                         className="space-y-6"
                     >
                         <div className="space-y-4">
+                        <FormField 
+                                control={form.control}
+                                name="email"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input 
+                                                {...field}
+                                                placeholder="john.ea@example.com"
+                                                type="email"
+                                                disabled={isPending}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )} 
+                            />
                         <FormField 
                                 control={form.control}
                                 name="firstName"
@@ -126,17 +139,18 @@ export const RegisterForm = () => {
                                         </FormItem>
                                     )}
                                     />
+
                             <FormField 
                                 control={form.control}
-                                name="email"
+                                name="password"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>Password</FormLabel>
                                         <FormControl>
                                             <Input 
                                                 {...field}
-                                                placeholder="john.ea@example.com"
-                                                type="email"
+                                                placeholder="*******"
+                                                type="password"
                                                 disabled={isPending}
                                             />
                                         </FormControl>
@@ -146,10 +160,10 @@ export const RegisterForm = () => {
                             />
                             <FormField 
                                 control={form.control}
-                                name="password"
+                                name="confirmPassword"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel>Confirm Password</FormLabel>
                                         <FormControl>
                                             <Input 
                                                 {...field}
