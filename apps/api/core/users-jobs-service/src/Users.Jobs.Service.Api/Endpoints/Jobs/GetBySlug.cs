@@ -11,7 +11,7 @@ internal sealed class GetBySlug : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         _ = app.MapGet(
-                "jobs/{jobSlug}",
+                "api/users-jobs/jobs/{jobSlug}",
                 static async (
                     string jobSlug,
                     ISender sender,
