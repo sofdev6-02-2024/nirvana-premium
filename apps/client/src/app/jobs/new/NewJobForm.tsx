@@ -23,7 +23,12 @@ import { draftToMarkdown } from "markdown-draft-js";
 import { useForm } from "react-hook-form";
 import { createJobPosting } from "./actions";
 
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast"
+
 export default function NewJobForm() {
+
+  const { toast } = useToast();
   const form = useForm<CreateJobValues>({
     resolver: zodResolver(createJobSchema),
   });
@@ -49,10 +54,20 @@ export default function NewJobForm() {
 
     try {
       await createJobPosting(formData);
+      toast({
+        title: "Job Posted Successfully",
+        description: "Your job posting has been created and is now live.",
+        variant: "default",
+      });
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      alert("Something went wrong, please try again.");
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Something went wrong while posting the job. Please try again.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     }
   }
 
