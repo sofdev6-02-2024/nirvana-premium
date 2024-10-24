@@ -36,10 +36,11 @@ export async function createJobPosting(formData: FormData) {
     applicationUrl: applicationUrl?.trim(),
     description: description?.trim(),
     salary: parseInt(salary),
+    approved: true
   };
 
   try {
-    const response = await fetch("http://localhost:5001/jobs", {
+    const response = await fetch("http://localhost:9500/jobs", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
