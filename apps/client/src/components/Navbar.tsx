@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { Button } from "./ui/button";
+import  AuthStatus from "@/components/auth/auth-status"
 
 export default function Navbar() {
   return (
@@ -14,14 +15,16 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <div className="flex gap-2">
-          <Button asChild>
+        <div className="flex items-center gap-3">
+          <Button asChild variant="default">
             <Link href="/jobs">Job List</Link>
           </Button>
 
-          <Button asChild>
-            <Link href="/jobs/new"> Post a Job</Link>
+          <Button asChild variant="default">
+            <Link href="/jobs/new">Post a Job</Link>
           </Button>
+
+          <AuthStatus />
         </div>
       </nav>
     </header>

@@ -3,8 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/toaster";
-
-
+import SessionProviderWrapper from "@/components/auth/session-provider-wrapper";
 
 export const metadata: Metadata = {
   title: {
@@ -24,11 +23,13 @@ export default function RootLayout({
       <body
         className='antialiased min-w-[350px]'
       >
-        <Navbar />
-        {children}
-        <Footer />
-        <Toaster />
-      </body>
+        <SessionProviderWrapper>
+          <Navbar />
+          {children}
+          <Footer />
+          <Toaster />
+        </SessionProviderWrapper>
+        </body>
     </html>
   );
 }
