@@ -4,10 +4,11 @@
   "private": false,
   "description": "An application about a job portal called Tu Primera Chamba",
   "scripts": {
-    "build": "pnpm --parallel build",
+    "build:compose": "pnpm -F=api-gateway -F=users-jobs-service build:compose",
+    "build": "pnpm -F=api-gateway build && pnpm -F=users-jobs-service build",
     "dev": "docker compose down && docker compose up -d && pnpm --parallel dev",
-    "down": "pnpm -F=api-gateway -F=iam-service -F=users-jobs-service down",
-    "reset:db": "docker compose down && pnpm -F=users-jobs-service -F=iam-service reset:db && docker compose up -d"
+    "down": "pnpm -F=api-gateway -F=users-jobs-service down",
+    "reset:db": "docker compose down && pnpm -F=users-jobs-service reset:db && docker compose up -d"
   },
   "keywords": [
     "api",

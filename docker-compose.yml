@@ -3,28 +3,6 @@ networks:
     driver: bridge
 
 services:
-  chamba_iam_db:
-    image: postgres:16.0
-    container_name: chamba_iam_db
-    restart: always
-    environment:
-      POSTGRES_DB: chamba_iam_db
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      TZ: 'UTC-4'
-    command: -p 3030
-    ports:
-      - 3030:3030
-    volumes:
-      - chamba-iam-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -h chamba_iam_db -p 3030 -d chamba_iam_db']
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    networks:
-      - chamba_network
-
   chamba_users_jobs_db:
     image: postgres:16.0
     container_name: chamba_users_jobs_db
@@ -60,8 +38,6 @@ services:
     volumes:
       - chamba-db-admin-data:/var/lib/pgadmin
     depends_on:
-      chamba_iam_db:
-        condition: service_healthy
       chamba_users_jobs_db:
         condition: service_healthy
     networks:
@@ -84,10 +60,29 @@ services:
     hostname: consul
     ports:
       - '8500:8500'
+    volumes:
+      - consul-data:/consul/data
     networks:
       - chamba_network
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.2
+    container_name: keycloak
+    command: start-dev --import-realm
+    hostname: keycloak
+    environment:
+      - KC_HEALTH_ENABLED=true
+      - KC_METRICS_ENABLED=true
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+      - keycloak-data:/opt/keycloak/data
+    ports:
+      - 18080:8080
+
 volumes:
-  chamba-iam-data:
   chamba-users-jobs-data:
   chamba-db-admin-data:
+  consul-data:
+  keycloak-data:

@@ -1,5 +1,4 @@
 packages:
   - './apps/api/core/api-gateway'
   - './apps/api/core/users-jobs-service'
-  - './apps/api/core/iam-service'
   - './apps/client'
