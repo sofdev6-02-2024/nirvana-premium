@@ -1,22 +1,26 @@
 namespace SkInfrastructure.Dependencies;
 
-using Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 public static partial class DependencyInjection
 {
-    public static IServiceCollection AddAuthenticationInternal(this IServiceCollection services)
+    public static IServiceCollection AddAuthenticationInternal(
+        this IServiceCollection services,
+        IConfiguration config
+    )
     {
         _ = services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(static options =>
+            .AddJwtBearer(o =>
             {
-                options.Authority = Environment.GetEnvironmentVariable(Constants.Authority)!;
-                options.Audience = Environment.GetEnvironmentVariable(Constants.Audience)!;
-                options.TokenValidationParameters.ValidIssuer = Environment.GetEnvironmentVariable(
-                    Constants.Issuer
-                )!;
+                o.RequireHttpsMetadata = false;
+
+                o.Audience = config["Jwt:Audience"];
+                o.MetadataAddress = config["Jwt:MetadataAddress"]!;
+
+                o.TokenValidationParameters = new() { ValidIssuer = config["Jwt:Issuer"] };
             });
 
         return services;

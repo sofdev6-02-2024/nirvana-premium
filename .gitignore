@@ -20,10 +20,6 @@ obj/
 ## Docker
 .containers/
 
-## Enviroment Variables
-firebase.json
-.env
-
 # Dependencies
 node_modules/
 

@@ -40,7 +40,7 @@ export async function createJobPosting(formData: FormData) {
   };
 
   try {
-    const response = await fetch("http://localhost:9500/jobs", {
+    const response = await fetch("http://localhost:9500/api/users-jobs/jobs", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

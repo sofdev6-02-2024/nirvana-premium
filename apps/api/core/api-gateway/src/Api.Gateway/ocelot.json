@@ -1,15 +1,6 @@
 {
   "Routes": [
     {
-      "Servicename": "IamService",
-      "SwaggerKey": "IamService",
-
-      "DownstreamPathTemplate": "/api/auth/{everything}",
-      "UpstreamPathTemplate": "/api/auth/{everything}",
-
-      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
-    },
-    {
       "ServiceName": "UsersJobsService",
       "SwaggerKey": "UsersJobsService",
 
@@ -21,21 +12,6 @@
   ],
 
   "SwaggerEndPoints": [
-    {
-      "Key": "IamService",
-
-      "Config": [
-        {
-          "Name": "IAM Service API",
-          "Version": "v1",
-          "Service": {
-            "Name": "IamService",
-            "Path": "/swagger/v1/swagger.json"
-          }
-        }
-      ]
-    },
-
     {
       "Key": "UsersJobsService",
 

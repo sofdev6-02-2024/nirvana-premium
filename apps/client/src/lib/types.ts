@@ -14,3 +14,5 @@ export interface Job {
   createdAt: string;
   approved: boolean;
 }
+
+export const roles = ["Applicant", "Recruiter"];

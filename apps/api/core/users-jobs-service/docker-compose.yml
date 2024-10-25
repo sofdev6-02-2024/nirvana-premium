@@ -11,8 +11,6 @@ services:
     build:
       context: ../..
       dockerfile: core/users-jobs-service/src/Users.Jobs.Service.Api/Dockerfile
-    volumes:
-      - ../../../../.env:/app/.env:ro
     networks:
       - nirvana-premium_chamba_network
 
@@ -24,7 +22,5 @@ services:
     build:
       context: ../..
       dockerfile: core/users-jobs-service/src/Users.Jobs.Service.Api/Dockerfile
-    volumes:
-      - ../../../../.env:/app/.env:ro
     networks:
       - nirvana-premium_chamba_network

@@ -1,7 +1,8 @@
 {
   "name": "users-jobs-service",
   "scripts": {
-    "build": "docker compose down && docker compose build",
+    "build": "dotnet build",
+    "build:compose": "docker compose down && docker compose build",
     "dev": "docker compose up",
     "down": "docker compose down",
     "reset:db": "docker volume rm --force nirvana-premium_chamba-users-jobs-data",

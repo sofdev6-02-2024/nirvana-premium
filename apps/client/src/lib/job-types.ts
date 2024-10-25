@@ -8,3 +8,4 @@ export const jobTypes = [
 ];
 
 export const locationTypes = ["Remote", "On-site", "Hybrid"];
+

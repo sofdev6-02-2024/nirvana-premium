@@ -6,7 +6,7 @@ public abstract class BaseEntity : IEntity
 {
     private readonly IList<IDomainEvent> _domainEvents = [];
 
-    public required Guid Id { get; init; }
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     public IList<IDomainEvent> DomainEvents => [.. _domainEvents];
 
