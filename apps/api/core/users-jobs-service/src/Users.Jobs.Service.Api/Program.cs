@@ -13,8 +13,8 @@ builder.Services.AddConsulInternal(builder.Configuration.GetServiceConfig());
 
 builder.Host.UseSerilogInternal();
 
-builder.Services.AddSwaggerGen(
-    config: builder.Configuration,
+builder.Services.AddSwaggerGenWithAuth(
+    configuration: builder.Configuration,
     title: "Users Jobs Service API",
     description: "This API manages the core business logic for user management and job postings. It serves as the central hub for applicants and recruiters, focusing on freelancers and software development solutions.",
     version: "v1"

@@ -4,9 +4,9 @@ using Microsoft.OpenApi.Models;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddSwaggerGen(
+    public static IServiceCollection AddSwaggerGenWithAuth(
         this IServiceCollection services,
-        IConfiguration config,
+        IConfiguration configuration,
         string title,
         string description,
         string version
@@ -24,17 +24,18 @@ public static class ServiceCollectionExtensions
                 }
             );
 
-            o.CustomSchemaIds(static id => id.FullName!.Replace('+', '-'));
+            o.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));
 
-            OpenApiSecurityScheme securityScheme =
-                new()
+            o.AddSecurityDefinition(
+                "Keycloak",
+                new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,
                     Flows = new OpenApiOAuthFlows
                     {
                         Implicit = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri(config["Keycloak:AuthorizationUrl"]!),
+                            AuthorizationUrl = new Uri(configuration["Keycloak:AuthorizationUrl"]!),
                             Scopes = new Dictionary<string, string>
                             {
                                 { "openid", "openid" },
@@ -42,9 +43,8 @@ public static class ServiceCollectionExtensions
                             },
                         },
                     },
-                };
-
-            o.AddSecurityDefinition("Keycloak", securityScheme);
+                }
+            );
 
             OpenApiSecurityRequirement securityRequirement =
                 new()

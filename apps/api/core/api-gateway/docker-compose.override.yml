@@ -2,5 +2,6 @@ services:
   api.gateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Staging
+      - ASPNETCORE_HTTP_PORTS=8080
     ports:
-      - '9500:8080'
+      - '8080'

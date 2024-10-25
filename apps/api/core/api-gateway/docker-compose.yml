@@ -11,5 +11,7 @@ services:
     build:
       context: ../..
       dockerfile: core/api-gateway/src/Api.Gateway/Dockerfile
+    ports:
+      - 9500:8080
     networks:
       - nirvana-premium_chamba_network
