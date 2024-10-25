@@ -47,7 +47,7 @@ internal sealed class GetJobsQueryHandler(IApplicationDbContext context)
         }
 
         return await PagedList.CreateAsync(
-            developer.GetPreferredJobs(domainJobs),
+            developer.GetPreferredJobs(domainJobs).Include(static job => job.Recruiter),
             new Converter(),
             query.Page,
             query.PageSize
