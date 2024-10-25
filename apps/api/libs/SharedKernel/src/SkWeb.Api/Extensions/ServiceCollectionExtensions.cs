@@ -37,14 +37,14 @@ public static class ServiceCollectionExtensions
                             AuthorizationUrl = new Uri(config["Keycloak:AuthorizationUrl"]!),
                             Scopes = new Dictionary<string, string>
                             {
-                                { "openid", "OpenId" },
+                                { "openid", "openid" },
                                 { "profile", "profile" },
                             },
                         },
                     },
                 };
 
-            o.AddSecurityDefinition("keycloak", securityScheme);
+            o.AddSecurityDefinition("Keycloak", securityScheme);
 
             OpenApiSecurityRequirement securityRequirement =
                 new()
@@ -54,7 +54,7 @@ public static class ServiceCollectionExtensions
                         {
                             Reference = new OpenApiReference
                             {
-                                Id = "keycloak",
+                                Id = "Keycloak",
                                 Type = ReferenceType.SecurityScheme,
                             },
                             In = ParameterLocation.Header,

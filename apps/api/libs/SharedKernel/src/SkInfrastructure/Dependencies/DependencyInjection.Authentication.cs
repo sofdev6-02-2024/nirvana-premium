@@ -3,13 +3,12 @@ namespace SkInfrastructure.Dependencies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 
 public static partial class DependencyInjection
 {
     public static IServiceCollection AddAuthenticationInternal(
         this IServiceCollection services,
-        IConfiguration configuration
+        IConfiguration config
     )
     {
         _ = services
@@ -17,13 +16,11 @@ public static partial class DependencyInjection
             .AddJwtBearer(o =>
             {
                 o.RequireHttpsMetadata = false;
-                o.Audience = configuration["Authentication:Audience"]!;
-                o.MetadataAddress = configuration["Authentication:MetadataAddress"]!;
-                o.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidIssuer = configuration["Authentication:ValidIssuer"],
-                };
+
+                o.Audience = config["Jwt:Audience"];
+                o.MetadataAddress = config["Jwt:MetadataAddress"]!;
+
+                o.TokenValidationParameters = new() { ValidIssuer = config["Jwt:Issuer"] };
             });
 
         return services;

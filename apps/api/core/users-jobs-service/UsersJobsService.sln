@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -12,6 +12,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{805E9DDC-2685-43FB-A892-5124442F3E60}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Users.Jobs.Service.Api", "src\Users.Jobs.Service.Api\Users.Jobs.Service.Api.csproj", "{9AE104BE-5520-4FDF-B57B-AC3C8A04956D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{67E29690-C9D9-432B-ADAC-2FE7E4E7CFA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Tests", "test\Domain\Domain.Tests.csproj", "{A460425B-84BA-4D4A-B4F6-F81505B43776}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,11 +42,16 @@ Global
 		{9AE104BE-5520-4FDF-B57B-AC3C8A04956D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AE104BE-5520-4FDF-B57B-AC3C8A04956D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AE104BE-5520-4FDF-B57B-AC3C8A04956D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A460425B-84BA-4D4A-B4F6-F81505B43776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A460425B-84BA-4D4A-B4F6-F81505B43776}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A460425B-84BA-4D4A-B4F6-F81505B43776}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A460425B-84BA-4D4A-B4F6-F81505B43776}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{68E82A52-A9B0-467C-B5AD-C546D6AB4692} = {69FC65FF-E507-44BE-AED5-AAF1CA874FE3}
 		{BC58A045-0C45-44EA-8C87-C830B1EA067E} = {69FC65FF-E507-44BE-AED5-AAF1CA874FE3}
 		{805E9DDC-2685-43FB-A892-5124442F3E60} = {69FC65FF-E507-44BE-AED5-AAF1CA874FE3}
 		{9AE104BE-5520-4FDF-B57B-AC3C8A04956D} = {69FC65FF-E507-44BE-AED5-AAF1CA874FE3}
+		{A460425B-84BA-4D4A-B4F6-F81505B43776} = {67E29690-C9D9-432B-ADAC-2FE7E4E7CFA4}
 	EndGlobalSection
 EndGlobal

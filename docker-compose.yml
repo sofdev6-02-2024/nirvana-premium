@@ -67,12 +67,10 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.0.2
-    container_name: keycloak
+    container_name: Keycloak
     command: start-dev --import-realm
-    hostname: keycloak
     environment:
       - KC_HEALTH_ENABLED=true
-      - KC_METRICS_ENABLED=true
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
     volumes:
