@@ -16,13 +16,14 @@ public class DeveloperTests
         Developer developer =
             new()
             {
+                Id = Guid.NewGuid(),
                 Name = "John",
                 LastName = "Doe",
                 YearsOfExperience = 5,
                 SalaryPerHourExpected = 50,
                 ModalityPreferred = Modality.Virtual,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "English" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 UserId = Guid.NewGuid(),
                 SpecializationId = Guid.NewGuid(),
             };
@@ -31,6 +32,7 @@ public class DeveloperTests
         {
             new()
             {
+                Id = Guid.NewGuid(),
                 Title = "Job1",
                 Description = "Description1",
                 SalaryPerHour = 60,
@@ -39,12 +41,13 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "English" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 RecruiterId = Guid.NewGuid(),
             },
             new()
             {
+                Id = Guid.NewGuid(),
                 Title = "Job2",
                 Description = "Description2",
                 SalaryPerHour = 40,
@@ -53,12 +56,14 @@ public class DeveloperTests
                 Modality = Modality.OnSite,
                 Schedule = Schedule.PartTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "Java" }],
-                Languages = [new() { Name = "Spanish" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "Java" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "Spanish" }],
                 RecruiterId = Guid.NewGuid(),
             },
             new()
             {
+                Id = Guid.NewGuid(),
+
                 Title = "Job3",
                 Description = "Description3",
                 SalaryPerHour = 70,
@@ -67,8 +72,8 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.InProgress,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "English" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 RecruiterId = Guid.NewGuid(),
             },
         }.AsQueryable();
@@ -89,13 +94,14 @@ public class DeveloperTests
         Developer developer =
             new()
             {
+                Id = Guid.NewGuid(),
                 Name = "John",
                 LastName = "Doe",
                 YearsOfExperience = 5,
                 SalaryPerHourExpected = 50,
                 ModalityPreferred = Modality.Virtual,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "English" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 UserId = Guid.NewGuid(),
                 SpecializationId = Guid.NewGuid(),
             };
@@ -104,6 +110,7 @@ public class DeveloperTests
         {
             new()
             {
+                Id = Guid.NewGuid(),
                 Title = "Job1",
                 Description = "Description1",
                 SalaryPerHour = 60,
@@ -112,12 +119,13 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "English" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 RecruiterId = Guid.NewGuid(),
             },
             new()
             {
+                Id = Guid.NewGuid(),
                 Title = "Job2",
                 Description = "Description2",
                 SalaryPerHour = 70,
@@ -126,8 +134,8 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.InProgress,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "English" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 RecruiterId = Guid.NewGuid(),
             },
         }.AsQueryable();
@@ -147,13 +155,14 @@ public class DeveloperTests
         Developer developer =
             new()
             {
+                Id = Guid.NewGuid(),
                 Name = "John",
                 LastName = "Doe",
                 YearsOfExperience = 5,
                 SalaryPerHourExpected = 50,
                 ModalityPreferred = Modality.Virtual,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "English" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 UserId = Guid.NewGuid(),
                 SpecializationId = Guid.NewGuid(),
             };
@@ -162,6 +171,7 @@ public class DeveloperTests
         {
             new()
             {
+                Id = Guid.NewGuid(),
                 Title = "Job1",
                 Description = "Description1",
                 SalaryPerHour = 60,
@@ -170,12 +180,13 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "English" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 RecruiterId = Guid.NewGuid(),
             },
             new()
             {
+                Id = Guid.NewGuid(),
                 Title = "Job2",
                 Description = "Description2",
                 SalaryPerHour = 80,
@@ -184,8 +195,8 @@ public class DeveloperTests
                 Modality = Modality.OnSite,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "English" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 RecruiterId = Guid.NewGuid(),
             },
         }.AsQueryable();
@@ -205,13 +216,18 @@ public class DeveloperTests
         Developer developer =
             new()
             {
+                Id = Guid.NewGuid(),
                 Name = "John",
                 LastName = "Doe",
                 YearsOfExperience = 5,
                 SalaryPerHourExpected = 50,
                 ModalityPreferred = Modality.Virtual,
-                Skills = [new() { Name = "C#" }, new() { Name = "JavaScript" }],
-                Languages = [new() { Name = "English" }],
+                Skills =
+                [
+                    new() { Id = Guid.NewGuid(), Name = "C#" },
+                    new() { Id = Guid.NewGuid(), Name = "JavaScript" },
+                ],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 UserId = Guid.NewGuid(),
                 SpecializationId = Guid.NewGuid(),
             };
@@ -220,6 +236,7 @@ public class DeveloperTests
         {
             new()
             {
+                Id = Guid.NewGuid(),
                 Title = "Job1",
                 Description = "Description1",
                 SalaryPerHour = 60,
@@ -228,12 +245,18 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "C#" }, new() { Name = "JavaScript" }],
-                Languages = [new() { Name = "English" }],
+                Skills =
+                [
+                    new() { Id = Guid.NewGuid(), Name = "C#" },
+                    new() { Id = Guid.NewGuid(), Name = "JavaScript" },
+                ],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 RecruiterId = Guid.NewGuid(),
             },
             new()
             {
+                Id = Guid.NewGuid(),
+
                 Title = "Job2",
                 Description = "Description2",
                 SalaryPerHour = 80,
@@ -242,8 +265,8 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "Java" }],
-                Languages = [new() { Name = "English" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "Java" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 RecruiterId = Guid.NewGuid(),
             },
         }.AsQueryable();
@@ -263,13 +286,19 @@ public class DeveloperTests
         Developer developer =
             new()
             {
+                Id = Guid.NewGuid(),
+
                 Name = "John",
                 LastName = "Doe",
                 YearsOfExperience = 5,
                 SalaryPerHourExpected = 50,
                 ModalityPreferred = Modality.Virtual,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "English" }, new() { Name = "Spanish" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages =
+                [
+                    new() { Id = Guid.NewGuid(), Name = "English" },
+                    new() { Id = Guid.NewGuid(), Name = "Spanish" },
+                ],
                 UserId = Guid.NewGuid(),
                 SpecializationId = Guid.NewGuid(),
             };
@@ -278,6 +307,8 @@ public class DeveloperTests
         {
             new()
             {
+                Id = Guid.NewGuid(),
+
                 Title = "Job1",
                 Description = "Description1",
                 SalaryPerHour = 60,
@@ -286,12 +317,18 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "English" }, new() { Name = "Spanish" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages =
+                [
+                    new() { Id = Guid.NewGuid(), Name = "English" },
+                    new() { Id = Guid.NewGuid(), Name = "Spanish" },
+                ],
                 RecruiterId = Guid.NewGuid(),
             },
             new()
             {
+                Id = Guid.NewGuid(),
+
                 Title = "Job2",
                 Description = "Description2",
                 SalaryPerHour = 80,
@@ -300,8 +337,8 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "C#" }],
-                Languages = [new() { Name = "French" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "C#" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "French" }],
                 RecruiterId = Guid.NewGuid(),
             },
         }.AsQueryable();
@@ -321,13 +358,23 @@ public class DeveloperTests
         Developer developer =
             new()
             {
+                Id = Guid.NewGuid(),
+
                 Name = "John",
                 LastName = "Doe",
                 YearsOfExperience = 5,
                 SalaryPerHourExpected = 50,
                 ModalityPreferred = Modality.Virtual,
-                Skills = [new() { Name = "C#" }, new() { Name = "JavaScript" }],
-                Languages = [new() { Name = "English" }, new() { Name = "Spanish" }],
+                Skills =
+                [
+                    new() { Id = Guid.NewGuid(), Name = "C#" },
+                    new() { Id = Guid.NewGuid(), Name = "JavaScript" },
+                ],
+                Languages =
+                [
+                    new() { Id = Guid.NewGuid(), Name = "English" },
+                    new() { Id = Guid.NewGuid(), Name = "Spanish" },
+                ],
                 UserId = Guid.NewGuid(),
                 SpecializationId = Guid.NewGuid(),
             };
@@ -336,6 +383,8 @@ public class DeveloperTests
         {
             new()
             {
+                Id = Guid.NewGuid(),
+
                 Title = "Job1",
                 Description = "Description1",
                 SalaryPerHour = 60,
@@ -344,12 +393,22 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "C#" }, new() { Name = "JavaScript" }],
-                Languages = [new() { Name = "English" }, new() { Name = "Spanish" }],
+                Skills =
+                [
+                    new() { Id = Guid.NewGuid(), Name = "C#" },
+                    new() { Id = Guid.NewGuid(), Name = "JavaScript" },
+                ],
+                Languages =
+                [
+                    new() { Id = Guid.NewGuid(), Name = "English" },
+                    new() { Id = Guid.NewGuid(), Name = "Spanish" },
+                ],
                 RecruiterId = Guid.NewGuid(),
             },
             new()
             {
+                Id = Guid.NewGuid(),
+
                 Title = "Job2",
                 Description = "Description2",
                 SalaryPerHour = 80,
@@ -358,12 +417,14 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "Java" }],
-                Languages = [new() { Name = "English" }],
+                Skills = [new() { Id = Guid.NewGuid(), Name = "Java" }],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 RecruiterId = Guid.NewGuid(),
             },
             new()
             {
+                Id = Guid.NewGuid(),
+
                 Title = "Job3",
                 Description = "Description3",
                 SalaryPerHour = 70,
@@ -372,8 +433,12 @@ public class DeveloperTests
                 Modality = Modality.Virtual,
                 Schedule = Schedule.FullTime,
                 Status = JobStatus.Open,
-                Skills = [new() { Name = "C#" }, new() { Name = "JavaScript" }],
-                Languages = [new() { Name = "English" }],
+                Skills =
+                [
+                    new() { Id = Guid.NewGuid(), Name = "C#" },
+                    new() { Id = Guid.NewGuid(), Name = "JavaScript" },
+                ],
+                Languages = [new() { Id = Guid.NewGuid(), Name = "English" }],
                 RecruiterId = Guid.NewGuid(),
             },
         }.AsQueryable();

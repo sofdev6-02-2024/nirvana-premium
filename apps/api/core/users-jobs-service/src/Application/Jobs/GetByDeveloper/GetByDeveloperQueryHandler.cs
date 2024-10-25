@@ -9,37 +9,29 @@ using SkApplication.Contracts;
 using SkApplication.Responses;
 using SkDomain.Results;
 
-internal sealed class GetJobsQueryHandler(IApplicationDbContext context)
-    : IQueryHandler<GetJobsByDeveloperQuery, PagedList<Response>>
+internal sealed class GetByDeveloperQueryHandler(IApplicationDbContext context)
+    : IQueryHandler<GetByDeveloperQuery, PagedList<Response>>
 {
     public async Task<Result<PagedList<Response>>> Handle(
-        GetJobsByDeveloperQuery query,
+        GetByDeveloperQuery query,
         CancellationToken cancellationToken
     )
     {
-        IQueryable<Job> domainJobs = context.Jobs;
+        IQueryable<Job> domainJobs = context
+            .Jobs.Where(job => job.Status == JobStatus.Open)
+            .Include(static job => job.Recruiter)
+            .Include(static job => job.Skills)
+            .Include(static job => job.Languages);
 
         if (!await domainJobs.AnyAsync(cancellationToken))
         {
             return Result.Failure<PagedList<Response>>(JobErrors.NotJobsFound);
         }
 
-        if (query.DeveloperId is null)
-        {
-            return await PagedList.CreateAsync(
-                domainJobs.Where(job => job.Status == JobStatus.Open),
-                new Converter(),
-                query.Page,
-                query.PageSize
-            );
-        }
-
-        Guid developerId = Guid.Parse(query.DeveloperId);
-
         Developer? developer = await context
             .Developers.Include(developer => developer.Skills)
             .Include(developer => developer.Languages)
-            .FirstOrDefaultAsync(developer => developer.Id == developerId, cancellationToken);
+            .FirstOrDefaultAsync(developer => developer.Id == query.DeveloperId, cancellationToken);
 
         if (developer is null)
         {
@@ -47,7 +39,7 @@ internal sealed class GetJobsQueryHandler(IApplicationDbContext context)
         }
 
         return await PagedList.CreateAsync(
-            developer.GetPreferredJobs(domainJobs).Include(static job => job.Recruiter),
+            developer.GetPreferredJobs(domainJobs),
             new Converter(),
             query.Page,
             query.PageSize

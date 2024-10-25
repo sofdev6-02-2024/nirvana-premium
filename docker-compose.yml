@@ -78,6 +78,8 @@ services:
       - keycloak-data:/opt/keycloak/data
     ports:
       - 18080:8080
+    networks:
+      - chamba_network
 
 volumes:
   chamba-users-jobs-data:
