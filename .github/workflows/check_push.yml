@@ -8,7 +8,7 @@ on:
 
 jobs:
   validate-code:
-    name: Build Project
+    name: Build, Test and Lint Project
     strategy:
       matrix:
         os: [ubuntu-latest]
