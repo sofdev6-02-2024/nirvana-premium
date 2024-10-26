@@ -3,7 +3,9 @@
   "scripts": {
     "build": "dotnet build",
     "build:compose": "docker compose down && docker compose build",
+    "build:norestore": "dotnet build --no-restore",
     "dev": "docker compose up",
-    "down": "docker compose down"
+    "down": "docker compose down",
+    "restore": "dotnet restore"
   }
 }
