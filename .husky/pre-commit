@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+echo -e "Running pre-commit hook - Building and testing project... 🚀\n"
+
+pnpm install
+pnpm restore
+pnpm build:norestore
+pnpm lint
+pnpm test

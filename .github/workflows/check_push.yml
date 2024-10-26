@@ -1,0 +1,56 @@
+name: CI/CD_PUSH
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!main'
+
+jobs:
+  validate-code:
+    name: Build, Test and Lint Project
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        dotnet_version: [8.0.x]
+        pnpm_version: [9]
+        node_version: [20]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Get the last commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet_version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ matrix.pnpm_version }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Restore Dependencies
+        run: pnpm restore
+
+      - name: Build Projects
+        run: pnpm build:norestore
+
+      - name: Lint Code
+        run: pnpm lint
+
+      - name: Test Code
+        run: pnpm test
