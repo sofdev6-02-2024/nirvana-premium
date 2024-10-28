@@ -6,11 +6,11 @@
   "scripts": {
     "build": "pnpm -F=api-gateway build && pnpm -F=users-jobs-service build",
     "build:compose": "pnpm -F=api-gateway -F=users-jobs-service build:compose",
-    "build:norestore": "pnpm -F=api-gateway -F=users-jobs-service build:norestore",
+    "build:norestore": "pnpm -F=api-gateway build:norestore && pnpm -F=users-jobs-service build:norestore",
     "dev": "pnpm --parallel dev",
     "down": "pnpm -F=api-gateway -F=users-jobs-service down",
     "reset:db": "docker compose down && pnpm -F=users-jobs-service reset:db && docker compose up -d",
-    "restore": "pnpm -F=api-gateway -F=users-jobs-service restore",
+    "restore": "pnpm -F=api-gateway restore && pnpm -F=users-jobs-service restore",
     "test": "pnpm -F=users-jobs-service test",
     "lint": "pnpm -F=client lint",
     "prepare": "husky"
