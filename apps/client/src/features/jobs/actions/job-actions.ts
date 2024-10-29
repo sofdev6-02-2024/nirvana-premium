@@ -1,11 +1,9 @@
-"use server";
-
-import { createJobSchema } from "@/lib/validation";
-import { redirect } from "next/navigation";
+import { createJobSchema } from "@/features/jobs/lib/validation";
 import { nanoid } from "nanoid";
 import { toSlug } from "@/lib/utils";
+import { apiRequest } from "@/lib/api";
 
-export async function createJobPosting(formData: FormData) {
+export async function createJobPosting(formData: FormData, accessToken: string) {
   const values = Object.fromEntries(formData.entries());
 
   const {
@@ -21,7 +19,6 @@ export async function createJobPosting(formData: FormData) {
   } = createJobSchema.parse(values);
 
   const slug = `${toSlug(title)}-${nanoid(10)}`;
-
   const companyLogoUrl = "company-logo-placeholder.png";
 
   const newJob = {
@@ -40,19 +37,10 @@ export async function createJobPosting(formData: FormData) {
   };
 
   try {
-    const response = await fetch("http://localhost:9500/api/users-jobs/jobs", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newJob),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to create job");
-    }
+    const response = await apiRequest("/api/users-jobs/jobs", "POST", newJob, accessToken);
+    return response;
   } catch (error) {
     console.error("Error creating job:", error);
+    throw error;
   }
-  redirect("/job-submitted");
 }

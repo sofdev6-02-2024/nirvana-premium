@@ -1,3 +1,15 @@
+export const constants = [
+  "Full-time",
+  "Part-time",
+  "Contract",
+  "Temporary",
+  "Internship",
+  "Volunteer",
+];
+
+export const locationTypes = ["Remote", "On-site", "Hybrid"];
+
+
 export interface Job {
   id: number;
   slug: string;

@@ -1,9 +1,11 @@
-import JobPage from "@/components/JobPage";
+import JobPage from "@/features/jobs/components/job-page";
 import { Button } from "@/components/ui/button";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import { getJobBySlug, getAllJobs } from "@/lib/jobUtils";
+import { getJobBySlug, getAllJobs } from "@/features/jobs/lib/job-service";
+import { getServerSession } from 'next-auth/next';
+import { redirect } from 'next/navigation';
 
 interface PageProps {
   params: { slug: string };
@@ -28,7 +30,12 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { slug } }: PageProps) {
+  const session = await getServerSession();
   const job = await getJob(slug);
+
+  if (!session) {
+    redirect('/api/auth/signin?callbackUrl=' + encodeURIComponent(`/jobs/${slug}`));
+  }
 
   const { applicationEmail, applicationUrl } = job;
 

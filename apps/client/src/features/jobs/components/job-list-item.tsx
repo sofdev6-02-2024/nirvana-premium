@@ -1,9 +1,9 @@
-import { Job } from "@/lib/types";
+import { Job } from "@/features/jobs/lib/constants";
 import Image from "next/image";
 import companyLogoPlaceholder from "@/assets/company-logo-placeholder.png";
 import { Banknote, Briefcase, Globe2, MapPin, Clock } from "lucide-react";
 import { formatMoney, relativeDate } from "@/lib/utils";
-import Badge from "./Badge";
+import Badge from "@/components/badge";
 
 interface JobListItemProps {
   job: Job;

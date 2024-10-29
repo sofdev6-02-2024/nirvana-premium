@@ -2,8 +2,8 @@ import { formatMoney } from "@/lib/utils";
 import { Banknote, Briefcase, Globe2, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import Markdown from "./Markdown";
-import { Job } from "@/lib/types";
+import Markdown from "@/components/markdown";
+import { Job } from "@/features/jobs/lib/constants";
 import companyLogo from "@/assets/company-logo-placeholder.png";
 
 interface JobPageProps {

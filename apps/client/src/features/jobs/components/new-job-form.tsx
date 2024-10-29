@@ -1,8 +1,8 @@
 "use client";
 
-import LoadingButton from "@/components/LoadingButton";
-import LocationInput from "@/components/LocationInput";
-import RichTextEditor from "@/components/RichTextEditor";
+import LoadingButton from "@/components/forms/loading-button";
+import LocationInput from "@/components/forms/location-input";
+import RichTextEditor from "@/features/jobs/components/rich-text-editor";
 import {
   Form,
   FormControl,
@@ -15,24 +15,29 @@ import H1 from "@/components/ui/h1";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Select from "@/components/ui/select";
-import { jobTypes, locationTypes } from "@/lib/job-types";
-import { CreateJobValues, createJobSchema } from "@/lib/validation";
+import { constants, locationTypes } from "@/features/jobs/lib/constants";
+import { CreateJobValues, createJobSchema } from "@/features/jobs/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { draftToMarkdown } from "markdown-draft-js";
 import { useForm } from "react-hook-form";
-import { createJobPosting } from "./actions";
-
+import { createJobPosting } from "@/features/jobs/actions/job-actions";
+import { useSession } from 'next-auth/react';
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
+import { useState } from "react"
+import { useRouter } from "next/navigation";
+import Loading from "@/components/loading";
 
 export default function NewJobForm() {
 
+  const { data: session, status } = useSession();
   const { toast } = useToast();
   const form = useForm<CreateJobValues>({
     resolver: zodResolver(createJobSchema),
   });
-
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
   const {
     handleSubmit,
     watch,
@@ -43,7 +48,19 @@ export default function NewJobForm() {
     formState: { isSubmitting },
   } = form;
 
+
+
   async function onSubmit(values: CreateJobValues) {
+    if (!session?.access_token) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to post a job.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
     const formData = new FormData();
 
     Object.entries(values).forEach(([key, value]) => {
@@ -53,22 +70,30 @@ export default function NewJobForm() {
     });
 
     try {
-      await createJobPosting(formData);
+      await createJobPosting(formData, session.access_token);
       toast({
         title: "Job Posted Successfully",
         description: "Your job posting has been created and is now live.",
         variant: "default",
       });
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      router.push("/job-submitted")
     } catch (error) {
       toast({
-        variant: "destructive",
         title: "Error",
-        description: "Something went wrong while posting the job. Please try again.",
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
+        description: error instanceof Error ? error.message : "Failed to post job",
+        variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
+  }
+
+  if (status === "loading") {
+    return <Loading fullScreen/>;
+  }
+
+  if (!session || !session.roles?.includes("company")) {
+    router.push("/access-denied");
   }
 
   return (
@@ -117,7 +142,7 @@ export default function NewJobForm() {
                       <option value="" hidden>
                         Select an option
                       </option>
-                      {jobTypes.map((jobType) => (
+                      {constants.map((jobType) => (
                         <option key={jobType} value={jobType}>
                           {jobType}
                         </option>
