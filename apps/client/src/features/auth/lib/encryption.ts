@@ -1,9 +1,9 @@
 import Cryptr from "cryptr";
 
 function getSecretKey(): string {
-    const secretKey = process.env.NEXTAUTH_SECRET;
+    const secretKey = process.env.SECRET || "XXy41eBU2gdmksLdx3ALY1eqdAvOf4nTXkAnx8jI";
     if (!secretKey) {
-        throw new Error("NEXTAUTH_SECRET environment variable is not set.");
+        throw new Error("SECRET environment variable is not set.");
     }
     return secretKey;
 }

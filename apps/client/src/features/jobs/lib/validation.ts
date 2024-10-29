@@ -1,72 +1,61 @@
 import { z } from "zod";
-import { constants, locationTypes, roles } from "./constants";
+import { modalities, schedules } from "./constants";
 
-const requiredString = z.string().min(1, "Required");
-const numericRequiredString = requiredString.regex(/^\d+$/, "Must be a number");
+const requiredString = z.string().min(1, "This field is required");
 
-const companyLogoSchema = z
-  .custom<File | undefined>()
-  .refine(
-    (file) => !file || (file instanceof File && file.type.startsWith("image/")),
-    "Must be an image file",
-  )
-  .refine((file) => {
-    return !file || file.size < 1024 * 1024 * 2;
-  }, "File must be less than 2MB");
+const isoDateString = z.string().refine(
+  (date) => {
+    const parsed = new Date(date);
+    return !isNaN(parsed.getTime()) && date === parsed.toISOString();
+  },
+  "Must be a valid ISO date string"
+);
 
-const applicationSchema = z
-  .object({
-    applicationEmail: z.string().max(100).email().optional().or(z.literal("")),
-    applicationUrl: z.string().max(100).url().optional().or(z.literal("")),
-  })
-  .refine((data) => data.applicationEmail || data.applicationUrl, {
-    message: "Email or url is required",
-    path: ["applicationEmail"],
-  });
+const salarySchema = z
+  .number()
+  .positive("Salary must be positive")
+  .max(1000, "Salary per hour cannot exceed $1,000");
 
-const locationSchema = z
-  .object({
-    locationType: requiredString.refine(
-      (value) => locationTypes.includes(value),
-      "Invalid location type",
-    ),
-    location: z.string().max(100).optional(),
-  })
-  .refine(
-    (data) =>
-      !data.locationType || data.locationType === "Remote" || data.location,
-    {
-      message: "Location is required for on-site jobs",
-      path: ["location"],
-    },
-  );
+const locationSchema = z.object({
+  location: z.string().max(200),
+  modality: z.enum(modalities),
+}).refine(
+  (data) => {
+    if (data.modality !== "Remote") {
+      return data.location.length > 0;
+    }
+    return true;
+  },
+  {
+    message: "Location is required for OnSite and Hybrid positions",
+    path: ["location"],
+  }
+);
 
-export const createJobSchema = z
-  .object({
-    title: requiredString.max(100),
-    type: requiredString.refine(
-      (value) => constants.includes(value),
-      "Invalid job type",
-    ),
-    companyName: requiredString.max(100),
-    companyLogo: companyLogoSchema,
-    description: z.string().max(5000).optional(),
-    salary: numericRequiredString.max(
-      9,
-      "Number can't be longer than 9 digits",
-    ),
-  })
-  .and(applicationSchema)
-  .and(locationSchema);
-
-export type CreateJobValues = z.infer<typeof createJobSchema>;
-
-
-export const LoginSchema = z.object({
-  email: z.string().email({
-    message:  "Email is required"
+export const jobCommandSchema = z.object({
+  title: requiredString.max(100, "Title cannot exceed 100 characters"),
+  description: requiredString.max(5000, "Description cannot exceed 5000 characters"),
+  salaryPerHour: salarySchema,
+  dueDate: isoDateString,
+  modality: z.enum(modalities, {
+    errorMap: () => ({ message: "Invalid modality type" }),
   }),
-  password: z.string().min(1, {
-    message: "Password is required"
-  })
-});
+  schedule: z.enum(schedules, {
+    errorMap: () => ({ message: "Invalid schedule type" }),
+  }),
+  location: z.string().max(200, "Location cannot exceed 200 characters"),
+  recruiterId: z.string().uuid("Invalid recruiter ID format"),
+}).refine(
+  (data) => {
+    const dueDate = new Date(data.dueDate);
+    const now = new Date();
+    return dueDate > now;
+  },
+  {
+    message: "Due date must be in the future",
+    path: ["dueDate"],
+  }
+);
+
+export type JobCommand = z.infer<typeof jobCommandSchema>;
+

@@ -1,4 +1,4 @@
-import { createJobSchema } from "@/features/jobs/lib/validation";
+import { jobCommandSchema } from "@/features/jobs/lib/validation";
 import { nanoid } from "nanoid";
 import { toSlug } from "@/lib/utils";
 import { apiRequest } from "@/lib/api";

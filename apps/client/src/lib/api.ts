@@ -1,4 +1,6 @@
-const apiPath = process.env.PUBLIC_API_PATH || "http://localhost:9500"; // Fallback for development
+import { decrypt } from "@/features/auth/lib/encryption";
+
+const apiPath = process.env.PUBLIC_API_PATH || "http://localhost:9500";
 
 export async function apiRequest(endpoint: string, method: string, body?: any, token?: string) {
   const headers: HeadersInit = {
@@ -6,7 +8,7 @@ export async function apiRequest(endpoint: string, method: string, body?: any, t
   };
 
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+    headers["Authorization"] = `Bearer ${decrypt(token)}`;
   }
 
   const response = await fetch(`${apiPath}${endpoint}`, {

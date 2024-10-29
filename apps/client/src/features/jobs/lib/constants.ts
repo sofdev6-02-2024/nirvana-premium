@@ -11,7 +11,6 @@ export const locationTypes = ["Remote", "On-site", "Hybrid"];
 
 
 export interface Job {
-  id: number;
   slug: string;
   title: string;
   type: string;
@@ -28,3 +27,17 @@ export interface Job {
 }
 
 export const roles = ["Applicant", "Recruiter"];
+
+export const modalities = ["Remote", "OnSite", "Hybrid"] as const;
+export const schedules = ["FullTime", "PartTime"] as const;
+
+export interface JobCommand {
+  title: string;
+  description: string;
+  salaryPerHour: number;
+  dueDate: string;
+  modality: string;
+  schedule: string;
+  location: string;
+  recruiterId: string;
+}

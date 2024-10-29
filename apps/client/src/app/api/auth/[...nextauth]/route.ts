@@ -1,4 +1,3 @@
-// [...nextauth]/route.ts
 import NextAuth, { AuthOptions } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import { jwtDecode } from "jwt-decode";
