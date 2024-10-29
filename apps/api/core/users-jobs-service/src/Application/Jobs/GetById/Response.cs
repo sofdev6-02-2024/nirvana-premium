@@ -1,4 +1,4 @@
-namespace Application.Jobs.GetByDeveloper;
+namespace Application.Jobs.GetById;
 
 public sealed class Response
 {

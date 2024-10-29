@@ -105,7 +105,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "recruiter",
+                name: "recruiters",
                 schema: "public",
                 columns: table => new
                 {
@@ -119,9 +119,9 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_recruiter", x => x.id);
+                    table.PrimaryKey("pk_recruiters", x => x.id);
                     table.ForeignKey(
-                        name: "fk_recruiter_users_user_id",
+                        name: "fk_recruiters_users_user_id",
                         column: x => x.user_id,
                         principalSchema: "public",
                         principalTable: "users",
@@ -205,10 +205,10 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("pk_jobs", x => x.id);
                     table.ForeignKey(
-                        name: "fk_jobs_recruiter_recruiter_id",
+                        name: "fk_jobs_recruiters_recruiter_id",
                         column: x => x.recruiter_id,
                         principalSchema: "public",
-                        principalTable: "recruiter",
+                        principalTable: "recruiters",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -311,9 +311,9 @@ namespace Infrastructure.Migrations
                 column: "recruiter_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_recruiter_user_id",
+                name: "ix_recruiters_user_id",
                 schema: "public",
-                table: "recruiter",
+                table: "recruiters",
                 column: "user_id",
                 unique: true);
 
@@ -372,7 +372,7 @@ namespace Infrastructure.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "recruiter",
+                name: "recruiters",
                 schema: "public");
 
             migrationBuilder.DropTable(

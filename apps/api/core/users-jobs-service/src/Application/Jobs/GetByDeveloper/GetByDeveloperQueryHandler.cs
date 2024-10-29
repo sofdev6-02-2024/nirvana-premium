@@ -17,13 +17,13 @@ internal sealed class GetByDeveloperQueryHandler(IApplicationDbContext context)
         CancellationToken cancellationToken
     )
     {
-        IQueryable<Job> domainJobs = context
+        IQueryable<Job> jobs = context
             .Jobs.Where(job => job.Status == JobStatus.Open)
             .Include(static job => job.Recruiter)
             .Include(static job => job.Skills)
             .Include(static job => job.Languages);
 
-        if (!await domainJobs.AnyAsync(cancellationToken))
+        if (!await jobs.AnyAsync(cancellationToken))
         {
             return Result.Failure<PagedList<Response>>(JobErrors.NotJobsFound);
         }
@@ -35,11 +35,13 @@ internal sealed class GetByDeveloperQueryHandler(IApplicationDbContext context)
 
         if (developer is null)
         {
-            return Result.Failure<PagedList<Response>>(DeveloperErrors.DeveloperNotFound);
+            return Result.Failure<PagedList<Response>>(
+                DeveloperErrors.DeveloperNotFound(query.DeveloperId)
+            );
         }
 
         return await PagedList.CreateAsync(
-            developer.GetPreferredJobs(domainJobs),
+            developer.GetPreferredJobs(jobs),
             new Converter(),
             query.Page,
             query.PageSize

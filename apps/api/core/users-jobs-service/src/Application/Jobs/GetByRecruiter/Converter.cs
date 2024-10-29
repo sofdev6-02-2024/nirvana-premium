@@ -1,4 +1,4 @@
-namespace Application.Jobs.GetAll;
+namespace Application.Jobs.GetByRecruiter;
 
 using Domain.Jobs;
 using SkApplication.Contracts;

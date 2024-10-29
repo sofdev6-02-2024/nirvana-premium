@@ -8,4 +8,9 @@ public static class JobErrors
         "Jobs.NotJobsFound",
         "No jobs were found"
     );
+
+    public static Error JobNotFound(Guid jobId)
+    {
+        return Error.NotFound("Jobs.JobNotFound", $"Job with id {jobId} was not found");
+    }
 }

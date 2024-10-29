@@ -205,13 +205,13 @@ namespace Infrastructure.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_recruiter");
+                        .HasName("pk_recruiters");
 
                     b.HasIndex("UserId")
                         .IsUnique()
-                        .HasDatabaseName("ix_recruiter_user_id");
+                        .HasDatabaseName("ix_recruiters_user_id");
 
-                    b.ToTable("recruiter", "public");
+                    b.ToTable("recruiters", "public");
                 });
 
             modelBuilder.Entity("Domain.Skills.Skill", b =>
@@ -398,7 +398,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("RecruiterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_jobs_recruiter_recruiter_id");
+                        .HasConstraintName("fk_jobs_recruiters_recruiter_id");
 
                     b.Navigation("Recruiter");
                 });
@@ -410,7 +410,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("Domain.Recruiters.Recruiter", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_recruiter_users_user_id");
+                        .HasConstraintName("fk_recruiters_users_user_id");
 
                     b.Navigation("User");
                 });
