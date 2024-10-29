@@ -20,6 +20,6 @@ internal sealed class UserMap : IEntityTypeConfiguration<User>
 
         _ = builder.Property(static u => u.IdentityId).IsRequired();
 
-        _ = builder.Property(static u => u.Role).HasConversion<string>().IsRequired();
+        _ = builder.Property(static u => u.Role).HasConversion<int>().IsRequired();
     }
 }

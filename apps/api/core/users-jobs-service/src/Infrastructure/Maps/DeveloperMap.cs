@@ -18,7 +18,7 @@ internal sealed class DeveloperMap : IEntityTypeConfiguration<Developer>
 
         _ = builder.Property(static u => u.SalaryPerHourExpected).IsRequired();
 
-        _ = builder.Property(static u => u.ModalityPreferred).HasConversion<string>().IsRequired();
+        _ = builder.Property(static u => u.ModalityPreferred).HasConversion<int>().IsRequired();
 
         _ = builder
             .HasOne(static u => u.User)

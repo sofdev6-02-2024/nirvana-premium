@@ -62,7 +62,7 @@ namespace Infrastructure.Migrations
                     email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     do_onboarding = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     identity_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    role = table.Column<string>(type: "text", nullable: false)
+                    role = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,7 +79,7 @@ namespace Infrastructure.Migrations
                     last_name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     years_of_experience = table.Column<double>(type: "double precision", nullable: false),
                     salary_per_hour_expected = table.Column<double>(type: "double precision", nullable: false),
-                    modality_preferred = table.Column<string>(type: "text", nullable: false),
+                    modality_preferred = table.Column<int>(type: "integer", nullable: false),
                     profile_picture_url = table.Column<string>(type: "text", nullable: true),
                     description = table.Column<string>(type: "text", nullable: true),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -194,9 +194,9 @@ namespace Infrastructure.Migrations
                     salary_per_hour = table.Column<double>(type: "double precision", nullable: false),
                     due_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modality = table.Column<string>(type: "text", nullable: false),
-                    schedule = table.Column<string>(type: "text", nullable: false),
-                    status = table.Column<string>(type: "text", nullable: false),
+                    modality = table.Column<int>(type: "integer", nullable: false),
+                    schedule = table.Column<int>(type: "integer", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
                     location = table.Column<string>(type: "text", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     recruiter_id = table.Column<Guid>(type: "uuid", nullable: false)

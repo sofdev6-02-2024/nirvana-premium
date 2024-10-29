@@ -40,9 +40,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("last_name");
 
-                    b.Property<string>("ModalityPreferred")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("ModalityPreferred")
+                        .HasColumnType("integer")
                         .HasColumnName("modality_preferred");
 
                     b.Property<string>("Name")
@@ -108,9 +107,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("location");
 
-                    b.Property<string>("Modality")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Modality")
+                        .HasColumnType("integer")
                         .HasColumnName("modality");
 
                     b.Property<Guid>("RecruiterId")
@@ -121,14 +119,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("double precision")
                         .HasColumnName("salary_per_hour");
 
-                    b.Property<string>("Schedule")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Schedule")
+                        .HasColumnType("integer")
                         .HasColumnName("schedule");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.Property<string>("Title")
@@ -275,9 +271,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("identity_id");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Role")
+                        .HasColumnType("integer")
                         .HasColumnName("role");
 
                     b.HasKey("Id")
