@@ -6,7 +6,7 @@ using SkDomain.Results;
 using SkWeb.Api.Endpoints;
 using SkWeb.Api.Infrastructure;
 
-internal sealed class GetAll : IEndpoint
+internal sealed class Create : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
