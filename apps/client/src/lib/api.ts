@@ -2,7 +2,12 @@ import { decrypt } from "@/features/auth/lib/encryption";
 
 const apiPath = process.env.PUBLIC_API_PATH || "http://localhost:9500";
 
-export async function apiRequest(endpoint: string, method: string, body?: any, token?: string) {
+export async function apiRequest(
+  endpoint: string,
+  method: string,
+  body?: unknown,
+  token?: string,
+) {
   const headers: HeadersInit = {
     "Content-Type": "application/json",
   };
