@@ -7,6 +7,7 @@ public sealed class Response
     public required string Title { get; init; }
     public required string Schedule { get; init; }
     public required string Modality { get; init; }
+    public Guid RecruiterId { get; init; }
     public Uri? RecruiterLogo { get; init; }
     public string? Location { get; init; }
 

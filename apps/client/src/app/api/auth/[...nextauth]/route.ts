@@ -1,8 +1,7 @@
-// [...nextauth]/route.ts
 import NextAuth, { AuthOptions } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import { jwtDecode } from "jwt-decode";
-import { encrypt } from "@/lib/encryption";
+import { encrypt } from "@/features/auth/lib/encryption";
 import { JWT } from "next-auth/jwt";
 
 const clientId = process.env.KEYCLOAK_ID;

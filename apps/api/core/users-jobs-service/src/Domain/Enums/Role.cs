@@ -11,5 +11,5 @@ public enum Role
     Recruiter = 1,
 
     [Description("Company")]
-    Company,
+    Company = 2,
 }

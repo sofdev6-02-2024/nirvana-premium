@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 public enum Modality
 {
-    [Description("Remote")]
+    [Description("Virtual")]
     Virtual = 0,
 
     [Description("On Site")]

@@ -20,10 +20,10 @@ internal sealed class JobMap : IEntityTypeConfiguration<Job>
 
         _ = builder.Property(static u => u.CreatedAt).IsRequired();
 
-        _ = builder.Property(static u => u.Modality).HasConversion<string>().IsRequired();
+        _ = builder.Property(static u => u.Modality).HasConversion<int>().IsRequired();
 
-        _ = builder.Property(static u => u.Schedule).HasConversion<string>().IsRequired();
+        _ = builder.Property(static u => u.Schedule).HasConversion<int>().IsRequired();
 
-        _ = builder.Property(static u => u.Status).HasConversion<string>().IsRequired();
+        _ = builder.Property(static u => u.Status).HasConversion<int>().IsRequired();
     }
 }

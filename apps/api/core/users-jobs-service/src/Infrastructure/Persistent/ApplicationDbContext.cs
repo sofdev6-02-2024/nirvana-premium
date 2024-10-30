@@ -5,6 +5,7 @@ using Application.Persistent;
 using Domain.Developers;
 using Domain.Jobs;
 using Domain.Languages;
+using Domain.Recruiters;
 using Domain.Skills;
 using Domain.Specializations;
 using Domain.Users;
@@ -22,6 +23,7 @@ public sealed class ApplicationDbContext(
     public required DbSet<Developer> Developers { get; set; }
     public required DbSet<Job> Jobs { get; set; }
     public required DbSet<Language> Languages { get; set; }
+    public required DbSet<Recruiter> Recruiters { get; set; }
     public required DbSet<Skill> Skills { get; set; }
     public required DbSet<Specialization> Specializations { get; set; }
     public required DbSet<User> Users { get; set; }

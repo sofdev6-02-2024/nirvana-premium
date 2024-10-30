@@ -12,7 +12,7 @@ internal sealed class GetByDeveloper : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         _ = app.MapGet(
-                "api/users-jobs/jobs/{developerId}",
+                "api/users-jobs/jobs/developer/{developerId}",
                 static async (
                     Guid developerId,
                     int page,

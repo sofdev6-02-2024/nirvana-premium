@@ -14,6 +14,7 @@ internal sealed class Converter : IConverter<Job, Response>
             Title = job.Title,
             Schedule = job.Schedule.GetDescription(),
             Modality = job.Modality.GetDescription(),
+            RecruiterId = job.RecruiterId,
             RecruiterLogo = job.Recruiter.ProfilePictureUrl,
             Location = job.Location,
             Description = job.Description,

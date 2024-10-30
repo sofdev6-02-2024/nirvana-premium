@@ -1,6 +1,6 @@
 import { authOptions } from "../[...nextauth]/route";
 import { getServerSession } from "next-auth";
-import { getIdToken } from "@/lib/session-token-accessor";
+import { getIdToken } from "@/features/auth/lib/session-token-accessor";
 
 export async function GET(): Promise<Response> {
   try {

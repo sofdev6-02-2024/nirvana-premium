@@ -16,15 +16,15 @@ internal sealed class GetAllQueryHandler(IApplicationDbContext context)
         CancellationToken cancellationToken
     )
     {
-        IQueryable<Job> domainJobs = context
+        IQueryable<Job> jobs = context
             .Jobs.Where(job => job.Status == JobStatus.Open)
             .Include(static job => job.Recruiter);
 
-        if (!await domainJobs.AnyAsync(cancellationToken))
+        if (!await jobs.AnyAsync(cancellationToken))
         {
             return Result.Failure<PagedList<Response>>(JobErrors.NotJobsFound);
         }
 
-        return await PagedList.CreateAsync(domainJobs, new Converter(), query.Page, query.PageSize);
+        return await PagedList.CreateAsync(jobs, new Converter(), query.Page, query.PageSize);
     }
 }
