@@ -20,6 +20,7 @@ export async function apiRequest(
     headers,
   );
 
+
   const response = await fetch(`${apiPath}${endpoint}`, {
     method,
     headers,

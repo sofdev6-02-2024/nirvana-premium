@@ -1,16 +1,26 @@
+// features/jobs/lib/constants.ts
 export interface Job {
   id: string;
   title: string;
-  dueDate: string;
   salaryPerHour: number;
   location: string;
   description: string;
   modality: "Remote" | "OnSite" | "Hybrid";
-  schedule: "FullTime" | "PartTime";
-  createdAt: string;
-  isActive: boolean;
-  recruiterId: string;
+  schedule: "Part Time" | "Full Time";
   status: "Open" | "InProgress" | "ForReview" | "Done";
+  recruiterId: string;
+  recruiterLogo: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaginatedResponse<T> {
+  items: T[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 }
 
 export const modalities = ["Remote", "OnSite", "Hybrid"] as const;
