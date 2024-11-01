@@ -17,9 +17,9 @@ const roleProtectedRoutes = [
   },
 ]
 
-const authProtectedRoutes = [
-  '/jobs/',
-]
+// const authProtectedRoutes = [
+//   '/jobs/',
+// ]
 
 export async function middleware(request: NextRequestWithAuth) {
   const token = await getToken({

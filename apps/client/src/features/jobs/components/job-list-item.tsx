@@ -1,7 +1,7 @@
 import { Job } from "@/features/jobs/lib/constants";
 import Image from "next/image";
 import companyLogoPlaceholder from "@/assets/company-logo-placeholder.png";
-import { Banknote, Briefcase, Globe2, MapPin, Clock } from "lucide-react";
+import { Banknote, Clock } from "lucide-react";
 import { formatMoney, relativeDate } from "@/lib/utils";
 import Badge from "@/components/badge";
 
@@ -12,58 +12,51 @@ interface JobListItemProps {
 export default function JobListItem({
   job: {
     title,
-    companyName,
-    type,
-    locationType,
+    dueDate,
+    salaryPerHour,
     location,
-    salary,
-    companyLogoUrl,
+    description,
+    modality,
+    schedule,
     createdAt,
   },
 }: JobListItemProps) {
   return (
-    <article className="flex gap-3 rounded-lg border border-orange-300 p-5 hover:bg-muted/60">
+    <article className="flex max-w-full items-start gap-5 rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-md">
       <Image
-        src={companyLogoPlaceholder || companyLogoUrl}
-        alt={`${companyName} logo`}
-        width={100}
-        height={100}
-        className="self-center rounded-lg"
+        src={companyLogoPlaceholder}
+        alt={`${title} company logo`}
+        width={130}
+        height={130}
+        className="rounded-xl border border-gray-100 shadow-sm"
       />
+
       <div className="flex-grow space-y-3">
-        <div>
-          <h2 className="text-xl font-medium">{title}</h2>
-          <p className="text-muted-foreground">{companyName}</p>
+        <div className="space-y-2">
+          <h2 className="text-left text-xl font-bold text-gray-800">{title}</h2>
+
+          <div className="flex items-center space-x-2 text-sm text-gray-600">
+            <span>{schedule}</span>
+            <span>|</span>
+            <span>{modality}</span>
+            <span>|</span>
+            <span>{location}</span>
+          </div>
         </div>
-        <div className="text-muted-foreground">
-          <p className="flex items-center gap-1.5 sm:hidden">
-            <Briefcase size={16} className="shrink-0" />
-            {type}
-          </p>
-          <p className="flex items-center gap-1.5">
-            <MapPin size={16} className="shrink-0" />
-            {locationType}
-          </p>
-          <p className="flex items-center gap-1.5">
-            <Globe2 size={16} className="shrink-0" />
-            {location || "Worldwide"}
-          </p>
-          <p className="flex items-center gap-1.5">
-            <Banknote size={16} className="shrink-0" />
-            {formatMoney(salary)}
-          </p>
-          <p className="flex items-center gap-1.5 sm:hidden">
+
+        <p className="line-clamp-2 text-gray-700">{description}</p>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-gray-600">
+            <Banknote size={18} className="shrink-0 text-gray-500" />
+            <span>{formatMoney(salaryPerHour)} / hour</span>
+          </div>
+
+          <div className="flex items-center gap-2 text-sm text-gray-500">
             <Clock size={16} className="shrink-0" />
-            {relativeDate(new Date(createdAt))}
-          </p>
+            <span>Posted {relativeDate(new Date(createdAt))}</span>
+          </div>
         </div>
-      </div>
-      <div className="hidden shrink-0 flex-col items-end justify-between sm:flex">
-        <Badge>{type}</Badge>
-        <span className="flex items-center gap-1.5 text-muted-foreground">
-          <Clock size={16} />
-          {relativeDate(new Date(createdAt))}
-        </span>
       </div>
     </article>
   );

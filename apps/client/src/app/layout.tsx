@@ -14,20 +14,20 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-                                     children,
-                                   }: Readonly<{
+  children,
+}: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en" className="h-full">
-    <body className="flex min-h-screen flex-col antialiased min-w-[350px]">
-    <SessionProviderWrapper>
-      <Navbar />
-      <div className="flex-1">{children}</div>
-      <Footer />
-      <Toaster />
-    </SessionProviderWrapper>
-    </body>
+      <body className="flex min-h-screen min-w-[350px] flex-col antialiased">
+        <SessionProviderWrapper>
+          <Navbar />
+          <div className="flex-1">{children}</div>
+          <Footer />
+          <Toaster />
+        </SessionProviderWrapper>
+      </body>
     </html>
   );
 }

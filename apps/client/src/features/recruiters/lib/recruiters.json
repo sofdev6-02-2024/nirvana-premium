@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "Tech Solutions",
+    "location": "San Francisco, CA",
+    "description": "A leading tech company specializing in AI-driven solutions.",
+    "profilePictureUrl": "/images/tech-solutions.jpg",
+    "isVerified": true,
+    "createdAt": "2023-06-01T10:00:00Z",
+    "isActive": true,
+    "userId": "user123",
+    "updatable": "true"
+  },
+  {
+    "id": "2",
+    "name": "Innovative Startups",
+    "location": "New York, NY",
+    "description": "Helping startups find top engineering talent.",
+    "profilePictureUrl": "/images/innovative-startups.jpg",
+    "isVerified": false,
+    "createdAt": "2023-07-15T08:30:00Z",
+    "isActive": true,
+    "userId": "user456",
+    "updatable": "false"
+  }
+]

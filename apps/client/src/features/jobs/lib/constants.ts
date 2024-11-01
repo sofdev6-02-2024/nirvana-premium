@@ -1,43 +1,18 @@
-export const constants = [
-  "Full-time",
-  "Part-time",
-  "Contract",
-  "Temporary",
-  "Internship",
-  "Volunteer",
-];
-
-export const locationTypes = ["Remote", "On-site", "Hybrid"];
-
-
 export interface Job {
-  slug: string;
+  id: string;
   title: string;
-  type: string;
-  locationType: string;
-  location?: string;
-  description?: string;
-  salary: number;
-  companyName: string;
-  applicationEmail?: string;
-  applicationUrl?: string;
-  companyLogoUrl?: string;
+  dueDate: string;
+  salaryPerHour: number;
+  location: string;
+  description: string;
+  modality: "Remote" | "OnSite" | "Hybrid";
+  schedule: "FullTime" | "PartTime";
   createdAt: string;
-  approved: boolean;
+  isActive: boolean;
+  recruiterId: string;
+  status: "Open" | "InProgress" | "ForReview" | "Done";
 }
-
-export const roles = ["Applicant", "Recruiter"];
 
 export const modalities = ["Remote", "OnSite", "Hybrid"] as const;
-export const schedules = ["FullTime", "PartTime"] as const;
-
-export interface JobCommand {
-  title: string;
-  description: string;
-  salaryPerHour: number;
-  dueDate: string;
-  modality: string;
-  schedule: string;
-  location: string;
-  recruiterId: string;
-}
+export const schedules = ["Full-Time", "Part-Time"] as const;
+export const status = ["Open", "In Progress", "For Review", "Done"];

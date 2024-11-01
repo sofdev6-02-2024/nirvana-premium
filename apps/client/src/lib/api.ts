@@ -1,5 +1,3 @@
-import { decrypt } from "@/features/auth/lib/encryption";
-
 const apiPath = process.env.PUBLIC_API_PATH || "http://localhost:9500";
 
 export async function apiRequest(
@@ -13,17 +11,27 @@ export async function apiRequest(
   };
 
   if (token) {
-    headers["Authorization"] = `Bearer ${decrypt(token)}`;
+    headers["Authorization"] = `Bearer  ${token}'
+`;
   }
+
+  console.log(
+    `Requesting ${apiPath}${endpoint} with method ${method} and headers`,
+    headers,
+  );
 
   const response = await fetch(`${apiPath}${endpoint}`, {
     method,
     headers,
-    body: body ? JSON.stringify(body) : undefined,
+    body: method !== "GET" && body ? JSON.stringify(body) : undefined,
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const errorBody = await response.text();
+    console.error("Error response:", errorBody);
+    throw new Error(
+      `HTTP error! status: ${response.status}, body: ${errorBody}`,
+    );
   }
 
   return response.json();
