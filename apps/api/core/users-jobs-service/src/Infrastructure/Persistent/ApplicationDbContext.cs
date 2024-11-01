@@ -1,14 +1,8 @@
 namespace Infrastructure.Persistent;
 
 using System.Reflection;
+using System.Threading.Tasks;
 using Application.Persistent;
-using Domain.Developers;
-using Domain.Jobs;
-using Domain.Languages;
-using Domain.Recruiters;
-using Domain.Skills;
-using Domain.Specializations;
-using Domain.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SkInfrastructure.Persistent;
@@ -20,11 +14,30 @@ public sealed class ApplicationDbContext(
     : BaseApplicationDbContext(options, publisher, Assembly.GetExecutingAssembly()),
         IApplicationDbContext
 {
-    public required DbSet<Developer> Developers { get; set; }
-    public required DbSet<Job> Jobs { get; set; }
-    public required DbSet<Language> Languages { get; set; }
-    public required DbSet<Recruiter> Recruiters { get; set; }
-    public required DbSet<Skill> Skills { get; set; }
-    public required DbSet<Specialization> Specializations { get; set; }
-    public required DbSet<User> Users { get; set; }
+    public required DbSet<Domain.Attributes.Educations.Education> Educations { get; init; }
+    public required DbSet<Domain.Attributes.Experiences.Experience> Experiences { get; init; }
+    public required DbSet<Domain.Attributes.JobAttachments.JobAttachment> JobAttachments { get; init; }
+    public required DbSet<Domain.Attributes.Languages.Language> Languages { get; init; }
+    public required DbSet<Domain.Attributes.Skills.Skill> Skills { get; init; }
+    public required DbSet<Domain.Attributes.Specializations.Specialization> Specializations { get; init; }
+
+    public required DbSet<Domain.Entities.Developers.Developer> Developers { get; init; }
+    public required DbSet<Domain.Entities.Jobs.Job> Jobs { get; init; }
+    public required DbSet<Domain.Entities.Recruiters.Recruiter> Recruiters { get; init; }
+    public required DbSet<Domain.Entities.Users.User> Users { get; init; }
+
+    public required DbSet<Domain.Joins.DeveloperLanguages.DeveloperLanguage> DeveloperLanguages { get; init; }
+    public required DbSet<Domain.Joins.DeveloperSkills.DeveloperSkill> DeveloperSkills { get; init; }
+    public required DbSet<Domain.Joins.JobDevelopers.JobDeveloper> JobDevelopers { get; init; }
+    public required DbSet<Domain.Joins.JobLanguages.JobLanguage> JobLanguages { get; init; }
+    public required DbSet<Domain.Joins.JobSkills.JobSkill> JobSkills { get; init; }
+    public required DbSet<Domain.Joins.UserFollows.UserFollow> UserFollows { get; init; }
+    public required DbSet<Domain.Joins.UserReviews.UserReview> UserReviews { get; init; }
+
+    public required DbSet<Domain.Pages.LandingInfos.LandingInfo> LandingInfos { get; init; }
+
+    public override Task SeedDataAsync()
+    {
+        return Task.CompletedTask;
+    }
 }

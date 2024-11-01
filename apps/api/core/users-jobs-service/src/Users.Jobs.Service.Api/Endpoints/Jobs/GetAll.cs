@@ -14,10 +14,10 @@ internal sealed class GetAll : IEndpoint
         _ = app.MapGet(
                 "api/users-jobs/jobs",
                 static async (
-                    int page,
-                    int pageSize,
                     ISender sender,
-                    CancellationToken cancellationToken
+                    CancellationToken cancellationToken,
+                    int page = 1,
+                    int pageSize = 10
                 ) =>
                 {
                     GetAllQuery query = new(page, pageSize);

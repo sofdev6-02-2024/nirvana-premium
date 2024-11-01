@@ -11,7 +11,7 @@ internal sealed class GetById : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         _ = app.MapGet(
-                "api/users-jobs/jobs/{jobId}",
+                "api/users-jobs/jobs/{jobId:guid}",
                 static async (Guid jobId, ISender sender, CancellationToken cancellationToken) =>
                 {
                     GetByIdQuery query = new(jobId);

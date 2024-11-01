@@ -1,7 +1,7 @@
 namespace Application.Jobs.GetAll;
 
+using Domain.Entities.Jobs;
 using Domain.Enums;
-using Domain.Jobs;
 using Microsoft.EntityFrameworkCore;
 using Persistent;
 using SkApplication.Contracts;
@@ -18,7 +18,8 @@ internal sealed class GetAllQueryHandler(IApplicationDbContext context)
     {
         IQueryable<Job> jobs = context
             .Jobs.Where(job => job.Status == JobStatus.Open)
-            .Include(static job => job.Recruiter);
+            .Include(static job => job.Recruiter)
+            .OrderByDescending(job => job.UpdatedAt);
 
         if (!await jobs.AnyAsync(cancellationToken))
         {

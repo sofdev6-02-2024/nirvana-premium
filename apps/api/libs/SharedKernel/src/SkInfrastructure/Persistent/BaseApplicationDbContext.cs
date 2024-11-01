@@ -14,6 +14,8 @@ public abstract class BaseApplicationDbContext(
     Assembly assembly
 ) : DbContext(options), IBaseApplicationDbContext
 {
+    public abstract Task SeedDataAsync();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         _ = modelBuilder.ApplyConfigurationsFromAssembly(assembly);

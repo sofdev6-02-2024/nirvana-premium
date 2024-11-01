@@ -1,6 +1,6 @@
 namespace Application.Jobs.GetById;
 
-using Domain.Jobs;
+using Domain.Entities.Jobs;
 using Microsoft.EntityFrameworkCore;
 using Persistent;
 using SkApplication.Contracts;

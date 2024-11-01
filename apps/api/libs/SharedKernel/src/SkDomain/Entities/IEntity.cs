@@ -6,6 +6,11 @@ public interface IEntity
 {
     Guid Id { get; }
 
+    DateTime CreatedAt { get; }
+    DateTime UpdatedAt { get; }
+
+    bool IsActive { get; }
+
     IList<IDomainEvent> DomainEvents { get; }
 
     void ClearDomainEvents();

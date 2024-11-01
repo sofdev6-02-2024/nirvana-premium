@@ -23,5 +23,7 @@ public static class MigrationExtensions
         using T dbContext = scope.ServiceProvider.GetRequiredService<T>();
 
         await dbContext.Database.MigrateAsync();
+
+        await dbContext.SeedDataAsync();
     }
 }

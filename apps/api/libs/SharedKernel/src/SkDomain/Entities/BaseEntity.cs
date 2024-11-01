@@ -2,11 +2,11 @@ namespace SkDomain.Entities;
 
 using Events;
 
-public abstract class BaseEntity : IEntity
+public abstract class BaseEntity : BaseRegister, IEntity
 {
     private readonly IList<IDomainEvent> _domainEvents = [];
 
-    public required Guid Id { get; init; }
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     public IList<IDomainEvent> DomainEvents => [.. _domainEvents];
 
