@@ -6,7 +6,9 @@
 
 export const publicRoutes = [
     "/",
-    "/jobs"
+    "/jobs",
+    "/recruiters",
+    "/developers"
 ]
 
 /**

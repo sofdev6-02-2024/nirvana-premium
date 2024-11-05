@@ -1,9 +1,10 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
-import SessionProviderWrapper from "@/features/auth/components/session-provider-wrapper";
+import NextAuthProvider from "@/providers/next-auth-proivder";
 
 export const metadata: Metadata = {
   title: {
@@ -21,12 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className="flex min-h-screen min-w-[350px] flex-col antialiased">
-        <SessionProviderWrapper>
+        <NextAuthProvider>
           <Navbar />
           <div className="flex-1">{children}</div>
           <Footer />
           <Toaster />
-        </SessionProviderWrapper>
+        </NextAuthProvider>
       </body>
     </html>
   );

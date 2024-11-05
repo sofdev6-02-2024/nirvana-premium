@@ -12,7 +12,6 @@ interface JobListItemProps {
 export default function JobListItem({
   job: {
     title,
-    dueDate,
     salaryPerHour,
     location,
     description,

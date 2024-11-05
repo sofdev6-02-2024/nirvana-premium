@@ -13,7 +13,7 @@ export function RecruiterListItem({
   return (
     <div className="flex max-w-full items-start gap-4 rounded-lg border bg-white p-6 shadow-md">
       <Image
-        src={companyLogoUrl}
+        src={companyLogoUrl || profilePictureUrl}
         alt={`${name} logo`}
         width={175}
         height={175}

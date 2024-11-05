@@ -1,38 +1,35 @@
-import { authOptions } from "../[...nextauth]/route";
-import { getServerSession } from "next-auth";
-import { getIdToken } from "@/features/auth/lib/session-token-accessor";
+import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 
-export async function GET(): Promise<Response> {
+export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return new Response("No active session", { status: 401 });
+    const session = await auth();
+
+    if (!session?.id_token) {
+      return NextResponse.json({ error: "No active session" }, { status: 401 });
     }
 
-    const idToken = await getIdToken();
-    if (!idToken) {
-      return new Response("No ID token found", { status: 401 });
-    }
-
-    const endSessionUrl = process.env.KEYCLOAK_ISSUER + "/protocol/openid-connect/logout";
+    const endSessionUrl = `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/logout`;
     const nextAuthUrl = process.env.NEXTAUTH_URL;
 
     if (!endSessionUrl || !nextAuthUrl) {
-      console.error("Environment variables KEYCLOAK_ISSUER or NEXTAUTH_URL are not set.");
-      return new Response("Server configuration error", { status: 500 });
+      return NextResponse.json(
+        { error: "Missing configuration" },
+        { status: 500 },
+      );
     }
 
     const logoutUrl = new URL(endSessionUrl);
-    logoutUrl.searchParams.append("id_token_hint=", idToken);
-    logoutUrl.searchParams.append("post_logout_redirect_uri=", nextAuthUrl);
-    
-    return new Response(JSON.stringify({ logoutUrl: logoutUrl.toString() }), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    logoutUrl.searchParams.append("id_token_hint", session.id_token);
+    logoutUrl.searchParams.append("post_logout_redirect_uri", nextAuthUrl);
+    logoutUrl.searchParams.append("client_id", process.env.KEYCLOAK_ID!);
+
+    return NextResponse.json({ logoutUrl: logoutUrl.toString() });
   } catch (error) {
     console.error("Logout error:", error);
-    return new Response("Internal Server Error", { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }

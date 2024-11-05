@@ -1,73 +1,32 @@
-import { NextResponse } from 'next/server'
-import { getToken } from 'next-auth/jwt'
-import { NextRequestWithAuth } from 'next-auth/middleware'
+import NextAuth from "next-auth";
+import authConfig from "@/auth.config";
+import { apiAuthPrefix, publicRoutes } from "@/routes";
 
-const roleProtectedRoutes = [
-  {
-    path: '/jobs/new',
-    allowedRoles: ['company'],
-  },
-  {
-    path: '/company/dashboard',
-    allowedRoles: ['company'],
-  },
-  {
-    path: '/developer/profile',
-    allowedRoles: ['developer'],
-  },
-]
+export { auth as middleware } from "@/auth";
 
-// const authProtectedRoutes = [
-//   '/jobs/',
-// ]
+const { auth } = NextAuth(authConfig);
 
-export async function middleware(request: NextRequestWithAuth) {
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET
-  })
+export default auth((req) => {
+  const { nextUrl } = req;
+  const isLoggedIn = !req.auth;
 
-  const isJobDetail = request.nextUrl.pathname.match(/^\/jobs\/[^/]+$/)
-  if (isJobDetail) {
-    if (!token) {
-      const callbackUrl = encodeURIComponent(request.nextUrl.pathname)
-      return NextResponse.redirect(
-        new URL(`/api/auth/signin?callbackUrl=${callbackUrl}`, request.url)
-      )
-    }
-    return NextResponse.next()
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isPublicRoute = publicRoutes.some((route) =>
+    nextUrl.pathname.startsWith(route),
+  );
+
+  if (isApiAuthRoute) {
+    return null;
   }
 
-  const roleProtectedRoute = roleProtectedRoutes.find(route =>
-    request.nextUrl.pathname.startsWith(route.path)
-  )
-
-  if (roleProtectedRoute) {
-    if (!token) {
-      const callbackUrl = encodeURIComponent(request.nextUrl.pathname)
-      return NextResponse.redirect(
-        new URL(`/api/auth/signin?callbackUrl=${callbackUrl}`, request.url)
-      )
-    }
-
-    const userRoles = token.roles as string[] || []
-    const hasRequiredRole = roleProtectedRoute.allowedRoles.some(role =>
-      userRoles.includes(role)
-    )
-
-    if (!hasRequiredRole) {
-      return NextResponse.redirect(new URL('/access-denied', request.url))
-    }
+  if (!isLoggedIn && !isPublicRoute) {
+    return Response.redirect(new URL("/jobs", nextUrl));
   }
-
-  return NextResponse.next()
-}
+});
 
 export const config = {
   matcher: [
-    '/jobs/new',
-    '/company/dashboard',
-    '/developer/profile',
-    '/jobs/:slug*'
-  ]
-}
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
+  ],
+};

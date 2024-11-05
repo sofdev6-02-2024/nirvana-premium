@@ -16,7 +16,6 @@ export default function JobPage({
     location,
     salaryPerHour,
     createdAt,
-    dueDate,
   },
 }: JobPageProps) {
   return (
@@ -42,10 +41,6 @@ export default function JobPage({
         <p className="flex items-center gap-1.5">
           <Clock size={16} className="shrink-0" />
           Posted {relativeDate(new Date(createdAt))}
-        </p>
-        <p className="flex items-center gap-1.5">
-          <Clock size={16} className="shrink-0" />
-          Due {relativeDate(new Date(dueDate))}
         </p>
       </div>
 

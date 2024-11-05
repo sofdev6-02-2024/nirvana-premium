@@ -1,28 +1,26 @@
 import JobPage from "@/features/jobs/components/job-page";
 import RecruiterInfo from "@/features/recruiters/components/recruiter-info";
 import { Button } from "@/components/ui/button";
-import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { cache } from "react";
 import { getJobById, readJobs } from "@/features/jobs/lib/job-service";
-import { getRecruiterById } from "@/features/recruiters/lib/recruiter-service";
+import {
+  getRecruiterById,
+} from "@/features/recruiters/lib/recruiter-service";
 import { Job } from "@/features/jobs/lib/constants";
 
-interface PageProps {
-  params: { id: string };
-}
-
-const getJob = cache(async (id: string) => {
+const getJob = async (id: string) => {
   const job = await getJobById(id);
+  console.log(job);
   if (!job) notFound();
   return job;
-});
+};
 
-const getRecruiter = cache(async (recruiterId: string) => {
+const getRecruiter = async (recruiterId: string) => {
   const recruiter = await getRecruiterById(recruiterId);
+  console.log(recruiter);
   if (!recruiter) notFound();
   return recruiter;
-});
+};
 
 export async function generateStaticParams(): Promise<{ id: string }[]> {
   const jobs = await readJobs();
@@ -31,19 +29,9 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
   }));
 }
 
-export async function generateMetadata({
-  params: { id },
-}: PageProps): Promise<Metadata> {
-  const job = await getJob(id);
-  return {
-    title: `${job.title} | Job Details`,
-    description: job.description,
-  };
-}
-
-export default async function Page({ params: { id } }: PageProps) {
+export default async function Page({ params }: { params: { id: string } }) {
   try {
-    const job = await getJob(id);
+    const job = await getJob(params.id);
     const recruiter = job.recruiterId
       ? await getRecruiter(job.recruiterId)
       : null;

@@ -1,5 +1,6 @@
 import { Recruiter } from "../lib/constant";
 import Image from "next/image";
+import defaultImage from "@/assets/company-logo-placeholder.png";
 
 interface RecruiterInfoProps {
   recruiter: Recruiter;
@@ -12,7 +13,7 @@ export default function RecruiterInfo({
     <div className="rounded-lg border p-5">
       <div className="flex items-center gap-3">
         <Image
-          src={profilePictureUrl || "/default-avatar.png"}
+          src={defaultImage || profilePictureUrl}
           alt={`${name}'s profile picture`}
           width={80}
           height={80}
