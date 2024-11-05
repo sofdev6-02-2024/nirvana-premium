@@ -6,14 +6,15 @@ interface RecruiterInfoProps {
   recruiter: Recruiter;
 }
 
-export default function RecruiterInfo({
-  recruiter: { name, location, description, profilePictureUrl, isVerified },
-}: RecruiterInfoProps) {
+export default function RecruiterInfo({ recruiter }: RecruiterInfoProps) {
+  const { name, location, description, profilePictureUrl, isVerified } =
+    recruiter;
+
   return (
     <div className="rounded-lg border p-5">
       <div className="flex items-center gap-3">
         <Image
-          src={defaultImage || profilePictureUrl}
+          src={ defaultImage || profilePictureUrl} 
           alt={`${name}'s profile picture`}
           width={80}
           height={80}
@@ -21,9 +22,11 @@ export default function RecruiterInfo({
         />
         <div>
           <h3 className="text-lg font-semibold">{name}</h3>
-          {isVerified && (
-            <span className="text-sm text-green-500">Verified</span>
-          )}
+          <span
+            className={`text-sm ${isVerified ? "text-green-500" : "text-red-500"}`}
+          >
+            {isVerified ? "Verified" : "Not Verified"}
+          </span>
         </div>
       </div>
       <p className="mt-3 text-sm text-muted-foreground">{location}</p>

@@ -3,9 +3,7 @@ import RecruiterInfo from "@/features/recruiters/components/recruiter-info";
 import { Button } from "@/components/ui/button";
 import { notFound } from "next/navigation";
 import { getJobById, readJobs } from "@/features/jobs/lib/job-service";
-import {
-  getRecruiterById,
-} from "@/features/recruiters/lib/recruiter-service";
+import { getRecruiterById } from "@/features/recruiters/lib/recruiter-service";
 import { Job } from "@/features/jobs/lib/constants";
 
 const getJob = async (id: string) => {

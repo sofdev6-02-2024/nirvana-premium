@@ -1,28 +1,42 @@
-// features/jobs/lib/constants.ts
-export interface Job {
+export type Modality = "Remote" | "OnSite" | "Hybrid";
+export type Schedule = "PartTime" | "FullTime";
+export type JobStatus = "Open" | "InProgress" | "ForReview" | "Done";
+
+export interface BaseEntity {
   id: string;
-  title: string;
-  salaryPerHour: number;
-  location: string;
-  description: string;
-  modality: "Remote" | "OnSite" | "Hybrid";
-  schedule: "Part Time" | "Full Time";
-  status: "Open" | "InProgress" | "ForReview" | "Done";
-  recruiterId: string;
-  recruiterLogo: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface PaginatedResponse<T> {
-  items: T[];
-  page: number;
-  pageSize: number;
-  totalCount: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+export interface Job extends BaseEntity {
+  title: string;
+  salaryPerHour: number;
+  location: string;
+  description: string;
+  modality: Modality;
+  schedule: Schedule;
+  status: JobStatus;
+  recruiterId: string;
+  recruiterLogo: string;
+  skills: string[];
+  experienceLevel: "Junior" | "Mid" | "Senior";
+  benefits: string[];
 }
 
-export const modalities = ["Remote", "OnSite", "Hybrid"] as const;
-export const schedules = ["Full-Time", "Part-Time"] as const;
-export const status = ["Open", "In Progress", "For Review", "Done"];
+export interface Recruiter extends BaseEntity {
+  name: string;
+  location: string;
+  description: string;
+  profilePictureUrl: string;
+  isVerified: boolean;
+  companyName: string;
+  companySector: string;
+  contactEmail: string;
+}
+
+export interface JobFilters {
+  search: string;
+  modality: Modality | "";
+  schedule: Schedule | "";
+  minSalary: number | "";
+}

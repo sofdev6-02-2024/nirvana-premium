@@ -3,6 +3,7 @@ import Link from "next/link";
 import { RecruiterListItem } from "@/features/recruiters/components/recruiter-item";
 import { getAllRecruiters } from "@/features/recruiters/lib/recruiter-service";
 
+
 export const metadata: Metadata = {
   title: "Recruiters",
 };

@@ -1,15 +1,37 @@
 import { apiRequest } from "@/lib/api";
 import { Recruiter, PaginatedResponse } from "../lib/constant";
 
+interface GetRecruitersOptions {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  location?: string;
+}
+
+class RecruiterServiceError extends Error {
+  constructor(
+    message: string,
+    public statusCode?: number,
+  ) {
+    super(message);
+    this.name = "RecruiterServiceError";
+  }
+}
+
+
 export async function readCompany(
   page: number = 1,
   pageSize: number = 10,
 ): Promise<Recruiter[]> {
   try {
-    const response = await apiRequest<PaginatedResponse<Recruiter>>(
-      `/api/users-jobs/recruiters?page=${page}&pageSize=${pageSize}`,
-      "GET",
-    );
+    const response = await apiRequest<PaginatedResponse<Recruiter>>({
+      endpoint: "/users-jobs/recruiters",
+      method: "GET",
+      params: {
+        page,
+        pageSize,
+      },
+    });
     return response.items || [];
   } catch (error) {
     console.error("Error fetching recruiters:", error);
@@ -22,13 +44,13 @@ export async function getRecruiterById(
 ): Promise<Recruiter | undefined> {
   try {
     const allRecruiters = await getAllRecruiters();
-    const recruiter = allRecruiters.find((recruiter) => recruiter.id === id);
-    return recruiter;
+    return allRecruiters.find((recruiter) => recruiter.id === id);
   } catch (error) {
     console.error(`Error fetching recruiter with id ${id}:`, error);
     return undefined;
   }
 }
+
 
 export async function getAllRecruiters(
   page: number = 1,
@@ -38,6 +60,31 @@ export async function getAllRecruiters(
     return await readCompany(page, pageSize);
   } catch (error) {
     console.error("Error in getAllRecruiters:", error);
+    return [];
+  }
+}
+
+
+export async function searchRecruiters({
+  page = 1,
+  pageSize = 10,
+  search = "",
+  location = "",
+}: GetRecruitersOptions = {}): Promise<Recruiter[]> {
+  try {
+    const response = await apiRequest<PaginatedResponse<Recruiter>>({
+      endpoint: "/users-jobs/recruiters",
+      method: "GET",
+      params: {
+        page,
+        pageSize,
+        ...(search && { search }),
+        ...(location && { location }),
+      },
+    });
+    return response.items || [];
+  } catch (error) {
+    console.error("Error searching recruiters:", error);
     return [];
   }
 }

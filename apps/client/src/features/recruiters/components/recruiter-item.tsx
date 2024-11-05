@@ -26,7 +26,13 @@ export function RecruiterListItem({
           {isVerified && (
             <span className="flex items-center text-sm text-orange-500">
               <CheckCircle size={16} className="mr-1" />
-              Verified Company
+              Verified Company & Recruiter
+            </span>
+          )}
+          {!isVerified && (
+            <span className="flex items-center text-sm text-gray-500">
+              <CheckCircle size={16} className="mr-1" />
+              Not Verified
             </span>
           )}
         </div>
