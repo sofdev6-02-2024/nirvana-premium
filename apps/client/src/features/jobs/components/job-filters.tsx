@@ -1,5 +1,6 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -9,74 +10,59 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { Modality, Schedule } from "@/features/jobs/lib/constants";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import { useDebounce } from "../hooks/use-dobounse";
 
 export interface JobFilters {
   search: string;
-  modality: Modality | "all";
-  schedule: Schedule | "all";
+  modality: "Remote" | "OnSite" | "Hybrid" | "all";
+  schedule: "FullTime" | "PartTime" | "all";
   minSalary: string;
 }
-
-const initialFilters: JobFilters = {
-  search: "",
-  modality: "all",
-  schedule: "all",
-  minSalary: "",
-};
 
 export function JobFilters() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [filters, setFilters] = useState<JobFilters>({
+  const [filters, setFilters] = useState({
     search: searchParams.get("search") || "",
-    modality: (searchParams.get("modality") as Modality) || "all",
-    schedule: (searchParams.get("schedule") as Schedule) || "all",
+    modality: (searchParams.get("modality") as JobFilters["modality"]) || "all",
+    schedule: (searchParams.get("schedule") as JobFilters["schedule"]) || "all",
     minSalary: searchParams.get("minSalary") || "",
   });
 
-  const debouncedSearch = useDebounce(filters.search, 300);
+  const updateURL = (newFilters: typeof filters) => {
+    const params = new URLSearchParams();
 
-  const updateURL = useCallback(
-    (newFilters: JobFilters) => {
-      const params = new URLSearchParams();
+    Object.entries(newFilters).forEach(([key, value]) => {
+      if (value && value !== "all") {
+        params.set(key, value);
+      }
+    });
 
-      Object.entries(newFilters).forEach(([key, value]) => {
-        if (value && value !== "all") {
-          params.set(key, value.toString());
-        }
-      });
+    // Reset to page 1 when filters change
+    params.delete("page");
 
-      router.push(
-        `${pathname}${params.toString() ? `?${params.toString()}` : ""}`,
-      );
-    },
-    [pathname, router],
-  );
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
-  const handleChange = (key: keyof JobFilters, value: string) => {
+  const handleChange = (key: keyof typeof filters, value: string) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
-
-    if (key !== "search") {
-      updateURL(newFilters);
-    }
+    updateURL(newFilters);
   };
 
-  const handleReset = () => {
-    setFilters(initialFilters);
+  const resetFilters = () => {
+    const defaultFilters = {
+      search: "",
+      modality: "all",
+      schedule: "all",
+      minSalary: "",
+    };
+    setFilters(defaultFilters);
     router.push(pathname);
   };
-
-  useEffect(() => {
-    const newFilters = { ...filters, search: debouncedSearch };
-    updateURL(newFilters);
-  }, [debouncedSearch, filters, updateURL]);
 
   const hasActiveFilters =
     filters.search !== "" ||
@@ -85,13 +71,12 @@ export function JobFilters() {
     filters.minSalary !== "";
 
   return (
-    <div className="space-y-4">
-      <div className="mb-6 grid gap-4 rounded-lg border p-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="mb-6">
+      <div className="grid gap-4 rounded-lg border p-4 md:grid-cols-2 lg:grid-cols-4">
         <Input
           placeholder="Search jobs..."
           value={filters.search}
           onChange={(e) => handleChange("search", e.target.value)}
-          className="w-full"
         />
 
         <Select
@@ -104,7 +89,7 @@ export function JobFilters() {
           <SelectContent>
             <SelectItem value="all">All Modalities</SelectItem>
             <SelectItem value="Remote">Remote</SelectItem>
-            <SelectItem value="OnSite">On-Site</SelectItem>
+            <SelectItem value="OnSite">On Site</SelectItem>
             <SelectItem value="Hybrid">Hybrid</SelectItem>
           </SelectContent>
         </Select>
@@ -128,17 +113,16 @@ export function JobFilters() {
           placeholder="Min salary per hour"
           value={filters.minSalary}
           onChange={(e) => handleChange("minSalary", e.target.value)}
-          className="w-full"
           min="0"
         />
       </div>
 
       {hasActiveFilters && (
-        <div className="flex justify-end">
+        <div className="mt-4 flex justify-end">
           <Button
             variant="outline"
             size="sm"
-            onClick={handleReset}
+            onClick={resetFilters}
             className="flex items-center gap-2"
           >
             <X className="h-4 w-4" />

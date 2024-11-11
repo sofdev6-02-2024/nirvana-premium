@@ -1,5 +1,6 @@
 import { apiRequest } from "@/lib/api";
 import { Recruiter, PaginatedResponse } from "../lib/constant";
+import { Job } from "@/features/jobs/lib/constants";
 
 interface GetRecruitersOptions {
   page?: number;
@@ -17,7 +18,6 @@ class RecruiterServiceError extends Error {
     this.name = "RecruiterServiceError";
   }
 }
-
 
 export async function readCompany(
   page: number = 1,
@@ -51,7 +51,6 @@ export async function getRecruiterById(
   }
 }
 
-
 export async function getAllRecruiters(
   page: number = 1,
   pageSize: number = 100,
@@ -63,7 +62,6 @@ export async function getAllRecruiters(
     return [];
   }
 }
-
 
 export async function searchRecruiters({
   page = 1,
@@ -85,6 +83,27 @@ export async function searchRecruiters({
     return response.items || [];
   } catch (error) {
     console.error("Error searching recruiters:", error);
+    return [];
+  }
+}
+
+export async function getJobsByRecruiter(
+  recruiterId: string,
+  page: number = 1,
+  pageSize: number = 10,
+): Promise<Job[]> {
+  try {
+    const response = await apiRequest<PaginatedResponse<Job>>({
+      endpoint: `/users-jobs/jobs/recruiter/${recruiterId}`,
+      method: "GET",
+      params: {
+        page,
+        pageSize,
+      },
+    });
+    return response.items || [];
+  } catch (error) {
+    console.error(`Error fetching jobs for recruiter ${recruiterId}:`, error);
     return [];
   }
 }
