@@ -2,36 +2,38 @@ import JobPage from "@/features/jobs/components/job-page";
 import RecruiterInfo from "@/features/recruiters/components/recruiter-info";
 import { Button } from "@/components/ui/button";
 import { notFound } from "next/navigation";
-import { getJobById, readJobs } from "@/features/jobs/lib/job-service";
+import { getJobById } from "@/features/jobs/lib/job-service";
 import { getRecruiterById } from "@/features/recruiters/lib/recruiter-service";
-import { Job } from "@/features/jobs/lib/constants";
+import { Metadata, ResolvingMetadata } from "next";
 
-const getJob = async (id: string) => {
-  const job = await getJobById(id);
-  console.log(job);
-  if (!job) notFound();
-  return job;
-};
-
-const getRecruiter = async (recruiterId: string) => {
-  const recruiter = await getRecruiterById(recruiterId);
-  console.log(recruiter);
-  if (!recruiter) notFound();
-  return recruiter;
-};
-
-export async function generateStaticParams(): Promise<{ id: string }[]> {
-  const jobs = await readJobs();
-  return jobs.map((job: Job) => ({
-    id: job.id,
-  }));
+interface Props {
+  params: { id: string };
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   try {
-    const job = await getJob(params.id);
+    const job = await getJobById(params.id);
+
+    return {
+      title: `${job.title} | Developer Jobs`,
+      description: job.description,
+    };
+  } catch {
+    return {
+      title: "Job Not Found",
+      description: "The requested job posting could not be found.",
+    };
+  }
+}
+
+export default async function Page({ params }: Props) {
+  try {
+    const job = await getJobById(params.id);
     const recruiter = job.recruiterId
-      ? await getRecruiter(job.recruiterId)
+      ? await getRecruiterById(job.recruiterId)
       : null;
 
     const applicationLink = `/api/apply/${job.id}`;

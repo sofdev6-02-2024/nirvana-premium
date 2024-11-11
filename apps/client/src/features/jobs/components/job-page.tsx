@@ -44,7 +44,6 @@ export default function JobPage({
         </p>
       </div>
 
-      {/* Job Description */}
       {description && <Markdown>{description}</Markdown>}
     </section>
   );

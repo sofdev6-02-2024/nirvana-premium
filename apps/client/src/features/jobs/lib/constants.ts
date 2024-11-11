@@ -1,6 +1,6 @@
-export type Modality = "Remote" | "OnSite" | "Hybrid";
-export type Schedule = "PartTime" | "FullTime";
-export type JobStatus = "Open" | "InProgress" | "ForReview" | "Done";
+export type Modality = "Remote" | "OnSite" | "Hybrid" | "all";
+export type Schedule = "FullTime" | "PartTime" | "all";
+export type JobStatus = "Open" | "In Progress" | "For Review" | "Done";
 
 export interface BaseEntity {
   id: string;

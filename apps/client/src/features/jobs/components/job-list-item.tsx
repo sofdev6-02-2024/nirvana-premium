@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Banknote, Clock, MapPin, Building2 } from "lucide-react";
 import { formatMoney, relativeDate } from "@/lib/utils";
 import Badge from "@/components/badge";
-import defaultImage from "@/assets/company-logo-placeholder.png"
+import defaultImage from "@/assets/company-logo-placeholder.png";
 
 interface JobListItemProps {
   job: Job;
@@ -11,7 +11,7 @@ interface JobListItemProps {
 
 export default function JobListItem({ job }: JobListItemProps) {
   return (
-    <article className="group relative flex max-w-full items-start gap-5 rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-md">
+    <article className="group relative flex w-full items-start gap-5 rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-md">
       <Image
         src={defaultImage || job.recruiterLogo}
         alt={`${job.title} company logo`}
