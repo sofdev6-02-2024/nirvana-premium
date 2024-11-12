@@ -1,6 +1,6 @@
 // From: https://datahub.io/core/world-cities
 
-const cities = [
+export const cities = [
     {
       country: "Andorra",
       geonameid: 3040051,

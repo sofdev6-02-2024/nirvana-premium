@@ -52,7 +52,6 @@ function normalizeSchedule(schedule: string): string {
 
 function filterJobs(jobs: Job[], filters: FilterParams): Job[] {
   return jobs.filter((job) => {
-    // Search filter
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
       const matchesTitle = job.title.toLowerCase().includes(searchTerm);
@@ -64,7 +63,6 @@ function filterJobs(jobs: Job[], filters: FilterParams): Job[] {
       }
     }
 
-    // Modality filter
     if (filters.modality && filters.modality !== "all") {
       const normalizedFilterModality = normalizeModality(filters.modality);
       const normalizedJobModality = normalizeModality(job.modality);
@@ -73,7 +71,6 @@ function filterJobs(jobs: Job[], filters: FilterParams): Job[] {
       }
     }
 
-    // Schedule filter
     if (filters.schedule && filters.schedule !== "all") {
       const normalizedFilterSchedule = normalizeSchedule(filters.schedule);
       const normalizedJobSchedule = normalizeSchedule(job.schedule);
@@ -82,7 +79,6 @@ function filterJobs(jobs: Job[], filters: FilterParams): Job[] {
       }
     }
 
-    // Minimum salary filter
     if (filters.minSalary && filters.minSalary !== "") {
       const minSalary = parseFloat(filters.minSalary);
       if (!isNaN(minSalary) && job.salaryPerHour < minSalary) {
@@ -114,10 +110,8 @@ export async function readJobs(
       revalidate: 3600,
     });
 
-    // Apply client-side filtering
     const filteredJobs = filterJobs(response.items, searchParams);
 
-    // Calculate pagination
     const totalCount = filteredJobs.length;
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
@@ -164,4 +158,24 @@ export async function getJobById(id: string): Promise<Job> {
     console.error(`❌ Error fetching job ${id}:`, error);
     notFound();
   }
+}
+
+
+import { JobFormValues } from "./validation";
+
+export async function createJob(formData: JobFormValues, recruiterId: string): Promise<Job> {
+  // TODO: add api endpoint and validation:3
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        recruiterId,
+        recruiterLogo: "placeholder",
+        status: "Open",
+        ...formData,
+      });
+    }, 1000);
+  });
 }

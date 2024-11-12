@@ -32,7 +32,7 @@ export default async function JobList({ searchParams = {} }: JobListProps) {
         <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
           <h3 className="mt-4 text-lg font-semibold">No jobs found</h3>
           <p className="mb-4 mt-2 text-sm text-muted-foreground">
-            We couldn't find any jobs matching your criteria. Try adjusting your
+            We could not find any jobs matching your criteria. Try adjusting your
             filters or check back later.
           </p>
           <Button variant="outline" asChild>
@@ -46,7 +46,6 @@ export default async function JobList({ searchParams = {} }: JobListProps) {
   const createPageUrl = (pageNum: number) => {
     const params = new URLSearchParams();
 
-    // Preserve all current search params
     Object.entries(searchParams).forEach(([key, value]) => {
       if (key !== "page" && value) {
         params.set(key, value);
@@ -77,7 +76,6 @@ export default async function JobList({ searchParams = {} }: JobListProps) {
       {totalCount > pageSize && (
         <Pagination>
           <PaginationContent>
-            {/* Previous button */}
             {page > 1 && (
               <PaginationItem>
                 <Link href={createPageUrl(page - 1)} passHref legacyBehavior>
@@ -86,7 +84,6 @@ export default async function JobList({ searchParams = {} }: JobListProps) {
               </PaginationItem>
             )}
 
-            {/* First page */}
             {page > 2 && (
               <PaginationItem>
                 <Link href={createPageUrl(1)} passHref legacyBehavior>
@@ -95,19 +92,16 @@ export default async function JobList({ searchParams = {} }: JobListProps) {
               </PaginationItem>
             )}
 
-            {/* Ellipsis after first page */}
             {page > 3 && (
               <PaginationItem>
                 <PaginationEllipsis />
               </PaginationItem>
             )}
 
-            {/* Current page */}
             <PaginationItem>
               <PaginationLink isActive>{page}</PaginationLink>
             </PaginationItem>
 
-            {/* Next page */}
             {hasNextPage && (
               <>
                 <PaginationItem>
@@ -116,12 +110,10 @@ export default async function JobList({ searchParams = {} }: JobListProps) {
                   </Link>
                 </PaginationItem>
 
-                {/* Ellipsis before next page */}
                 <PaginationItem>
                   <PaginationEllipsis />
                 </PaginationItem>
 
-                {/* Next button */}
                 <PaginationItem>
                   <Link href={createPageUrl(page + 1)} passHref legacyBehavior>
                     <PaginationNext />

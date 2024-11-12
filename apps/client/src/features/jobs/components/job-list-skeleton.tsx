@@ -10,10 +10,7 @@ export function JobListSkeleton() {
 
       <div className="space-y-4">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div
-            key={i}
-            className="flex gap-4 rounded-xl border border-gray-200 bg-white p-6"
-          >
+          <div key={i} className="flex gap-4 rounded-xl">
             <Skeleton className="h-[130px] w-[130px] rounded-xl" />
             <div className="flex-1 space-y-4">
               <Skeleton className="h-6 w-2/3" />

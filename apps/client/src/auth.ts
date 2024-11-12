@@ -32,6 +32,6 @@ export const {
     },
   },
   pages: {
-    signOut: "/", // Redirect to home after signout
-  }
+    signOut: "/",
+  },
 });

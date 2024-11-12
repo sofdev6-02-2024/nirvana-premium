@@ -1,17 +1,21 @@
 import { Metadata } from "next";
-import NewJobForm from "@/features/jobs/components/new-job-form";
-import { getServerSession } from 'next-auth/next';
-import { redirect } from 'next/navigation';
+import { JobPostFormWrapper } from "@/features/jobs/components/job-post-form-wrapper";
 
 export const metadata: Metadata = {
-  title: "Post a new job",
+  title: "Post New Job",
+  description: "Create a new job posting",
 };
 
-export default async function Page() {
-
+export default function NewJobPage() {
   return (
-    <div className="min-h-[calc(100vh-8rem)] px-4">
-      <NewJobForm />
-    </div>
+    <main className="mx-auto my-10 max-w-3xl space-y-8 px-4">
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold">Post a New Job</h1>
+        <p className="text-muted-foreground">
+          Create a new job posting for your company
+        </p>
+      </div>
+      <JobPostFormWrapper />
+    </main>
   );
 }

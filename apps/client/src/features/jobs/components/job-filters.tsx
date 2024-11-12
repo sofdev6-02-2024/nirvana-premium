@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -41,7 +41,6 @@ export function JobFilters() {
       }
     });
 
-    // Reset to page 1 when filters change
     params.delete("page");
 
     router.push(`${pathname}?${params.toString()}`);

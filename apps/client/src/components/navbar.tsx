@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LogoutMenuItem } from "./logout-button";
+import { ModeToggle } from "./ui/mode-toggle";
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -88,15 +89,7 @@ export default function Navbar() {
                 </Link>
               </Button>
             )}
-
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0"
-              size="icon"
-              aria-label="Notifications"
-            >
-              <Bell className="h-5 w-5" />
-            </Button>
+            <ModeToggle />
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -109,6 +102,7 @@ export default function Navbar() {
                   <User className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
+
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
@@ -136,9 +130,6 @@ export default function Navbar() {
                 {isCompany() && (
                   <>
                     <DropdownMenuItem asChild>
-                      <Link href="/jobs/new">Post a Job</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
                       <Link href="/company/dashboard">Company Dashboard</Link>
                     </DropdownMenuItem>
                   </>
@@ -156,8 +147,10 @@ export default function Navbar() {
           </div>
         ) : (
           <div className="flex items-center gap-3">
+            <ModeToggle />
+
             <Button
-              variant="primary"
+              variant="link"
               className="h-8 px-3 py-1"
               onClick={() =>
                 signIn("keycloak", {
