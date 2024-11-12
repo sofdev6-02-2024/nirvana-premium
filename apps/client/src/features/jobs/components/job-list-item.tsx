@@ -17,7 +17,7 @@ export default function JobListItem({ job, className }: JobListItemProps) {
     <Card className={cn("group transition-all hover:shadow-md", className)}>
       <div className={cn("flex w-full items-start gap-5 p-6")}>
         <Image
-          src={defaultImage || job.recruiterLogo}
+          src={ defaultImage || job.recruiterLogo}
           alt={`${job.title} company logo`}
           width={130}
           height={130}

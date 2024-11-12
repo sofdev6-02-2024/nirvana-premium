@@ -1,5 +1,3 @@
-import JobListItem from "@/features/jobs/components/job-list-item";
-import { RecruiterListItem } from "@/features/recruiters/components/recruiter-item";
 
 export default function Home() {
   return (

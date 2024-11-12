@@ -5,6 +5,14 @@ import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+
 import NextAuthProvider from "@/providers/next-auth-proivder";
 
 export const metadata: Metadata = {
@@ -21,22 +29,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
-      <body className="flex min-h-screen min-w-[350px] flex-col antialiased">
-        <NextAuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Navbar />
-            <div className="flex-1">{children}</div>
-            <Footer />
-            <Toaster />
-          </ThemeProvider>
-        </NextAuthProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className="h-full">
+        <body className="flex min-h-screen min-w-[350px] flex-col antialiased">
+          <NextAuthProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Navbar />
+
+              <div className="flex-1">{children}</div>
+              <Footer />
+              <Toaster />
+            </ThemeProvider>
+          </NextAuthProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
