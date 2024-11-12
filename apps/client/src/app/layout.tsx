@@ -4,14 +4,8 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
-
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { dark, neobrutalism } from "@clerk/themes";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import NextAuthProvider from "@/providers/next-auth-proivder";
 
@@ -29,7 +23,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: [dark],
+      }}
+    >
       <html lang="en" className="h-full">
         <body className="flex min-h-screen min-w-[350px] flex-col antialiased">
           <NextAuthProvider>

@@ -19,7 +19,7 @@ export default async function DashboardPage() {
             <p>
               <strong>Role:</strong> {sessionClaims?.metadata.role}
             </p>
-            <pre className="mt-4 rounded-md bg-gray-100 p-4">
+            <pre className="mt-4 rounded-md bg-secondary p-4">
               {JSON.stringify({ sessionClaims, user }, null, 2)}
             </pre>
           </div>

@@ -85,7 +85,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen items-center justify-center bg-secondary px-4 py-12 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Create your account</CardTitle>
@@ -117,7 +117,7 @@ const SignUpPage = () => {
                 className="flex flex-col space-y-2"
               >
                 <div
-                  className="flex cursor-pointer items-center space-x-2 rounded-lg border p-4 hover:bg-gray-100"
+                  className="flex cursor-pointer items-center space-x-2 rounded-lg border p-4 hover:bg-gray-100 dark:hover:bg-muted"
                   onClick={() => handleRoleSelect("developer")}
                 >
                   <RadioGroupItem value="developer" id="developer" />
@@ -132,7 +132,7 @@ const SignUpPage = () => {
                   </Label>
                 </div>
                 <div
-                  className="flex cursor-pointer items-center space-x-2 rounded-lg border p-4 hover:bg-gray-100"
+                  className="flex cursor-pointer items-center space-x-2 rounded-lg border p-4 hover:bg-gray-100 dark:hover:bg-muted"
                   onClick={() => handleRoleSelect("recruiter")}
                 >
                   <RadioGroupItem value="recruiter" id="recruiter" />
@@ -150,7 +150,7 @@ const SignUpPage = () => {
             </DialogContent>
           </Dialog>
 
-          <form onSubmit={handleSubmit} className="mt-4">
+          <form onSubmit={handleSubmit} className="mt-4 bg-secondary">
             <SignUp
               path="/sign-up"
               routing="path"
