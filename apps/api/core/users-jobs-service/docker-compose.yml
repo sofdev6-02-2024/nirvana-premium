@@ -28,3 +28,11 @@ services:
       - 9400:8080
     networks:
       - nirvana-premium_chamba_network
+
+  redis:
+    image: redis:latest
+    container_name: redis_container  
+    ports:
+      - 6379:6379
+    networks:
+      - nirvana-premium_chamba_network

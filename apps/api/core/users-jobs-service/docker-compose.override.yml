@@ -9,6 +9,7 @@ services:
       - ServiceConfig__ApiHost=usersjobsservice1.api
       - ServiceConfig__Port=8080
       - ServiceConfig__ConsulUrl=http://consul:8500
+      - ConnectionStrings__Redis=redis:6379
     ports:
       - '8080'
 
@@ -22,5 +23,6 @@ services:
       - ServiceConfig__ApiHost=usersjobsservice2.api
       - ServiceConfig__Port=8080
       - ServiceConfig__ConsulUrl=http://consul:8500
+      - ConnectionStrings__Redis=redis:6379
     ports:
       - '8080'

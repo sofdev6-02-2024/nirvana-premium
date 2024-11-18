@@ -24,6 +24,12 @@ builder.Services.AddApplication().AddPresentation().AddInfrastructure(builder.Co
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "SampleInstance";
+});
+
 WebApplication app = builder.Build();
 
 app.MapEndpoints();
@@ -46,5 +52,7 @@ app.UseExceptionHandler();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseOutputCache();
 
 await app.RunAsync();
