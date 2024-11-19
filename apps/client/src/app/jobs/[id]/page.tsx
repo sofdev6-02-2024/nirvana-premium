@@ -1,10 +1,10 @@
-import JobPage from "@/features/jobs/components/job-page";
-import RecruiterInfo from "@/features/recruiters/components/recruiter-info";
-import { Button } from "@/components/ui/button";
-import { notFound } from "next/navigation";
-import { getJobById } from "@/features/jobs/lib/job-service";
-import { getRecruiterById } from "@/features/recruiters/lib/recruiter-service";
-import { Metadata, ResolvingMetadata } from "next";
+import { Button } from '@/components/ui/button';
+import JobPage from '@/features/jobs/components/job-page';
+import { getJobById } from '@/features/jobs/lib/job-service';
+import RecruiterInfo from '@/features/recruiters/components/recruiter-info';
+import { getRecruiterById } from '@/features/recruiters/lib/recruiter-service';
+import { Metadata, ResolvingMetadata } from 'next';
+import { notFound } from 'next/navigation';
 
 interface Props {
   params: { id: string };
@@ -12,7 +12,7 @@ interface Props {
 
 export async function generateMetadata(
   { params }: Props,
-  parent: ResolvingMetadata,
+  _parent: ResolvingMetadata,
 ): Promise<Metadata> {
   try {
     const job = await getJobById(params.id);
@@ -23,8 +23,8 @@ export async function generateMetadata(
     };
   } catch {
     return {
-      title: "Job Not Found",
-      description: "The requested job posting could not be found.",
+      title: 'Job Not Found',
+      description: 'The requested job posting could not be found.',
     };
   }
 }
@@ -32,9 +32,7 @@ export async function generateMetadata(
 export default async function Page({ params }: Props) {
   try {
     const job = await getJobById(params.id);
-    const recruiter = job.recruiterId
-      ? await getRecruiterById(job.recruiterId)
-      : null;
+    const recruiter = job.recruiterId ? await getRecruiterById(job.recruiterId) : null;
 
     const applicationLink = `/api/apply/${job.id}`;
 
@@ -59,7 +57,7 @@ export default async function Page({ params }: Props) {
       </main>
     );
   } catch (error) {
-    console.error("Error rendering job page:", error);
+    console.error('Error rendering job page:', error);
     notFound();
   }
 }

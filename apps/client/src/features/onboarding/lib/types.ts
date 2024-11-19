@@ -9,9 +9,9 @@ export interface Company {
 }
 
 export interface StepFields {
-  personal: ["firstName", "lastName"];
-  skills: ["skills", "specialty", "yearsOfExperience", "spokenLanguages"];
-  preferences: ["modality", "expectedSalary", "portfolioUrl"];
+  personal: ['firstName', 'lastName'];
+  skills: ['skills', 'specialty', 'yearsOfExperience', 'spokenLanguages'];
+  preferences: ['modality', 'expectedSalary', 'portfolioUrl'];
 }
 
 // Type for the step IDs

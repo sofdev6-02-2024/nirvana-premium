@@ -1,4 +1,3 @@
-
 export default function Home() {
   return (
     <main className="flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center px-4">

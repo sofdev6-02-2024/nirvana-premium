@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
+import { Check } from 'lucide-react';
 
 interface StepsProps {
   steps: Array<{
@@ -17,7 +17,7 @@ export function Steps({ steps, currentStep, onChange }: StepsProps) {
   return (
     <nav aria-label="Progress">
       <ol className="space-y-4 md:flex md:space-x-8 md:space-y-0">
-        {steps.map((step, index) => {
+        {steps.map((step) => {
           const isCurrent = currentStep === step.id;
           const isComplete = currentStep > step.id;
 
@@ -33,12 +33,12 @@ export function Steps({ steps, currentStep, onChange }: StepsProps) {
             >
               <div
                 className={cn(
-                  "group flex flex-col border-l-4 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4",
+                  'group flex flex-col border-l-4 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4',
                   isCurrent
-                    ? "border-primary"
+                    ? 'border-primary'
                     : isComplete
-                      ? "cursor-pointer border-primary"
-                      : "cursor-not-allowed border-muted-foreground/20",
+                      ? 'cursor-pointer border-primary'
+                      : 'cursor-not-allowed border-muted-foreground/20',
                 )}
               >
                 <span className="text-sm font-medium">
@@ -48,20 +48,13 @@ export function Steps({ steps, currentStep, onChange }: StepsProps) {
                       {step.name}
                     </span>
                   ) : (
-                    <span
-                      className={cn(
-                        isCurrent ? "text-primary" : "text-muted-foreground",
-                      )}
-                    >
+                    <span className={cn(isCurrent ? 'text-primary' : 'text-muted-foreground')}>
                       {step.name}
                     </span>
                   )}
                 </span>
                 <span
-                  className={cn(
-                    "text-sm",
-                    isCurrent ? "text-primary" : "text-muted-foreground",
-                  )}
+                  className={cn('text-sm', isCurrent ? 'text-primary' : 'text-muted-foreground')}
                 >
                   {step.description}
                 </span>

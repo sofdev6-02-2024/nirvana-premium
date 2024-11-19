@@ -1,20 +1,20 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
-import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/theme-provider";
-import { dark, neobrutalism } from "@clerk/themes";
-import { ClerkProvider } from "@clerk/nextjs";
+import Footer from '@/components/footer';
+import Navbar from '@/components/navbar';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
+import { ClerkProvider } from '@clerk/nextjs';
+import { dark } from '@clerk/themes';
+import type { Metadata } from 'next';
+import './globals.css';
 
-import NextAuthProvider from "@/providers/next-auth-proivder";
+import NextAuthProvider from '@/providers/next-auth-proivder';
 
 export const metadata: Metadata = {
   title: {
-    default: "Tu Primera Chamba",
-    template: "%s | Tu Primera Chamba",
+    default: 'Tu Primera Chamba',
+    template: '%s | Tu Primera Chamba',
   },
-  description: "Work harder and win",
+  description: 'Work harder and win',
 };
 
 export default function RootLayout({

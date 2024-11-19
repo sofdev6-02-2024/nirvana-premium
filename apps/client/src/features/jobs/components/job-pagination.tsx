@@ -1,6 +1,5 @@
-"use client";
+'use client';
 
-import { useSearchParams } from "next/navigation";
 import {
   Pagination,
   PaginationContent,
@@ -9,7 +8,8 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from '@/components/ui/pagination';
+import { useSearchParams } from 'next/navigation';
 
 interface JobPaginationProps {
   currentPage: number;
@@ -34,13 +34,13 @@ export function JobPagination({
 
     // Preserve all existing filters
     searchParams.forEach((value, key) => {
-      if (key !== "page") {
+      if (key !== 'page') {
         params.set(key, value);
       }
     });
 
     // Set the new page
-    params.set("page", page.toString());
+    params.set('page', page.toString());
     return `/jobs?${params.toString()}`;
   };
 
@@ -49,7 +49,7 @@ export function JobPagination({
 
   return (
     <Pagination className="mt-4 flex justify-center">
-      {" "}
+      {' '}
       {/* Center and add spacing */}
       <PaginationContent>
         {hasPreviousPage && (
@@ -68,9 +68,7 @@ export function JobPagination({
 
         {currentPage > 1 && (
           <PaginationItem>
-            <PaginationLink href={createPageUrl(currentPage - 1)}>
-              {currentPage - 1}
-            </PaginationLink>
+            <PaginationLink href={createPageUrl(currentPage - 1)}>{currentPage - 1}</PaginationLink>
           </PaginationItem>
         )}
 
@@ -80,9 +78,7 @@ export function JobPagination({
 
         {hasNextPage && (
           <PaginationItem>
-            <PaginationLink href={createPageUrl(currentPage + 1)}>
-              {currentPage + 1}
-            </PaginationLink>
+            <PaginationLink href={createPageUrl(currentPage + 1)}>{currentPage + 1}</PaginationLink>
           </PaginationItem>
         )}
 
@@ -90,9 +86,7 @@ export function JobPagination({
 
         {currentPage < totalPages - 1 && (
           <PaginationItem>
-            <PaginationLink href={createPageUrl(totalPages)}>
-              {totalPages}
-            </PaginationLink>
+            <PaginationLink href={createPageUrl(totalPages)}>{totalPages}</PaginationLink>
           </PaginationItem>
         )}
 

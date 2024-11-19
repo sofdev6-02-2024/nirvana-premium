@@ -1,6 +1,6 @@
-import { apiRequest } from "@/lib/api";
-import { Recruiter, PaginatedResponse } from "../lib/constant";
-import { Job } from "@/features/jobs/lib/constants";
+import { Job } from '@/features/jobs/lib/constants';
+import { apiRequest } from '@/lib/api';
+import { PaginatedResponse, Recruiter } from '../lib/constant';
 
 interface GetRecruitersOptions {
   page?: number;
@@ -9,24 +9,11 @@ interface GetRecruitersOptions {
   location?: string;
 }
 
-class RecruiterServiceError extends Error {
-  constructor(
-    message: string,
-    public statusCode?: number,
-  ) {
-    super(message);
-    this.name = "RecruiterServiceError";
-  }
-}
-
-export async function readCompany(
-  page: number = 1,
-  pageSize: number = 10,
-): Promise<Recruiter[]> {
+export async function readCompany(page: number = 1, pageSize: number = 10): Promise<Recruiter[]> {
   try {
     const response = await apiRequest<PaginatedResponse<Recruiter>>({
-      endpoint: "/users-jobs/recruiters",
-      method: "GET",
+      endpoint: '/users-jobs/recruiters',
+      method: 'GET',
       params: {
         page,
         pageSize,
@@ -34,14 +21,12 @@ export async function readCompany(
     });
     return response.items || [];
   } catch (error) {
-    console.error("Error fetching recruiters:", error);
+    console.error('Error fetching recruiters:', error);
     return [];
   }
 }
 
-export async function getRecruiterById(
-  id: string,
-): Promise<Recruiter | undefined> {
+export async function getRecruiterById(id: string): Promise<Recruiter | undefined> {
   try {
     const allRecruiters = await getAllRecruiters();
     return allRecruiters.find((recruiter) => recruiter.id === id);
@@ -58,7 +43,7 @@ export async function getAllRecruiters(
   try {
     return await readCompany(page, pageSize);
   } catch (error) {
-    console.error("Error in getAllRecruiters:", error);
+    console.error('Error in getAllRecruiters:', error);
     return [];
   }
 }
@@ -66,13 +51,13 @@ export async function getAllRecruiters(
 export async function searchRecruiters({
   page = 1,
   pageSize = 10,
-  search = "",
-  location = "",
+  search = '',
+  location = '',
 }: GetRecruitersOptions = {}): Promise<Recruiter[]> {
   try {
     const response = await apiRequest<PaginatedResponse<Recruiter>>({
-      endpoint: "/users-jobs/recruiters",
-      method: "GET",
+      endpoint: '/users-jobs/recruiters',
+      method: 'GET',
       params: {
         page,
         pageSize,
@@ -82,7 +67,7 @@ export async function searchRecruiters({
     });
     return response.items || [];
   } catch (error) {
-    console.error("Error searching recruiters:", error);
+    console.error('Error searching recruiters:', error);
     return [];
   }
 }
@@ -95,7 +80,7 @@ export async function getJobsByRecruiter(
   try {
     const response = await apiRequest<PaginatedResponse<Job>>({
       endpoint: `/users-jobs/jobs/recruiter/${recruiterId}`,
-      method: "GET",
+      method: 'GET',
       params: {
         page,
         pageSize,

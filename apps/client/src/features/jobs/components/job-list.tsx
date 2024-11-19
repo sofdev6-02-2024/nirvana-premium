@@ -1,30 +1,26 @@
-import { readJobs } from "../lib/job-service";
-import Link from "next/link";
-import JobListItem from "./job-list-item";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-  PaginationEllipsis,
-} from "@/components/ui/pagination";
+} from '@/components/ui/pagination';
+import Link from 'next/link';
+import { readJobs } from '../lib/job-service';
+import JobListItem from './job-list-item';
 
 interface JobListProps {
   searchParams?: { [key: string]: string | undefined };
 }
 
 export default async function JobList({ searchParams = {} }: JobListProps) {
-  const page = parseInt(searchParams.page || "1", 10);
+  const page = parseInt(searchParams.page || '1', 10);
   const pageSize = 5;
 
-  const { jobs, hasNextPage, totalCount } = await readJobs(
-    searchParams,
-    page,
-    pageSize,
-  );
+  const { jobs, hasNextPage, totalCount } = await readJobs(searchParams, page, pageSize);
 
   if (jobs.length === 0) {
     return (
@@ -32,8 +28,8 @@ export default async function JobList({ searchParams = {} }: JobListProps) {
         <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
           <h3 className="mt-4 text-lg font-semibold">No jobs found</h3>
           <p className="mb-4 mt-2 text-sm text-muted-foreground">
-            We could not find any jobs matching your criteria. Try adjusting your
-            filters or check back later.
+            We could not find any jobs matching your criteria. Try adjusting your filters or check
+            back later.
           </p>
           <Button variant="outline" asChild>
             <Link href="/jobs">Clear filters</Link>
@@ -47,12 +43,12 @@ export default async function JobList({ searchParams = {} }: JobListProps) {
     const params = new URLSearchParams();
 
     Object.entries(searchParams).forEach(([key, value]) => {
-      if (key !== "page" && value) {
+      if (key !== 'page' && value) {
         params.set(key, value);
       }
     });
 
-    params.set("page", pageNum.toString());
+    params.set('page', pageNum.toString());
     return `/jobs?${params.toString()}`;
   };
 
@@ -60,7 +56,7 @@ export default async function JobList({ searchParams = {} }: JobListProps) {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Showing <span className="font-medium">{jobs.length}</span> of{" "}
+          Showing <span className="font-medium">{jobs.length}</span> of{' '}
           <span className="font-medium">{totalCount}</span> jobs
         </p>
       </div>

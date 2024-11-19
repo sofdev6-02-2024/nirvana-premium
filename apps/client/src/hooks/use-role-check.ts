@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { useSession } from 'next-auth/react';
 
 type SessionWithRoles = {
   roles?: string[];
@@ -14,8 +14,8 @@ export function useRoleCheck() {
     return roles.some((role) => session.roles!.includes(role));
   };
 
-  const isCompany = () => hasRole("company");
-  const isDeveloper = () => hasRole("developer");
+  const isCompany = () => hasRole('company');
+  const isDeveloper = () => hasRole('developer');
 
   return {
     hasRole,

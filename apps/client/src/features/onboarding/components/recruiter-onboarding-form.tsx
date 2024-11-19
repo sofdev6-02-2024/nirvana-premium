@@ -1,11 +1,20 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useUser } from '@clerk/nextjs';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 
-import { Button } from "@/components/ui/button";
+import LoadingButton from '@/components/forms/loading-button';
+import LocationInput from '@/components/forms/location-input';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -14,23 +23,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { companyFormSchema, CompanyFormValues } from "../lib/validations";
-import { Company } from "../lib/types";
-import { Textarea } from "@/components/ui/text-area";
-import LocationInput from "@/components/forms/location-input";
-import { X } from "lucide-react";
-import LoadingButton from "@/components/forms/loading-button";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/text-area';
+import { X } from 'lucide-react';
+import { toast } from 'sonner';
+import { Company } from '../lib/types';
+import { companyFormSchema, CompanyFormValues } from '../lib/validations';
 
 export default function CompanyOnboardingForm() {
   const { user, isSignedIn, isLoaded } = useUser();
@@ -39,10 +38,10 @@ export default function CompanyOnboardingForm() {
   const form = useForm<CompanyFormValues>({
     resolver: zodResolver(companyFormSchema),
     defaultValues: {
-      name: "",
-      location: "",
-      description: "",
-      profilePicture: "",
+      name: '',
+      location: '',
+      description: '',
+      profilePicture: '',
     },
   });
 
@@ -72,13 +71,13 @@ export default function CompanyOnboardingForm() {
         },
       });
 
-      console.log("Company data ready for backend:", companyData);
+      console.log('Company data ready for backend:', companyData);
 
-      toast.success("Company profile created successfully!");
-      router.push("/dashboard");
+      toast.success('Company profile created successfully!');
+      router.push('/dashboard');
     } catch (error) {
-      console.error("Error saving company data:", error);
-      toast.error("Failed to create company profile. Please try again.");
+      console.error('Error saving company data:', error);
+      toast.error('Failed to create company profile. Please try again.');
     }
   };
 
@@ -91,9 +90,7 @@ export default function CompanyOnboardingForm() {
       <Card>
         <CardHeader>
           <CardTitle>Company Profile</CardTitle>
-          <CardDescription>
-            Complete your company profile to get started
-          </CardDescription>
+          <CardDescription>Complete your company profile to get started</CardDescription>
         </CardHeader>
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -107,9 +104,7 @@ export default function CompanyOnboardingForm() {
                     <FormControl>
                       <Input placeholder="Enter company name" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This will be your company's display name
-                    </FormDescription>
+                    <FormDescription>This will be your company&aposs display name</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -122,22 +117,19 @@ export default function CompanyOnboardingForm() {
                   <FormItem>
                     <FormLabel>Location</FormLabel>
                     <FormControl>
-                      <LocationInput
-                        onLocationSelected={field.onChange}
-                        ref={field.ref}
-                      />
+                      <LocationInput onLocationSelected={field.onChange} ref={field.ref} />
                     </FormControl>
-                    {watch("location") && (
+                    {watch('location') && (
                       <div className="flex items-center gap-1">
                         <button
                           type="button"
                           onClick={() => {
-                            setValue("location", "", { shouldValidate: true });
+                            setValue('location', '', { shouldValidate: true });
                           }}
                         >
                           <X className="h-5 w-5" />
                         </button>
-                        <span className="text-sm">{watch("location")}</span>
+                        <span className="text-sm">{watch('location')}</span>
                       </div>
                     )}
                     <FormMessage />
@@ -159,7 +151,7 @@ export default function CompanyOnboardingForm() {
                       />
                     </FormControl>
                     <FormDescription>
-                      Briefly describe your company's mission and values
+                      Briefly describe your company&aposs mission and values
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -173,28 +165,17 @@ export default function CompanyOnboardingForm() {
                   <FormItem>
                     <FormLabel>Upload a profile image</FormLabel>
                     <FormControl>
-                      <Input
-                        type="file"
-                        accept="image/*"
-                        placeholder="A file"
-                        {...field}
-                      />
+                      <Input type="file" accept="image/*" placeholder="A file" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      Upload your profile picture
-                    </FormDescription>
+                    <FormDescription>Upload your profile picture</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </CardContent>
             <CardFooter>
-              <LoadingButton
-                type="submit"
-                loading={isSubmitting}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Submitting..." : "Submit Job Posting"}
+              <LoadingButton type="submit" loading={isSubmitting} disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Submit Job Posting'}
               </LoadingButton>
             </CardFooter>
           </form>

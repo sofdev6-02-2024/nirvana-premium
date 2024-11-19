@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useSession, signIn, signOut } from "next-auth/react";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 
 export default function AuthStatus() {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (status !== "loading" && session?.error === "RefreshAccessTokenError") {
-      signOut({ callbackUrl: "/" });
+    if (status !== 'loading' && session?.error === 'RefreshAccessTokenError') {
+      signOut({ callbackUrl: '/' });
     }
   }, [session, status]);
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return <div className="text-sm">Loading...</div>;
   }
 
@@ -21,14 +21,16 @@ export default function AuthStatus() {
     return (
       <div className="flex items-center gap-3">
         <span className="text-sm">
-          <span className="text-gray-500">Logged in as</span>{" "}
+          <span className="text-gray-500">Logged in as</span>{' '}
           <span className="text-orange-500">{session.user.email}</span>
         </span>
         <Button
           variant="outline"
-          onClick={() => signOut({ 
-            callbackUrl: "/",
-          })}
+          onClick={() =>
+            signOut({
+              callbackUrl: '/',
+            })
+          }
         >
           Log out
         </Button>
@@ -37,10 +39,7 @@ export default function AuthStatus() {
   }
 
   return (
-    <Button 
-      variant="outline" 
-      onClick={() => signIn("keycloak")}
-    >
+    <Button variant="outline" onClick={() => signIn('keycloak')}>
       Log in
     </Button>
   );

@@ -1,15 +1,13 @@
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ShieldX } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AccessDenied() {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-4">
       <div className="text-center">
         <ShieldX className="mx-auto h-16 w-16 text-red-500 mb-4" />
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-primary">
-          Access Denied
-        </h1>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-primary">Access Denied</h1>
         <p className="mt-4 text-base text-gray-500">
           You dont have permission to access this page.
         </p>

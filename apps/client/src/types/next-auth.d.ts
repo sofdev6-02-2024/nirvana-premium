@@ -1,5 +1,5 @@
 import 'next-auth';
-import { JWT } from 'next-auth/jwt';
+import 'next-auth/jwt';
 
 declare module 'next-auth' {
   interface Session {
@@ -26,8 +26,7 @@ declare module 'next-auth/jwt' {
     id_token?: string;
     expires_at?: number;
     refresh_token?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    userProp?: any;
+    userProp?: unknown;
     error?: string;
   }
 }

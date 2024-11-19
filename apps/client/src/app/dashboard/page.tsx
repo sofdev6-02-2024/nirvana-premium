@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth, currentUser } from '@clerk/nextjs/server';
 
 export default async function DashboardPage() {
   const { sessionClaims } = await auth();

@@ -1,13 +1,23 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-import * as z from "zod";
-import { CheckIcon, X } from "lucide-react";
+import { useUser } from '@clerk/nextjs';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckIcon, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 
-import { Button } from "@/components/ui/button";
+import LoadingButton from '@/components/forms/loading-button';
+import LocationInput from '@/components/forms/location-input';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -16,53 +26,27 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import { useState } from "react";
-import { developerFormSchema, DeveloperFormValues } from "../lib/validations";
-import { mockLanguages, mockSkills } from "@/features/jobs/lib/mock";
-import LoadingButton from "@/components/forms/loading-button";
-import LocationInput from "@/components/forms/location-input";
-import { Step } from "../lib/types";
+} from '@/components/ui/select';
+import { mockLanguages, mockSkills } from '@/features/jobs/lib/mock';
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { Step } from '../lib/types';
+import { developerFormSchema, DeveloperFormValues } from '../lib/validations';
 
 interface StepFields {
-  personal: ["firstName", "lastName"];
-  skills: ["skills", "specialty", "yearsOfExperience", "spokenLanguages"];
-  preferences: ["modality", "expectedSalary", "portfolioUrl"];
+  personal: ['firstName', 'lastName'];
+  skills: ['skills', 'specialty', 'yearsOfExperience', 'spokenLanguages'];
+  preferences: ['modality', 'expectedSalary', 'portfolioUrl'];
 }
-
-const steps = [
-  {
-    id: "personal",
-    name: "Personal Information",
-  },
-  {
-    id: "skills",
-    name: "Skills & Experience",
-  },
-  {
-    id: "preferences",
-    name: "Work Preferences",
-  },
-] as const;
 
 export default function DeveloperOnboardingForm() {
   const { user, isSignedIn, isLoaded } = useUser();
@@ -72,16 +56,16 @@ export default function DeveloperOnboardingForm() {
   const form = useForm<DeveloperFormValues>({
     resolver: zodResolver(developerFormSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      location: "",
+      firstName: '',
+      lastName: '',
+      location: '',
       skills: [],
-      specialization: "Frontend",
+      specialization: 'Frontend',
       yearsOfExperience: 0,
       spokenLanguages: [],
-      modality: "Remote",
+      modality: 'Remote',
       expectedSalary: 0,
-      portfolioUrl: "",
+      portfolioUrl: '',
     },
   });
 
@@ -104,34 +88,34 @@ export default function DeveloperOnboardingForm() {
         },
       });
 
-      console.log("Developer data ready for backend:", data);
+      console.log('Developer data ready for backend:', data);
 
-      toast.success("Profile created successfully!");
-      router.push("/dashboard");
+      toast.success('Profile created successfully!');
+      router.push('/dashboard');
     } catch (error) {
-      console.error("Error updating onboarding status:", error);
-      toast.error("Something went wrong. Please try again.");
+      console.error('Error updating onboarding status:', error);
+      toast.error('Something went wrong. Please try again.');
     }
   };
 
   const stepFields: StepFields = {
-    personal: ["firstName", "lastName"],
-    skills: ["skills", "specialty", "yearsOfExperience", "spokenLanguages"],
-    preferences: ["modality", "expectedSalary", "portfolioUrl"],
+    personal: ['firstName', 'lastName'],
+    skills: ['skills', 'specialty', 'yearsOfExperience', 'spokenLanguages'],
+    preferences: ['modality', 'expectedSalary', 'portfolioUrl'],
   } as const;
 
   const steps: Step[] = [
     {
-      id: "personal",
-      name: "Personal Information",
+      id: 'personal',
+      name: 'Personal Information',
     },
     {
-      id: "skills",
-      name: "Skills & Experience",
+      id: 'skills',
+      name: 'Skills & Experience',
     },
     {
-      id: "preferences",
-      name: "Work Preferences",
+      id: 'preferences',
+      name: 'Work Preferences',
     },
   ];
 
@@ -161,19 +145,19 @@ export default function DeveloperOnboardingForm() {
               <li
                 key={step.id}
                 className={cn(
-                  "relative",
-                  index !== steps.length - 1 ? "pr-8 sm:pr-20" : "",
-                  "flex items-center",
+                  'relative',
+                  index !== steps.length - 1 ? 'pr-8 sm:pr-20' : '',
+                  'flex items-center',
                 )}
               >
                 <div
                   className={cn(
-                    "relative flex h-8 w-8 items-center justify-center rounded-full",
+                    'relative flex h-8 w-8 items-center justify-center rounded-full',
                     currentStep > index
-                      ? "bg-primary text-primary-foreground"
+                      ? 'bg-primary text-primary-foreground'
                       : currentStep === index
-                        ? "border-2 border-primary bg-background"
-                        : "border-2 border-muted bg-background",
+                        ? 'border-2 border-primary bg-background'
+                        : 'border-2 border-muted bg-background',
                   )}
                 >
                   {currentStep > index ? (
@@ -185,14 +169,12 @@ export default function DeveloperOnboardingForm() {
                 {index !== steps.length - 1 && (
                   <div
                     className={cn(
-                      "absolute left-0 top-4 -z-10 h-0.5 w-full",
-                      currentStep > index ? "bg-primary" : "bg-muted",
+                      'absolute left-0 top-4 -z-10 h-0.5 w-full',
+                      currentStep > index ? 'bg-primary' : 'bg-muted',
                     )}
                   />
                 )}
-                <span className="absolute left-0 top-10 text-sm font-medium">
-                  {step.name}
-                </span>
+                <span className="absolute left-0 top-10 text-sm font-medium">{step.name}</span>
               </li>
             ))}
           </ol>
@@ -204,10 +186,10 @@ export default function DeveloperOnboardingForm() {
           <CardTitle>{steps[currentStep].name}</CardTitle>
           <CardDescription>
             {currentStep === 0
-              ? "Enter your personal information"
+              ? 'Enter your personal information'
               : currentStep === 1
-                ? "Tell us about your skills and experience"
-                : "Share your work preferences"}
+                ? 'Tell us about your skills and experience'
+                : 'Share your work preferences'}
           </CardDescription>
         </CardHeader>
         <Form {...form}>
@@ -222,10 +204,7 @@ export default function DeveloperOnboardingForm() {
                       <FormItem>
                         <FormLabel>First Name</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="Enter your first name"
-                            {...field}
-                          />
+                          <Input placeholder="Enter your first name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -238,10 +217,7 @@ export default function DeveloperOnboardingForm() {
                       <FormItem>
                         <FormLabel>Last Name</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="Enter your last name"
-                            {...field}
-                          />
+                          <Input placeholder="Enter your last name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -255,24 +231,21 @@ export default function DeveloperOnboardingForm() {
                       <FormItem>
                         <FormLabel>Location</FormLabel>
                         <FormControl>
-                          <LocationInput
-                            onLocationSelected={field.onChange}
-                            ref={field.ref}
-                          />
+                          <LocationInput onLocationSelected={field.onChange} ref={field.ref} />
                         </FormControl>
-                        {watch("location") && (
+                        {watch('location') && (
                           <div className="flex items-center gap-1">
                             <button
                               type="button"
                               onClick={() => {
-                                setValue("location", "", {
+                                setValue('location', '', {
                                   shouldValidate: true,
                                 });
                               }}
                             >
                               <X className="h-5 w-5" />
                             </button>
-                            <span className="text-sm">{watch("location")}</span>
+                            <span className="text-sm">{watch('location')}</span>
                           </div>
                         )}
                         <FormMessage />
@@ -302,16 +275,12 @@ export default function DeveloperOnboardingForm() {
                                   onCheckedChange={(checked) => {
                                     const newValue = checked
                                       ? [...field.value, skill.id]
-                                      : field.value.filter(
-                                          (value) => value !== skill.id,
-                                        );
+                                      : field.value.filter((value) => value !== skill.id);
                                     field.onChange(newValue);
                                   }}
                                 />
                               </FormControl>
-                              <FormLabel className="font-normal">
-                                {skill.name}
-                              </FormLabel>
+                              <FormLabel className="font-normal">{skill.name}</FormLabel>
                             </FormItem>
                           ))}
                         </div>
@@ -325,10 +294,7 @@ export default function DeveloperOnboardingForm() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Specialization</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Select specialization" />
@@ -355,9 +321,7 @@ export default function DeveloperOnboardingForm() {
                           <Input
                             type="number"
                             {...field}
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value))
-                            }
+                            onChange={(e) => field.onChange(Number(e.target.value))}
                           />
                         </FormControl>
                         <FormMessage />
@@ -382,16 +346,12 @@ export default function DeveloperOnboardingForm() {
                                   onCheckedChange={(checked) => {
                                     const newValue = checked
                                       ? [...field.value, language.id]
-                                      : field.value.filter(
-                                          (value) => value !== language.id,
-                                        );
+                                      : field.value.filter((value) => value !== language.id);
                                     field.onChange(newValue);
                                   }}
                                 />
                               </FormControl>
-                              <FormLabel className="font-normal">
-                                {language.name}
-                              </FormLabel>
+                              <FormLabel className="font-normal">{language.name}</FormLabel>
                             </FormItem>
                           ))}
                         </div>
@@ -410,10 +370,7 @@ export default function DeveloperOnboardingForm() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Modality</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Select modality" />
@@ -439,9 +396,7 @@ export default function DeveloperOnboardingForm() {
                           <Input
                             type="number"
                             {...field}
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value))
-                            }
+                            onChange={(e) => field.onChange(Number(e.target.value))}
                           />
                         </FormControl>
                         <FormMessage />
@@ -455,10 +410,7 @@ export default function DeveloperOnboardingForm() {
                       <FormItem>
                         <FormLabel>Portfolio URL</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="https://your-portfolio.com"
-                            {...field}
-                          />
+                          <Input placeholder="https://your-portfolio.com" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -471,16 +423,9 @@ export default function DeveloperOnboardingForm() {
                       <FormItem>
                         <FormLabel>Upload a profile image</FormLabel>
                         <FormControl>
-                          <Input
-                            type="file"
-                            accept="image/*"
-                            placeholder="A file"
-                            {...field}
-                          />
+                          <Input type="file" accept="image/*" placeholder="A file" {...field} />
                         </FormControl>
-                        <FormDescription>
-                          Upload your profile picture
-                        </FormDescription>
+                        <FormDescription>Upload your profile picture</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -498,12 +443,8 @@ export default function DeveloperOnboardingForm() {
                 Previous
               </Button>
               {currentStep === steps.length - 1 ? (
-                <LoadingButton
-                  type="submit"
-                  loading={isSubmitting}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Submitting..." : "Complete Profile"}
+                <LoadingButton type="submit" loading={isSubmitting} disabled={isSubmitting}>
+                  {isSubmitting ? 'Submitting...' : 'Complete Profile'}
                 </LoadingButton>
               ) : (
                 <Button type="button" onClick={nextStep}>

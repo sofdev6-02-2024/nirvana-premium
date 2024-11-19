@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+} from '@/components/ui/select';
+import { X } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
 export interface JobFilters {
   search: string;
-  modality: "Remote" | "OnSite" | "Hybrid" | "all";
-  schedule: "FullTime" | "PartTime" | "all";
+  modality: 'Remote' | 'OnSite' | 'Hybrid' | 'all';
+  schedule: 'FullTime' | 'PartTime' | 'all';
   minSalary: string;
 }
 
@@ -26,22 +26,22 @@ export function JobFilters() {
   const searchParams = useSearchParams();
 
   const [filters, setFilters] = useState({
-    search: searchParams.get("search") || "",
-    modality: (searchParams.get("modality") as JobFilters["modality"]) || "all",
-    schedule: (searchParams.get("schedule") as JobFilters["schedule"]) || "all",
-    minSalary: searchParams.get("minSalary") || "",
+    search: searchParams.get('search') || '',
+    modality: (searchParams.get('modality') as JobFilters['modality']) || 'all',
+    schedule: (searchParams.get('schedule') as JobFilters['schedule']) || 'all',
+    minSalary: searchParams.get('minSalary') || '',
   });
 
   const updateURL = (newFilters: typeof filters) => {
     const params = new URLSearchParams();
 
     Object.entries(newFilters).forEach(([key, value]) => {
-      if (value && value !== "all") {
+      if (value && value !== 'all') {
         params.set(key, value);
       }
     });
 
-    params.delete("page");
+    params.delete('page');
 
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -54,20 +54,20 @@ export function JobFilters() {
 
   const resetFilters = () => {
     const defaultFilters = {
-      search: "",
-      modality: "all",
-      schedule: "all",
-      minSalary: "",
+      search: '',
+      modality: 'all',
+      schedule: 'all',
+      minSalary: '',
     };
     setFilters(defaultFilters);
     router.push(pathname);
   };
 
   const hasActiveFilters =
-    filters.search !== "" ||
-    filters.modality !== "all" ||
-    filters.schedule !== "all" ||
-    filters.minSalary !== "";
+    filters.search !== '' ||
+    filters.modality !== 'all' ||
+    filters.schedule !== 'all' ||
+    filters.minSalary !== '';
 
   return (
     <div className="mb-6">
@@ -75,13 +75,10 @@ export function JobFilters() {
         <Input
           placeholder="Search jobs..."
           value={filters.search}
-          onChange={(e) => handleChange("search", e.target.value)}
+          onChange={(e) => handleChange('search', e.target.value)}
         />
 
-        <Select
-          value={filters.modality}
-          onValueChange={(value) => handleChange("modality", value)}
-        >
+        <Select value={filters.modality} onValueChange={(value) => handleChange('modality', value)}>
           <SelectTrigger>
             <SelectValue placeholder="All Modalities" />
           </SelectTrigger>
@@ -93,10 +90,7 @@ export function JobFilters() {
           </SelectContent>
         </Select>
 
-        <Select
-          value={filters.schedule}
-          onValueChange={(value) => handleChange("schedule", value)}
-        >
+        <Select value={filters.schedule} onValueChange={(value) => handleChange('schedule', value)}>
           <SelectTrigger>
             <SelectValue placeholder="All Schedules" />
           </SelectTrigger>
@@ -111,7 +105,7 @@ export function JobFilters() {
           type="number"
           placeholder="Min salary per hour"
           value={filters.minSalary}
-          onChange={(e) => handleChange("minSalary", e.target.value)}
+          onChange={(e) => handleChange('minSalary', e.target.value)}
           min="0"
         />
       </div>

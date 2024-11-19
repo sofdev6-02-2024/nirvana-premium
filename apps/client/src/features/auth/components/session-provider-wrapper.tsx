@@ -1,18 +1,14 @@
-"use client";
+'use client';
 
-import { ReactNode } from "react";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider } from 'next-auth/react';
+import { ReactNode } from 'react';
 
 interface SessionProviderWrapperProps {
-    children: ReactNode; 
+  children: ReactNode;
 }
 
 const SessionProviderWrapper: React.FC<SessionProviderWrapperProps> = ({ children }) => {
-    return (
-        <SessionProvider>
-            {children}
-        </SessionProvider>
-    );
+  return <SessionProvider>{children}</SessionProvider>;
 };
 
 export default SessionProviderWrapper;

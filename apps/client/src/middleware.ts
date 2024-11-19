@@ -1,24 +1,20 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
-const isProtectedRoute = createRouteMatcher([
-  "/onboarding(.*)",
-  "/jobs/(.*)",
-  "/dashboard(.*)",
-]);
+const isProtectedRoute = createRouteMatcher(['/onboarding(.*)', '/jobs/(.*)', '/dashboard(.*)']);
 
-const isRecruiterRoute = createRouteMatcher(["/jobs/new"]);
+const isRecruiterRoute = createRouteMatcher(['/jobs/new']);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isRecruiterRoute(req)) {
     try {
       await auth.protect();
-      if ((await auth()).sessionClaims?.metadata?.role !== "recruiter") {
-        const url = new URL("/access-denied", req.url);
+      if ((await auth()).sessionClaims?.metadata?.role !== 'recruiter') {
+        const url = new URL('/access-denied', req.url);
         return NextResponse.redirect(url);
       }
     } catch {
-      const url = new URL("/access-denied", req.url);
+      const url = new URL('/access-denied', req.url);
       return NextResponse.redirect(url);
     }
   }
@@ -27,7 +23,7 @@ export default clerkMiddleware(async (auth, req) => {
     try {
       await auth.protect();
     } catch {
-      const url = new URL("/access-denied", req.url);
+      const url = new URL('/access-denied', req.url);
       return NextResponse.redirect(url);
     }
   }
@@ -35,7 +31,7 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    "/(api|trpc)(.*)",
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    '/(api|trpc)(.*)',
   ],
 };

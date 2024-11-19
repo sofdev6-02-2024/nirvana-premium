@@ -1,7 +1,6 @@
-import { jobCommandSchema } from "@/features/jobs/lib/validation";
-import { nanoid } from "nanoid";
-import { toSlug } from "@/lib/utils";
-import { apiRequest } from "@/lib/api";
+import { apiRequest } from '@/lib/api';
+import { toSlug } from '@/lib/utils';
+import { nanoid } from 'nanoid';
 
 export async function createJobPosting(formData: FormData, accessToken: string) {
   const values = Object.fromEntries(formData.entries());
@@ -19,7 +18,7 @@ export async function createJobPosting(formData: FormData, accessToken: string) 
   } = createJobSchema.parse(values);
 
   const slug = `${toSlug(title)}-${nanoid(10)}`;
-  const companyLogoUrl = "company-logo-placeholder.png";
+  const companyLogoUrl = 'company-logo-placeholder.png';
 
   const newJob = {
     slug,
@@ -33,14 +32,14 @@ export async function createJobPosting(formData: FormData, accessToken: string) 
     applicationUrl: applicationUrl?.trim(),
     description: description?.trim(),
     salary: parseInt(salary),
-    approved: true
+    approved: true,
   };
 
   try {
-    const response = await apiRequest("/api/users-jobs/jobs", "POST", newJob, accessToken);
+    const response = await apiRequest('/api/users-jobs/jobs', 'POST', newJob, accessToken);
     return response;
   } catch (error) {
-    console.error("Error creating job:", error);
+    console.error('Error creating job:', error);
     throw error;
   }
 }
