@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using SkApplication.Persistent;
 using SkDomain.Entities;
 using SkDomain.Events;
-using SkInfrastructure.Configurations;
+using Configurations;
+using Microsoft.Extensions.DependencyInjection;
+using Seed;
 
 public abstract class BaseApplicationDbContext(
     DbContextOptions options,
@@ -14,14 +16,13 @@ public abstract class BaseApplicationDbContext(
     Assembly assembly
 ) : DbContext(options), IBaseApplicationDbContext
 {
-    public abstract Task SeedDataAsync();
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         _ = modelBuilder.ApplyConfigurationsFromAssembly(assembly);
 
         _ = modelBuilder.HasDefaultSchema(Constants.DefaultSchema);
     }
+
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -51,5 +52,19 @@ public abstract class BaseApplicationDbContext(
         {
             await publisher.Publish(domainEvent);
         }
+    }
+
+    public virtual async Task SeedDataAsync(IServiceScope scope)
+    {
+        IOrderedEnumerable<ISeedEntity> seedEntities = scope.ServiceProvider
+            .GetServices<ISeedEntity>()
+            .OrderBy(entity => entity.Priority);
+
+        foreach (ISeedEntity seedEntity in seedEntities)
+        {
+            seedEntity.SeedData(this);
+        }
+
+        await SaveChangesAsync();
     }
 }

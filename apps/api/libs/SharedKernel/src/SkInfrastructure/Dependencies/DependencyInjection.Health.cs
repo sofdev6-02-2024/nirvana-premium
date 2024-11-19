@@ -1,9 +1,8 @@
 namespace SkInfrastructure.Dependencies;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SkInfrastructure.Configurations;
+using Configurations;
 
 public static partial class DependencyInjection
 {

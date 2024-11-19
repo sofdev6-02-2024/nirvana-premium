@@ -1,5 +1,6 @@
 namespace Infrastructure;
 
+using System.Reflection;
 using Application.Persistent;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ public static class DependencyInjection
     {
         return services
             .AddDatabase<IApplicationDbContext, ApplicationDbContext>(configuration)
+            .AddSeedDataInternal(Assembly.GetExecutingAssembly())
             .AddHealthChecksInternal(configuration)
             .AddAuthorizationInternal()
             .AddAuthenticationInternal(configuration);

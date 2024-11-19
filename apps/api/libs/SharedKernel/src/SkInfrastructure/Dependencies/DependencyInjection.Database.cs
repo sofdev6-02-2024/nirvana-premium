@@ -16,7 +16,7 @@ public static partial class DependencyInjection
         where TIDbContext : class, IBaseApplicationDbContext
         where TDbContext : DbContext, TIDbContext
     {
-        string? connectionString = configuration.GetConnectionString(Constants.ConnectionString)!;
+        string connectionString = configuration.GetConnectionString(Constants.ConnectionString)!;
 
         _ = services.AddDbContext<TDbContext>(options =>
             options

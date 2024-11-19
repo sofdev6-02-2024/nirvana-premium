@@ -20,10 +20,10 @@ public static class MigrationExtensions
 
         using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-        using T dbContext = scope.ServiceProvider.GetRequiredService<T>();
+        await using T dbContext = scope.ServiceProvider.GetRequiredService<T>();
 
         await dbContext.Database.MigrateAsync();
 
-        await dbContext.SeedDataAsync();
+        await dbContext.SeedDataAsync(scope);
     }
 }

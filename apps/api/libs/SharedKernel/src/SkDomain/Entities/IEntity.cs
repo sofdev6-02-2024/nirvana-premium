@@ -2,14 +2,9 @@ namespace SkDomain.Entities;
 
 using Events;
 
-public interface IEntity
+public interface IEntity : IRegister
 {
     Guid Id { get; }
-
-    DateTime CreatedAt { get; }
-    DateTime UpdatedAt { get; }
-
-    bool IsActive { get; }
 
     IList<IDomainEvent> DomainEvents { get; }
 
