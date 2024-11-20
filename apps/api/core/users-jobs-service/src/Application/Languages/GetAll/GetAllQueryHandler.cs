@@ -7,27 +7,24 @@ using SkApplication.Contracts;
 using SkDomain.Results;
 
 internal sealed class GetAllQueryHandler(IApplicationDbContext context)
-    : IQueryHandler<GetAllQuery, Response>
+    : IQueryHandler<GetAllQuery, IList<Response>>
 {
-
-    public async Task<Result<Response>> Handle(GetAllQuery query,
+    public async Task<Result<IList<Response>>> Handle(GetAllQuery query,
         CancellationToken cancellationToken)
     {
-        Converter converter = new();
+        IQueryable<Language> languages =
+            context.Languages;
 
-        IQueryable<Domain.Attributes.Languages.Language> languages =
-            context.Languages.OrderBy(language => language.Name);
-
-        List<Domain.Attributes.Languages.Language> languageList =
-            await languages.ToListAsync(cancellationToken).ConfigureAwait(false);
-
-
-        if (!await languages.AnyAsync(cancellationToken).ConfigureAwait(false))
+        if (!await languages.AnyAsync(cancellationToken))
         {
-            return Result.Failure<Response>(LanguageErrors.NoLanguagesFound);
+            return Result.Failure<IList<Response>>(LanguageErrors.NoLanguagesFound);
         }
 
-        Response response = converter.Convert(languageList);
+        Converter converter = new();
+
+        IList<Response> response = await languages.Select(l => converter.Convert(l))
+            .ToListAsync(cancellationToken);
+
         return Result.Success(response);
     }
 }

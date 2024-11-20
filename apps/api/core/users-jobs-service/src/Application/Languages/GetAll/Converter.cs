@@ -1,18 +1,16 @@
 namespace Application.Languages.GetAll;
 
+using Domain.Attributes.Languages;
 using SkApplication.Contracts;
 
-internal sealed class Converter : IConverter<List<Domain.Attributes.Languages.Language>, Response>
+internal sealed class Converter : IConverter<Language, Response>
 {
-    public Response Convert(List<Domain.Attributes.Languages.Language> languages)
+    public Response Convert(Language from)
     {
         return new Response
         {
-            Languages = languages.Select(s => new Language
-            {
-                Id = s.Id,
-                Name = s.Name,
-            }).ToList()
+            Id = from.Id,
+            Name = from.Name
         };
     }
 }

@@ -18,10 +18,12 @@ public class GetAll : IEndpoint
                 ) =>
                 {
                     GetAllQuery query = new();
-                    Result<Response> result = await sender.Send(
+
+                    Result<IList<Response>> result = await sender.Send(
                         query,
                         cancellationToken
-                    ).ConfigureAwait(false);
+                    );
+
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }
             )
