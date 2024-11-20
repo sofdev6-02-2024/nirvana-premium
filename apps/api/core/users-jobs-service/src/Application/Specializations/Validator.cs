@@ -1,9 +1,8 @@
 namespace Application.Specializations;
 
-using Domain.Attributes.Specializations;
 using FluentValidation;
 
-public sealed class Validator : AbstractValidator<List<Specialization>>
+public sealed class Validator : AbstractValidator<GetAllQuery>
 {
     public Validator()
     {
