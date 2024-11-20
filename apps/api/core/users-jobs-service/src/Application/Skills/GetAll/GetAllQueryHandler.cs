@@ -7,27 +7,23 @@ using SkApplication.Contracts;
 using SkDomain.Results;
 
 internal sealed class GetAllQueryHandler(IApplicationDbContext context)
-    : IQueryHandler<GetAllQuery, Response>
+    : IQueryHandler<GetAllQuery, IList<Response>>
 {
-
-    public async Task<Result<Response>> Handle(GetAllQuery query,
+    public async Task<Result<IList<Response>>> Handle(GetAllQuery query,
         CancellationToken cancellationToken)
     {
-        Converter converter = new();
+        IQueryable<Skill> skills = context.Skills;
 
-        IQueryable<Domain.Attributes.Skills.Skill> skills =
-            context.Skills.OrderBy(skill => skill.Name);
-
-        List<Domain.Attributes.Skills.Skill> skillList =
-            await skills.ToListAsync(cancellationToken).ConfigureAwait(false);
-
-
-        if (!await skills.AnyAsync(cancellationToken).ConfigureAwait(false))
+        if (!await skills.AnyAsync(cancellationToken))
         {
-            return Result.Failure<Response>(SkillErrors.NoSkillsFound);
+            return Result.Failure<IList<Response>>(SkillErrors.NoSkillsFound);
         }
 
-        Response response = converter.Convert(skillList);
+        Converter converter = new();
+
+        IList<Response> response =
+            await skills.Select(s => converter.Convert(s)).ToListAsync(cancellationToken);
+
         return Result.Success(response);
     }
 }
