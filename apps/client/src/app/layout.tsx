@@ -1,13 +1,10 @@
-import Footer from '@/components/footer';
-import Navbar from '@/components/navbar';
+// app/layout.tsx
 import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from '@/components/ui/sonner';
 import { ClerkProvider } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 import type { Metadata } from 'next';
 import './globals.css';
-
-import NextAuthProvider from '@/providers/next-auth-proivder';
+import Navbar from '@/components/navbar';
 
 export const metadata: Metadata = {
   title: {
@@ -28,22 +25,17 @@ export default function RootLayout({
         baseTheme: [dark],
       }}
     >
-      <html lang="en" className="h-full">
-        <body className="flex min-h-screen min-w-[350px] flex-col antialiased">
-          <NextAuthProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Navbar />
-
-              <div className="flex-1">{children}</div>
-              <Footer />
-              <Toaster />
-            </ThemeProvider>
-          </NextAuthProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body className="min-h-screen bg-background font-sans antialiased">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
+            {children}
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
