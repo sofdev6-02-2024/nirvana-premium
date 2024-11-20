@@ -6,7 +6,7 @@ using SkDomain.Results;
 using SkWeb.Api.Endpoints;
 using SkWeb.Api.Infrastructure;
 
-public class GetAll : IEndpoint
+internal sealed class GetAll : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -19,7 +19,7 @@ public class GetAll : IEndpoint
                 {
                     GetAllQuery query = new();
 
-                    Result<Response> result = await sender.Send(
+                    Result<IList<Response>> result = await sender.Send(
                         query,
                         cancellationToken
                     );

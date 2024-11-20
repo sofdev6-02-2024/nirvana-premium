@@ -1,32 +1,30 @@
 namespace Application.Specializations.GetAll;
 
-using Application.Persistent;
+using Persistent;
 using Domain.Attributes.Specializations;
 using Microsoft.EntityFrameworkCore;
 using SkApplication.Contracts;
 using SkDomain.Results;
 
 internal sealed class GetAllQueryHandler(IApplicationDbContext context)
-    : IQueryHandler<GetAllQuery, Response>
+    : IQueryHandler<GetAllQuery, IList<Response>>
 {
-
-    public async Task<Result<Response>> Handle(GetAllQuery query,
+    public async Task<Result<IList<Response>>> Handle(GetAllQuery query,
         CancellationToken cancellationToken)
     {
-        Converter converter = new();
-
         IQueryable<Specialization> specializations =
-            context.Specializations.OrderBy(specialization => specialization.Name);
+            context.Specializations;
 
         if (!await specializations.AnyAsync(cancellationToken))
         {
-            return Result.Failure<Response>(SpecializationErrors.NotSpecializationsFound);
+            return Result.Failure<IList<Response>>(SpecializationErrors.NotSpecializationsFound);
         }
 
-        List<Specialization> specializationsList =
-            await specializations.ToListAsync(cancellationToken);
+        Converter converter = new();
 
-        Response response = converter.Convert(specializationsList);
+        IList<Response> response =
+            await specializations.Select(s => converter.Convert(s)).ToListAsync(cancellationToken);
+
         return Result.Success(response);
     }
 }

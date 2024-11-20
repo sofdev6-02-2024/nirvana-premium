@@ -3,17 +3,14 @@ namespace Application.Specializations.GetAll;
 using Domain.Attributes.Specializations;
 using SkApplication.Contracts;
 
-internal sealed class Converter : IConverter<List<Specialization>, Response>
+internal sealed class Converter : IConverter<Specialization, Response>
 {
-    public Response Convert(List<Specialization> specialization)
+    public Response Convert(Specialization from)
     {
         return new Response
         {
-            Specializations = specialization.Select(s => new Item
-            {
-                Id = s.Id,
-                Name = s.Name,
-            }).ToList()
+            Id = from.Id,
+            Name = from.Name
         };
     }
 }
