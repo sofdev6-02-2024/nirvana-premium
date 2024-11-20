@@ -1,4 +1,4 @@
-namespace Application.Specializations;
+namespace Application.Specializations.GetAll;
 
 using Domain.Attributes.Specializations;
 using SkApplication.Contracts;

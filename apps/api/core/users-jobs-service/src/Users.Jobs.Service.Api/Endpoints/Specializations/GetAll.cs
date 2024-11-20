@@ -1,6 +1,6 @@
 namespace Users.Jobs.Service.Api.Endpoints.Specializations;
 
-using Application.Specializations;
+using Application.Specializations.GetAll;
 using MediatR;
 using SkDomain.Results;
 using SkWeb.Api.Endpoints;

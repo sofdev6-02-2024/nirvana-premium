@@ -1,4 +1,4 @@
-namespace Application.Specializations;
+namespace Application.Specializations.GetAll;
 
 public sealed class Response
 {
