@@ -1,6 +1,6 @@
-namespace Users.Jobs.Service.Api.Endpoints.Languages;
+namespace Users.Jobs.Service.Api.Endpoints.Skills;
 
-using Application.Languages.GetAll;
+using Application.Skills.GetAll;
 using MediatR;
 using SkDomain.Results;
 using SkWeb.Api.Endpoints;
@@ -11,7 +11,7 @@ internal sealed class GetAll : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         _ = app.MapGet(
-                "api/users-jobs/languages",
+                "api/users-jobs/skills",
                 static async (
                     ISender sender,
                     CancellationToken cancellationToken
@@ -27,6 +27,6 @@ internal sealed class GetAll : IEndpoint
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }
             )
-            .WithTags(Tags.Languages);
+            .WithTags(Tags.Skills);
     }
 }
