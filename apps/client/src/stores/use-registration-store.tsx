@@ -1,12 +1,12 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface RegistrationData {
   id?: string;
   username?: string;
   firstName?: string | null;
   lastName?: string | null;
-  role: "developer" | "recruiter";
+  role: 'developer' | 'recruiter';
   email?: string;
 }
 
@@ -28,7 +28,7 @@ export const useRegistrationStore = create<RegistrationStore>()(
       setPendingBackendSync: (pending) => set({ pendingBackendSync: pending }),
     }),
     {
-      name: "registration-storage",
+      name: 'registration-storage',
     },
   ),
 );

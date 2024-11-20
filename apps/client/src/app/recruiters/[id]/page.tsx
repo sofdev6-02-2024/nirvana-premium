@@ -1,10 +1,10 @@
-import { Suspense } from "react";
-import { notFound } from "next/navigation";
-import { getRecruiterById } from "@/features/recruiters/lib/recruiter-service";
-import { JobListSkeleton } from "@/features/jobs/components/job-list-skeleton";
-import { Metadata, ResolvingMetadata } from "next";
-import { RecruiterDetailHeader } from "@/features/recruiters/components/recruiter-header";
-import { RecruiterJobList } from "@/features/recruiters/components/recruiter-job.-list";
+import { JobListSkeleton } from '@/features/jobs/components/job-list-skeleton';
+import { RecruiterDetailHeader } from '@/features/recruiters/components/recruiter-header';
+import { RecruiterJobList } from '@/features/recruiters/components/recruiter-job.-list';
+import { getRecruiterById } from '@/features/recruiters/lib/recruiter-service';
+import { Metadata, ResolvingMetadata } from 'next';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 interface Props {
   params: { id: string };
@@ -12,11 +12,11 @@ interface Props {
 
 export async function generateMetadata(
   { params }: Props,
-  parent: ResolvingMetadata,
+  _parent: ResolvingMetadata,
 ): Promise<Metadata> {
   try {
     const recruiter = await getRecruiterById(params.id);
-    if (!recruiter) return { title: "Recruiter Not Found" };
+    if (!recruiter) return { title: 'Recruiter Not Found' };
 
     return {
       title: `${recruiter.name} | Developer Jobs`,
@@ -24,8 +24,8 @@ export async function generateMetadata(
     };
   } catch {
     return {
-      title: "Recruiter Not Found",
-      description: "The requested recruiter could not be found.",
+      title: 'Recruiter Not Found',
+      description: 'The requested recruiter could not be found.',
     };
   }
 }
@@ -48,7 +48,7 @@ export default async function RecruiterDetailPage({ params }: Props) {
       </main>
     );
   } catch (error) {
-    console.error("Error rendering recruiter page:", error);
+    console.error('Error rendering recruiter page:', error);
     notFound();
   }
 }

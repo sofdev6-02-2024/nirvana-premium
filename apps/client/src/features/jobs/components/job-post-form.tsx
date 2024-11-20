@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import LoadingButton from '@/components/forms/loading-button';
+import LocationInput from '@/components/forms/location-input';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -10,39 +11,38 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useRouter } from "next/navigation";
-import { jobFormSchema, type JobFormValues } from "../lib/validation";
-import RichTextEditor from "./rich-text-editor";
-import { mockLanguages, mockSkills } from "../lib/mock";
-import LocationInput from "@/components/forms/location-input";
-import { X } from "lucide-react";
-import LoadingButton from "@/components/forms/loading-button";
-import { Label } from "@/components/ui/label";
-import { draftToMarkdown } from "markdown-draft-js";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { X } from 'lucide-react';
+import { draftToMarkdown } from 'markdown-draft-js';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { mockLanguages, mockSkills } from '../lib/mock';
+import { jobFormSchema, type JobFormValues } from '../lib/validation';
+import RichTextEditor from './rich-text-editor';
 
 export function JobPostForm() {
   const router = useRouter();
   const form = useForm<JobFormValues>({
     resolver: zodResolver(jobFormSchema),
     defaultValues: {
-      title: "",
-      specialization: "Frontend",
+      title: '',
+      specialization: 'Frontend',
       salaryPerHour: 0,
-      schedule: "FullTime",
-      modality: "Remote",
-      location: "",
-      description: "",
+      schedule: 'FullTime',
+      modality: 'Remote',
+      location: '',
+      description: '',
       skills: [],
       languages: [],
       attachments: [],
@@ -60,7 +60,7 @@ export function JobPostForm() {
 
   async function onSubmit(values: JobFormValues) {
     try {
-      console.log("Form submission started", values);
+      console.log('Form submission started', values);
 
       const transformedValues = {
         ...values,
@@ -68,21 +68,21 @@ export function JobPostForm() {
         languages: values.languages.map(Number),
       };
 
-      console.log("Transformed values:", transformedValues);
+      console.log('Transformed values:', transformedValues);
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      toast.success("Job posted successfully");
-      console.log("Toast should have appeared");
+      toast.success('Job posted successfully');
+      console.log('Toast should have appeared');
 
       try {
-        await router.push("/jobs");
+        await router.push('/jobs');
       } catch (routerError) {
-        console.error("Router push failed:", routerError);
+        console.error('Router push failed:', routerError);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Failed to post job. Please try again.");
+      console.error('Error submitting form:', error);
+      toast.error('Failed to post job. Please try again.');
     }
   }
 
@@ -90,7 +90,7 @@ export function JobPostForm() {
     <Form {...form}>
       <form
         onSubmit={(e) => {
-          console.log("Form submitted");
+          console.log('Form submitted');
           console.log(e);
           handleSubmit(onSubmit)(e);
         }}
@@ -103,10 +103,7 @@ export function JobPostForm() {
             <FormItem>
               <FormLabel>Job Title</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="e.g. Senior Frontend Developer"
-                  {...field}
-                />
+                <Input placeholder="e.g. Senior Frontend Developer" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,10 +117,7 @@ export function JobPostForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Specialization</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select specialization" />
@@ -167,22 +161,19 @@ export function JobPostForm() {
             <FormItem>
               <FormLabel>Location</FormLabel>
               <FormControl>
-                <LocationInput
-                  onLocationSelected={field.onChange}
-                  ref={field.ref}
-                />
+                <LocationInput onLocationSelected={field.onChange} ref={field.ref} />
               </FormControl>
-              {watch("location") && (
+              {watch('location') && (
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
                     onClick={() => {
-                      setValue("location", "", { shouldValidate: true });
+                      setValue('location', '', { shouldValidate: true });
                     }}
                   >
                     <X className="h-5 w-5" />
                   </button>
-                  <span className="text-sm">{watch("location")}</span>
+                  <span className="text-sm">{watch('location')}</span>
                 </div>
               )}
               <FormMessage />
@@ -197,10 +188,7 @@ export function JobPostForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Schedule</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select schedule" />
@@ -222,10 +210,7 @@ export function JobPostForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Modality</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select modality" />
@@ -248,7 +233,7 @@ export function JobPostForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <Label onClick={() => setFocus("description")}>Description</Label>
+              <Label onClick={() => setFocus('description')}>Description</Label>
               <FormControl>
                 <RichTextEditor
                   onChange={(draft) => field.onChange(draftToMarkdown(draft))}
@@ -268,10 +253,7 @@ export function JobPostForm() {
               <FormLabel>Required Skills</FormLabel>
               <div className="grid grid-cols-3 gap-4">
                 {mockSkills.map((skill) => (
-                  <FormItem
-                    key={skill.id}
-                    className="flex items-start space-x-3 space-y-0"
-                  >
+                  <FormItem key={skill.id} className="flex items-start space-x-3 space-y-0">
                     <FormControl>
                       <Checkbox
                         checked={field.value.includes(skill.id)}
@@ -300,26 +282,19 @@ export function JobPostForm() {
               <FormLabel>Required Languages</FormLabel>
               <div className="grid grid-cols-3 gap-4">
                 {mockLanguages.map((language) => (
-                  <FormItem
-                    key={language.id}
-                    className="flex items-start space-x-3 space-y-0"
-                  >
+                  <FormItem key={language.id} className="flex items-start space-x-3 space-y-0">
                     <FormControl>
                       <Checkbox
                         checked={field.value.includes(language.id)}
                         onCheckedChange={(checked) => {
                           const newValue = checked
                             ? [...field.value, language.id]
-                            : field.value.filter(
-                                (value) => value !== language.id,
-                              );
+                            : field.value.filter((value) => value !== language.id);
                           field.onChange(newValue);
                         }}
                       />
                     </FormControl>
-                    <FormLabel className="font-normal">
-                      {language.name}
-                    </FormLabel>
+                    <FormLabel className="font-normal">{language.name}</FormLabel>
                   </FormItem>
                 ))}
               </div>
@@ -345,20 +320,14 @@ export function JobPostForm() {
                   }}
                 />
               </FormControl>
-              <FormDescription>
-                Upload any relevant documents (max 5MB per file)
-              </FormDescription>
+              <FormDescription>Upload any relevant documents (max 5MB per file)</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <LoadingButton
-          type="submit"
-          loading={isSubmitting}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Submitting..." : "Submit Job Posting"}
+        <LoadingButton type="submit" loading={isSubmitting} disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Submit Job Posting'}
         </LoadingButton>
       </form>
     </Form>

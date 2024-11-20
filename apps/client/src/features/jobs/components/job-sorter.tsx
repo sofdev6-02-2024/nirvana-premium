@@ -1,32 +1,27 @@
-"use client";
-import { useState, useMemo } from "react";
-import { Job } from "@/features/jobs/lib/constants";
-import Link from "next/link";
-import JobListItem from "./job-list-item";
+'use client';
+import { Job } from '@/features/jobs/lib/constants';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import JobListItem from './job-list-item';
 
 interface JobSorterProps {
   jobs: Job[];
 }
 
 export default function JobSorter({ jobs }: JobSorterProps) {
-  const [sortCriteria, setSortCriteria] = useState("recent");
+  const [sortCriteria, setSortCriteria] = useState('recent');
 
   const sortedJobs = useMemo(() => {
     const jobsCopy = [...jobs];
     switch (sortCriteria) {
-      case "salary-high":
-        return jobsCopy.sort(
-          (a, b) => (b.salaryPerHour || 0) - (a.salaryPerHour || 0),
-        );
-      case "salary-low":
-        return jobsCopy.sort(
-          (a, b) => (a.salaryPerHour || 0) - (b.salaryPerHour || 0),
-        );
-      case "recent":
+      case 'salary-high':
+        return jobsCopy.sort((a, b) => (b.salaryPerHour || 0) - (a.salaryPerHour || 0));
+      case 'salary-low':
+        return jobsCopy.sort((a, b) => (a.salaryPerHour || 0) - (b.salaryPerHour || 0));
+      case 'recent':
       default:
         return jobsCopy.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
     }
   }, [sortCriteria, jobs]);
@@ -35,11 +30,7 @@ export default function JobSorter({ jobs }: JobSorterProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Showing{" "}
-          <span className="font-medium text-foreground">
-            {sortedJobs.length}
-          </span>{" "}
-          jobs
+          Showing <span className="font-medium text-foreground">{sortedJobs.length}</span> jobs
         </p>
         <div className="flex items-center space-x-2">
           <p className="text-xs text-muted-foreground">Sort by:</p>

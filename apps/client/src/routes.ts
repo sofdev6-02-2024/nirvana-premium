@@ -4,9 +4,8 @@
  * @type {string[]}
  */
 
-export const publicRoutes = ["/", "/jobs", "/recruiters", "/developers"];
+export const publicRoutes = ['/', '/jobs', '/recruiters', '/developers'];
 
+export const protectedRoutes = ['/onboarding', '/jobs/*'];
 
-export const protectedRoutes = ["/onboarding", "/jobs/*"]
-
-export const justForRecruiter = ["/jobs/new"]
+export const justForRecruiter = ['/jobs/new'];

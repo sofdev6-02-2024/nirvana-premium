@@ -1,4 +1,4 @@
-export const API_PATH = process.env.PUBLIC_API_PATH || "http://localhost:9500";
+export const API_PATH = process.env.PUBLIC_API_PATH ?? 'http://localhost:9500';
 
 interface ApiRequestOptions {
   endpoint: string;
@@ -18,19 +18,19 @@ export async function apiRequest<T>({
   params,
 }: ApiRequestOptions): Promise<T> {
   const headers: HeadersInit = {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   };
 
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   const queryParams = params
-    ? "?" +
+    ? '?' +
       new URLSearchParams(
         Object.entries(params).map(([key, value]) => [key, String(value)]),
       ).toString()
-    : "";
+    : '';
 
   const url = `${API_PATH}/api${endpoint}${queryParams}`;
   console.log(`🚀 Making API request to: ${url}`);
@@ -38,7 +38,7 @@ export async function apiRequest<T>({
   const options: RequestInit = {
     method,
     headers,
-    body: method !== "GET" && body ? JSON.stringify(body) : undefined,
+    body: method !== 'GET' && body ? JSON.stringify(body) : undefined,
   };
 
   if (revalidate !== undefined) {
@@ -56,9 +56,7 @@ export async function apiRequest<T>({
         body: errorBody,
         headers: Object.fromEntries(response.headers.entries()),
       });
-      throw new Error(
-        `HTTP error! status: ${response.status}, body: ${errorBody}`,
-      );
+      throw new Error(`HTTP error! status: ${response.status}, body: ${errorBody}`);
     }
 
     const data = await response.json();

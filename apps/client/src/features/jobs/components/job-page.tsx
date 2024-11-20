@@ -1,22 +1,14 @@
-import { formatMoney, relativeDate } from "@/lib/utils";
-import { Banknote, Briefcase, Globe2, MapPin, Clock } from "lucide-react";
-import Markdown from "@/components/markdown";
-import { Job } from "@/features/jobs/lib/constants";
+import Markdown from '@/components/markdown';
+import { Job } from '@/features/jobs/lib/constants';
+import { formatMoney, relativeDate } from '@/lib/utils';
+import { Banknote, Briefcase, Clock, Globe2, MapPin } from 'lucide-react';
 
 interface JobPageProps {
   job: Job;
 }
 
 export default function JobPage({
-  job: {
-    title,
-    description,
-    modality,
-    schedule,
-    location,
-    salaryPerHour,
-    createdAt,
-  },
+  job: { title, description, modality, schedule, location, salaryPerHour, createdAt },
 }: JobPageProps) {
   return (
     <section className="w-full grow space-y-5">
@@ -24,7 +16,7 @@ export default function JobPage({
       <div className="text-muted-foreground">
         <p className="flex items-center gap-1.5">
           <Briefcase size={16} className="shrink-0" />
-          {schedule === "FullTime" ? "Full-Time" : "Part-Time"}
+          {schedule === 'FullTime' ? 'Full-Time' : 'Part-Time'}
         </p>
         <p className="flex items-center gap-1.5">
           <MapPin size={16} className="shrink-0" />

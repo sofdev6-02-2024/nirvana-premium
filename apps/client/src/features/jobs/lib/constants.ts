@@ -1,8 +1,6 @@
-export type Modality = "Remote" | "OnSite" | "Hybrid" | "all";
-export type Schedule = "FullTime" | "PartTime" | "all";
-export type JobStatus = "Open" | "In Progress" | "For Review" | "Done";
-
-
+export type Modality = 'Remote' | 'OnSite' | 'Hybrid' | 'all';
+export type Schedule = 'FullTime' | 'PartTime' | 'all';
+export type JobStatus = 'Open' | 'In Progress' | 'For Review' | 'Done';
 
 export interface BaseEntity {
   id: string;
@@ -21,7 +19,7 @@ export interface Job extends BaseEntity {
   recruiterId: string;
   recruiterLogo: string;
   skills: string[];
-  experienceLevel: "Junior" | "Mid" | "Senior";
+  experienceLevel: 'Junior' | 'Mid' | 'Senior';
   benefits: string[];
 }
 
@@ -38,14 +36,12 @@ export interface Recruiter extends BaseEntity {
 
 export interface JobFilters {
   search: string;
-  modality: Modality | "";
-  schedule: Schedule | "";
-  minSalary: number | "";
+  modality: Modality | '';
+  schedule: Schedule | '';
+  minSalary: number | '';
 }
 
-
-
-export type Specialization = "Frontend" | "Backend" | "DevOps" | "Architect";
+export type Specialization = 'Frontend' | 'Backend' | 'DevOps' | 'Architect';
 
 export interface Skill {
   id: string;
@@ -70,13 +66,13 @@ export interface JobFormData {
   schedule: Schedule;
   modality: Modality;
   location: string;
-  
+
   description: string;
   requirements: string[];
   benefits: string[];
-  
-  skills: string[]; 
-  languages: string[]; 
-  
+
+  skills: string[];
+  languages: string[];
+
   attachments?: File[];
 }

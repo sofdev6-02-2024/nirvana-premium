@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { JobPostForm } from "./job-post-form";
+import { JobPostForm } from './job-post-form';
 
 export function JobPostFormWrapper() {
   return (

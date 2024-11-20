@@ -54,8 +54,8 @@ efficient.
 #### Code Example
 
 ```typescript
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -166,8 +166,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brandBlue: "#1E40AF",
-        brandRed: "#EF4444",
+        brandBlue: '#1E40AF',
+        brandRed: '#EF4444',
       },
     },
   },

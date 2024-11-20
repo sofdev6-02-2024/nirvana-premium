@@ -1,18 +1,17 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import logo from "@/assets/logo.png";
-import { UserButton, SignInButton, useUser } from "@clerk/nextjs";
-import { Building2, Code2, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ModeToggle } from "./ui/mode-toggle";
+import logo from '@/assets/logo.png';
+import { Button } from '@/components/ui/button';
+import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
+import { Building2, Code2, Plus } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ModeToggle } from './ui/mode-toggle';
 
 export default function Navbar() {
   const { user, isSignedIn } = useUser();
 
-  const isCompany = () => user?.unsafeMetadata.role === "recruiter";
-  const isDeveloper = () => user?.unsafeMetadata.role === "developer";
+  const isCompany = () => user?.unsafeMetadata.role === 'recruiter';
 
   return (
     <header className="shadow-sm">
@@ -74,7 +73,7 @@ export default function Navbar() {
               afterSignOutUrl="/"
               appearance={{
                 elements: {
-                  avatarBox: "h-8 w-8",
+                  avatarBox: 'h-8 w-8',
                 },
               }}
             />
@@ -90,7 +89,7 @@ export default function Navbar() {
             <Button
               variant="default"
               onClick={() => {
-                window.location.href = "/sign-up";
+                window.location.href = '/sign-up';
               }}
             >
               Sign Up
