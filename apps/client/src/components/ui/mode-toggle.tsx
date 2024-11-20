@@ -1,9 +1,9 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 
 interface ModeToggleProps {
   variant?: 'default' | 'mobile';
@@ -21,9 +21,9 @@ export function ModeToggle({ variant = 'default', className }: ModeToggleProps) 
         variant="ghost"
         onClick={toggleTheme}
         className={cn(
-          "w-full justify-start gap-2 h-11",
-          "text-muted-foreground hover:text-accent-foreground hover:bg-accent",
-          className
+          'w-full justify-start gap-2 h-11',
+          'text-muted-foreground hover:text-accent-foreground hover:bg-accent',
+          className,
         )}
       >
         <Sun className="h-5 w-5 rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />
@@ -39,9 +39,9 @@ export function ModeToggle({ variant = 'default', className }: ModeToggleProps) 
       size="icon"
       onClick={toggleTheme}
       className={cn(
-        "h-10 w-10",
-        "text-muted-foreground hover:text-accent-foreground hover:bg-accent",
-        className
+        'h-10 w-10',
+        'text-muted-foreground hover:text-accent-foreground hover:bg-accent',
+        className,
       )}
     >
       <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />

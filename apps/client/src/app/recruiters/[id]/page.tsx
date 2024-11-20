@@ -36,16 +36,30 @@ export default async function RecruiterDetailPage({ params }: Props) {
     if (!recruiter) notFound();
 
     return (
-      <main className="mx-auto my-10 max-w-5xl space-y-10 px-4 sm:px-6 lg:px-8">
-        <RecruiterDetailHeader recruiter={recruiter} />
+      <div className="min-h-[calc(100vh-4rem)] bg-muted/10">
+        <main className="container py-8 lg:py-12">
+          <div className="mx-auto max-w-5xl">
+            <RecruiterDetailHeader recruiter={recruiter} />
 
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold">Open Positions</h2>
-          <Suspense fallback={<JobListSkeleton />}>
-            <RecruiterJobList recruiterId={recruiter.id} />
-          </Suspense>
-        </div>
-      </main>
+            <div className="mt-10 space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold">Open Positions</h2>
+                <span className="text-sm text-muted-foreground">Showing 0 positions</span>
+              </div>
+
+              <Suspense
+                fallback={
+                  <div className="space-y-4">
+                    <JobListSkeleton />
+                  </div>
+                }
+              >
+                <RecruiterJobList recruiterId={recruiter.id} />
+              </Suspense>
+            </div>
+          </div>
+        </main>
+      </div>
     );
   } catch (error) {
     console.error('Error rendering recruiter page:', error);

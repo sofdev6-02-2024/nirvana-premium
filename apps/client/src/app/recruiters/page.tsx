@@ -11,22 +11,31 @@ export default async function RecruitersPage() {
   const recruiters = await getAllRecruiters();
 
   return (
-    <main className="mx-auto my-10 max-w-5xl space-y-10 px-4 sm:px-6 lg:px-8">
-      <div className="space-y-5 text-center">
-        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">Our Top Recruiters</h1>
-        <p className="text-lg text-muted-foreground">
-          Discover top companies looking for talented developers.
-        </p>
-      </div>
-      <section className="space-y-6">
-        <div className="space-y-4">
-          {recruiters.map((recruiter) => (
-            <Link key={recruiter.id} href={`/recruiters/${recruiter.id}`} className="block">
-              <RecruiterListItem recruiter={recruiter} />
-            </Link>
-          ))}
+    <div className="min-h-[calc(100vh-4rem)] bg-muted/10">
+      <main className="container py-8 lg:py-12">
+        <div className="mx-auto max-w-2xl text-center">
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+            Our Top Recruiters
+          </h1>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Discover top companies looking for talented developers.
+          </p>
         </div>
-      </section>
-    </main>
+
+        <section className="mx-auto mt-8 max-w-4xl lg:mt-12">
+          <div className="grid gap-4 sm:gap-6">
+            {recruiters.map((recruiter) => (
+              <Link
+                key={recruiter.id}
+                href={`/recruiters/${recruiter.id}`}
+                className="block transition-colors hover:bg-accent/5 rounded-lg"
+              >
+                <RecruiterListItem recruiter={recruiter} />
+              </Link>
+            ))}
+          </div>
+        </section>
+      </main>
+    </div>
   );
 }

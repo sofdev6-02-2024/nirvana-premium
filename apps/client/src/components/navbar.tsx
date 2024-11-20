@@ -1,16 +1,15 @@
 // components/navbar.tsx
 'use client';
 
+import logo from '@/assets/logo.png';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
 import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
-import { Building2, Code2, Briefcase, Menu, Plus, Sun, Moon, LucideIcon } from 'lucide-react';
+import { Briefcase, Building2, Code2, LucideIcon, Menu, Plus } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useTheme } from 'next-themes';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
 import { usePathname } from 'next/navigation';
-import logo from '@/assets/logo.png';
 import { ModeToggle } from './ui/mode-toggle';
 
 interface NavItem {
@@ -44,9 +43,9 @@ const RecruiterNavItems = () => {
             key={item.href}
             href={item.href}
             className={cn(
-              "flex items-center min-h-[44px] px-3 rounded-md gap-2 w-full",
-              "hover:bg-accent hover:text-accent-foreground transition-colors",
-              pathname === item.href && "bg-accent"
+              'flex items-center min-h-[44px] px-3 rounded-md gap-2 w-full',
+              'hover:bg-accent hover:text-accent-foreground transition-colors',
+              pathname === item.href && 'bg-accent',
             )}
           >
             <Icon className="h-5 w-5" />
@@ -76,9 +75,9 @@ const DeveloperNavItems = () => {
             key={item.href}
             href={item.href}
             className={cn(
-              "flex items-center min-h-[44px] px-3 rounded-md gap-2 w-full",
-              "hover:bg-accent hover:text-accent-foreground transition-colors",
-              pathname === item.href && "bg-accent"
+              'flex items-center min-h-[44px] px-3 rounded-md gap-2 w-full',
+              'hover:bg-accent hover:text-accent-foreground transition-colors',
+              pathname === item.href && 'bg-accent',
             )}
           >
             <Icon className="h-5 w-5" />
@@ -89,7 +88,6 @@ const DeveloperNavItems = () => {
     </div>
   );
 };
-
 
 export default function Navbar() {
   const { user, isSignedIn } = useUser();
@@ -114,9 +112,9 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center min-h-[44px] px-3 rounded-md gap-2",
-                  "hover:bg-accent hover:text-accent-foreground transition-colors",
-                  pathname === item.href && "bg-accent"
+                  'flex items-center min-h-[44px] px-3 rounded-md gap-2 text-foreground',
+                  'hover:bg-accent transition-colors',
+                  pathname === item.href && 'bg-accent',
                 )}
               >
                 <Icon className="h-5 w-5" />
@@ -150,9 +148,9 @@ export default function Navbar() {
                         key={item.href}
                         href={item.href}
                         className={cn(
-                          "flex items-center min-h-[44px] px-3 rounded-md gap-2 w-full",
-                          "hover:bg-accent hover:text-accent-foreground transition-colors",
-                          pathname === item.href && "bg-accent"
+                          'flex items-center min-h-[44px] px-3 rounded-md gap-2 w-full',
+                          'hover:bg-accent hover:text-accent-foreground transition-colors',
+                          pathname === item.href && 'bg-accent',
                         )}
                       >
                         <Icon className="h-5 w-5" />
@@ -178,7 +176,7 @@ export default function Navbar() {
                   <SheetHeader className="text-left pb-4">
                     <SheetTitle>Actions</SheetTitle>
                   </SheetHeader>
-                  <ModeToggle variant='mobile' />
+                  <ModeToggle variant="mobile" />
                   {isCompany && (
                     <Button
                       variant="default"
