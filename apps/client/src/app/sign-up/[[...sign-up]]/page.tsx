@@ -46,17 +46,12 @@ const SignUpPage = () => {
     try {
       const formData = new FormData(e.target as HTMLFormElement);
       const email = formData.get('emailAddress') as string;
-      const username = formData.get('username') as string;
       const password = formData.get('password') as string;
-      const firstName = formData.get('firstName') as string;
       const lastName = formData.get('lastName') as string;
 
       const result = await signUp.create({
         emailAddress: email,
-        username,
         password,
-        firstName,
-        lastName,
         unsafeMetadata: {
           role: selectedRole,
           onboardingComplete: false,
@@ -65,9 +60,6 @@ const SignUpPage = () => {
 
       setRegistrationData({
         id: result.createdUserId!,
-        username,
-        firstName: firstName || null,
-        lastName: lastName || null,
         role: selectedRole,
         email,
       });
@@ -84,10 +76,10 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-secondary p-4 md:p-6 lg:p-8">
-      <div className="mx-auto max-w-md">
+    <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center bg-secondary p-4">
+      <div className="w-full max-w-md">
         <Card className="w-full">
-          <CardHeader>
+          <CardHeader className="space-y-2">
             <CardTitle className="text-xl md:text-2xl">Create your account</CardTitle>
             <CardDescription>Join our platform to find opportunities or great talent</CardDescription>
             {selectedRole && (
@@ -153,12 +145,11 @@ const SignUpPage = () => {
             </Dialog>
 
             {selectedRole && (
-              <form onSubmit={handleSubmit} className="mt-4">
+              <form onSubmit={handleSubmit}>
                 <SignUp
                   path="/sign-up"
                   routing="path"
                   signInUrl="/sign-in"
-                  afterSignUpUrl={`/onboarding/${selectedRole}`}
                   unsafeMetadata={{
                     role: selectedRole,
                     onboardingComplete: false,

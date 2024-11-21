@@ -19,11 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: [dark],
-      }}
-    >
+
       <html lang="en" suppressHydrationWarning>
         <body className="min-h-screen bg-background font-sans antialiased">
           <ThemeProvider
@@ -32,11 +28,19 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Navbar />
-            {children}
+            <ClerkProvider
+              appearance={{
+                variables: {
+                    colorPrimary: 'hsl(263.4, 70%, 50.4%)',
+                        },
+                    }}
+            >
+              <Navbar />
+              {children}
+            </ClerkProvider>
+
           </ThemeProvider>
         </body>
       </html>
-    </ClerkProvider>
   );
 }

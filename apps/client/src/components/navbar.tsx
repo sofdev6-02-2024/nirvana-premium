@@ -1,4 +1,3 @@
-// components/navbar.tsx
 'use client';
 
 import logo from '@/assets/logo.png';
@@ -18,16 +17,57 @@ interface NavItem {
   icon: LucideIcon;
 }
 
+interface AuthButtonsProps {
+  className?: string;
+  variant?: 'mobile' | 'desktop';
+}
+
 const mainNavItems: NavItem[] = [
   { href: '/jobs', label: 'Jobs', icon: Briefcase },
   { href: '/recruiters', label: 'Companies', icon: Building2 },
   { href: '/developers', label: 'Developers', icon: Code2 },
 ];
 
-const RecruiterNavItems = () => {
+const AuthButtons: React.FC<AuthButtonsProps> = ({ className, variant = 'desktop' }) => {
+  const isMobile = variant === 'mobile';
+
+  return (
+    <div className={cn(
+      "flex items-center gap-2",
+      isMobile && "flex-col w-full",
+      className
+    )}>
+      <SignInButton mode="modal">
+        <Button
+          variant="ghost"
+          className={cn(
+            "h-11",
+            isMobile && "w-full"
+          )}
+        >
+          Log In
+        </Button>
+      </SignInButton>
+      <Button
+        variant="default"
+        className={cn(
+          "h-11",
+          isMobile && "w-full"
+        )}
+        onClick={() => {
+          window.location.href = '/sign-up';
+        }}
+      >
+        Sign Up
+      </Button>
+    </div>
+  );
+};
+
+const RecruiterNavItems: React.FC = () => {
   const pathname = usePathname();
 
-  const items = [
+  const items: NavItem[] = [
     { href: '/dashboard', label: 'Dashboard', icon: Briefcase },
     { href: '/dashboard/jobs', label: 'My Jobs', icon: Building2 },
     { href: '/dashboard/applicants', label: 'Applicants', icon: Code2 },
@@ -57,10 +97,10 @@ const RecruiterNavItems = () => {
   );
 };
 
-const DeveloperNavItems = () => {
+const DeveloperNavItems: React.FC = () => {
   const pathname = usePathname();
 
-  const items = [
+  const items: NavItem[] = [
     { href: '/dashboard', label: 'Dashboard', icon: Briefcase },
     { href: '/dashboard/applications', label: 'Applications', icon: Building2 },
     { href: '/dashboard/profile', label: 'Profile', icon: Code2 },
@@ -89,7 +129,7 @@ const DeveloperNavItems = () => {
   );
 };
 
-export default function Navbar() {
+const Navbar: React.FC = () => {
   const { user, isSignedIn } = useUser();
   const pathname = usePathname();
   const isCompany = user?.unsafeMetadata.role === 'recruiter';
@@ -98,12 +138,10 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto flex h-16 items-center px-4">
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2 min-h-[44px] min-w-[44px]">
           <Image src={logo} alt="tp chamba logo" width={30} height={30} priority />
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center ml-6 space-x-1">
           {mainNavItems.map((item) => {
             const Icon = item.icon;
@@ -124,9 +162,7 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Auth Section */}
         <div className="ml-auto flex items-center gap-2">
-          {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild className="md:hidden">
               <Button variant="ghost" size="icon" className="h-11 w-11">
@@ -160,7 +196,6 @@ export default function Navbar() {
                   })}
                 </div>
 
-                {/* Role-specific Navigation */}
                 {isSignedIn && (
                   <div className="space-y-1">
                     <SheetHeader className="text-left pb-4">
@@ -171,7 +206,6 @@ export default function Navbar() {
                   </div>
                 )}
 
-                {/* Actions Section */}
                 <div className="space-y-1">
                   <SheetHeader className="text-left pb-4">
                     <SheetTitle>Actions</SheetTitle>
@@ -191,16 +225,23 @@ export default function Navbar() {
                     </Button>
                   )}
                 </div>
+
+                {!isSignedIn && (
+                  <div className="space-y-1">
+                    <SheetHeader className="text-left pb-4">
+                      <SheetTitle>Account</SheetTitle>
+                    </SheetHeader>
+                    <AuthButtons variant="mobile" />
+                  </div>
+                )}
               </div>
             </SheetContent>
           </Sheet>
 
-          {/* Desktop Theme Toggle */}
           <div className="hidden md:flex min-h-[44px] min-w-[44px] items-center">
             <ModeToggle />
           </div>
 
-          {/* Desktop Post Job Button */}
           {isSignedIn && isCompany && (
             <div className="hidden md:flex">
               <Button variant="default" size="sm" className="h-11 gap-1" asChild>
@@ -212,7 +253,6 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Auth Buttons */}
           {isSignedIn ? (
             <UserButton
               afterSignOutUrl="/"
@@ -223,25 +263,14 @@ export default function Navbar() {
               }}
             />
           ) : (
-            <div className="flex items-center gap-2">
-              <SignInButton mode="modal">
-                <Button variant="ghost" className="h-11">
-                  Log In
-                </Button>
-              </SignInButton>
-              <Button
-                variant="default"
-                className="h-11"
-                onClick={() => {
-                  window.location.href = '/sign-up';
-                }}
-              >
-                Sign Up
-              </Button>
+            <div className="hidden md:block">
+              <AuthButtons />
             </div>
           )}
         </div>
       </nav>
     </header>
   );
-}
+};
+
+export default Navbar;
