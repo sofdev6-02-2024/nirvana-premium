@@ -28,9 +28,6 @@ const createRedirectResponse = (url: string, req: Request): NextResponse => {
 };
 
 export default clerkMiddleware(async (auth, req) => {
-  const url = new URL(req.url);
-  const path = url.pathname;
-
   const { sessionClaims } = await auth();
   const userRole = sessionClaims?.metadata?.role;
 
