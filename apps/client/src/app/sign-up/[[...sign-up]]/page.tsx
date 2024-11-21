@@ -1,8 +1,6 @@
-'use client'
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { SignUp, useSignUp } from '@clerk/nextjs';
+'use client';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
@@ -14,7 +12,9 @@ import {
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useRegistrationStore } from '@/stores/use-registration-store';
-import { Button } from '@/components/ui/button';
+import { SignUp, useSignUp } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -47,7 +47,6 @@ const SignUpPage = () => {
       const formData = new FormData(e.target as HTMLFormElement);
       const email = formData.get('emailAddress') as string;
       const password = formData.get('password') as string;
-      const lastName = formData.get('lastName') as string;
 
       const result = await signUp.create({
         emailAddress: email,
@@ -64,7 +63,7 @@ const SignUpPage = () => {
         email,
       });
 
-      router.push("/onboarding/");
+      router.push('/onboarding/');
     } catch (err) {
       console.error('Error during signup:', err);
       setError(err instanceof Error ? err.message : 'An error occurred during signup');
@@ -81,7 +80,9 @@ const SignUpPage = () => {
         <Card className="w-full">
           <CardHeader className="space-y-2">
             <CardTitle className="text-xl md:text-2xl">Create your account</CardTitle>
-            <CardDescription>Join our platform to find opportunities or great talent</CardDescription>
+            <CardDescription>
+              Join our platform to find opportunities or great talent
+            </CardDescription>
             {selectedRole && (
               <div className="mt-2 flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
@@ -121,7 +122,10 @@ const SignUpPage = () => {
                     onClick={() => handleRoleSelect('developer')}
                   >
                     <RadioGroupItem value="developer" id="developer" className="h-5 w-5" />
-                    <Label htmlFor="developer" className="flex w-full cursor-pointer flex-col gap-1">
+                    <Label
+                      htmlFor="developer"
+                      className="flex w-full cursor-pointer flex-col gap-1"
+                    >
                       <span className="font-semibold">Developer</span>
                       <span className="text-sm text-muted-foreground">
                         Find your first job opportunity in tech
@@ -133,7 +137,10 @@ const SignUpPage = () => {
                     onClick={() => handleRoleSelect('recruiter')}
                   >
                     <RadioGroupItem value="recruiter" id="recruiter" className="h-5 w-5" />
-                    <Label htmlFor="recruiter" className="flex w-full cursor-pointer flex-col gap-1">
+                    <Label
+                      htmlFor="recruiter"
+                      className="flex w-full cursor-pointer flex-col gap-1"
+                    >
                       <span className="font-semibold">Recruiter</span>
                       <span className="text-sm text-muted-foreground">
                         Find great talent for your company

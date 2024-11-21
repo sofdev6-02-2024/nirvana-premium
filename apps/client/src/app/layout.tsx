@@ -1,7 +1,6 @@
 import Navbar from '@/components/navbar';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs';
-import { dark } from '@clerk/themes';
 import type { Metadata } from 'next';
 import './globals.css';
 
@@ -19,28 +18,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-
-      <html lang="en" suppressHydrationWarning>
-        <body className="min-h-screen bg-background font-sans antialiased">
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-screen bg-background font-sans antialiased">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ClerkProvider
+            appearance={{
+              variables: {
+                colorPrimary: 'hsl(263.4, 70%, 50.4%)',
+              },
+            }}
           >
-            <ClerkProvider
-              appearance={{
-                variables: {
-                    colorPrimary: 'hsl(263.4, 70%, 50.4%)',
-                        },
-                    }}
-            >
-              <Navbar />
-              {children}
-            </ClerkProvider>
-
-          </ThemeProvider>
-        </body>
-      </html>
+            <Navbar />
+            {children}
+          </ClerkProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

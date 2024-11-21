@@ -4,7 +4,7 @@ import logo from '@/assets/logo.png';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
+import { UserButton, useUser } from '@clerk/nextjs';
 import { Briefcase, Building2, Code2, LucideIcon, Menu, Plus } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -32,33 +32,12 @@ const AuthButtons: React.FC<AuthButtonsProps> = ({ className, variant = 'desktop
   const isMobile = variant === 'mobile';
 
   return (
-    <div className={cn(
-      "flex items-center gap-2",
-      isMobile && "flex-col w-full",
-      className
-    )}>
-      <SignInButton mode="modal">
-        <Button
-          variant="ghost"
-          className={cn(
-            "h-11",
-            isMobile && "w-full"
-          )}
-        >
-          Log In
-        </Button>
-      </SignInButton>
-      <Button
-        variant="default"
-        className={cn(
-          "h-11",
-          isMobile && "w-full"
-        )}
-        onClick={() => {
-          window.location.href = '/sign-up';
-        }}
-      >
-        Sign Up
+    <div className={cn('flex items-center gap-2', isMobile && 'flex-col w-full', className)}>
+      <Button variant="ghost" className={cn('h-11', isMobile && 'w-full')}>
+        <Link href="/sign-in">Log In</Link>
+      </Button>
+      <Button variant="default" className={cn('h-11', isMobile && 'w-full')}>
+        <Link href="/sign-up">Sign Up</Link>
       </Button>
     </div>
   );
@@ -255,7 +234,6 @@ const Navbar: React.FC = () => {
 
           {isSignedIn ? (
             <UserButton
-              afterSignOutUrl="/"
               appearance={{
                 elements: {
                   avatarBox: 'h-11 w-11',
