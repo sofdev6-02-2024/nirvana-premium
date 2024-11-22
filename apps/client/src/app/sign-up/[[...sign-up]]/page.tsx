@@ -1,5 +1,6 @@
 'use client';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
@@ -12,39 +13,44 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useRegistrationStore } from '@/stores/use-registration-store';
 import { SignUp, useSignUp } from '@clerk/nextjs';
-import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 const SignUpPage = () => {
-  const [selectedRole, setSelectedRole] = useState<'developer' | 'recruiter'>('developer');
+  const router = useRouter();
+  const [selectedRole, setSelectedRole] = useState<'developer' | 'recruiter' | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showRoleDialog, setShowRoleDialog] = useState(true);
+  const [showRoleDialog, setShowRoleDialog] = useState(false);
   const { isLoaded, signUp } = useSignUp();
-
   const { setRegistrationData } = useRegistrationStore();
+
+  useEffect(() => {
+    const hasRole = localStorage.getItem('selectedRole');
+    if (!hasRole) {
+      setShowRoleDialog(true);
+    } else {
+      setSelectedRole(hasRole as 'developer' | 'recruiter');
+    }
+  }, []);
 
   const handleRoleSelect = (value: 'developer' | 'recruiter') => {
     setSelectedRole(value);
+    localStorage.setItem('selectedRole', value);
     setShowRoleDialog(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isLoaded) return;
+    if (!isLoaded || !selectedRole) return;
 
     try {
       const formData = new FormData(e.target as HTMLFormElement);
       const email = formData.get('emailAddress') as string;
-      const username = formData.get('username') as string;
       const password = formData.get('password') as string;
-      const firstName = formData.get('firstName') as string;
-      const lastName = formData.get('lastName') as string;
 
       const result = await signUp.create({
         emailAddress: email,
-        username,
         password,
-        firstName,
-        lastName,
         unsafeMetadata: {
           role: selectedRole,
           onboardingComplete: false,
@@ -53,95 +59,114 @@ const SignUpPage = () => {
 
       setRegistrationData({
         id: result.createdUserId!,
-        username,
-        firstName: firstName || null,
-        lastName: lastName || null,
         role: selectedRole,
         email,
       });
 
-      console.log('Registration data ready for backend:', {
-        id: result.createdUserId,
-        username,
-        firstName,
-        lastName,
-        role: selectedRole,
-        email,
-      });
+      router.push('/onboarding/');
     } catch (err) {
       console.error('Error during signup:', err);
       setError(err instanceof Error ? err.message : 'An error occurred during signup');
     }
   };
 
+  const handleChangeRole = () => {
+    setShowRoleDialog(true);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-secondary px-4 py-12 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Create your account</CardTitle>
-          <CardDescription>Join our platform to find opportunities or great talent</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {error && (
-            <Alert variant="destructive" className="mb-4">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
-          <Dialog open={showRoleDialog} onOpenChange={setShowRoleDialog}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Choose your role</DialogTitle>
-                <DialogDescription>Select how you want to use our platform</DialogDescription>
-              </DialogHeader>
-              <RadioGroup
-                defaultValue="developer"
-                value={selectedRole}
-                onValueChange={(value) => handleRoleSelect(value as 'developer' | 'recruiter')}
-                className="flex flex-col space-y-2"
-              >
-                <div
-                  className="flex cursor-pointer items-center space-x-2 rounded-lg border p-4 hover:bg-gray-100 dark:hover:bg-muted"
-                  onClick={() => handleRoleSelect('developer')}
+    <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center bg-secondary p-4">
+      <div className="w-full max-w-md">
+        <Card className="w-full">
+          <CardHeader className="space-y-2">
+            <CardTitle className="text-xl md:text-2xl">Create your account</CardTitle>
+            <CardDescription>
+              Join our platform to find opportunities or great talent
+            </CardDescription>
+            {selectedRole && (
+              <div className="mt-2 flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">
+                  Selected role: <span className="font-medium capitalize">{selectedRole}</span>
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleChangeRole}
+                  className="text-xs hover:bg-secondary"
                 >
-                  <RadioGroupItem value="developer" id="developer" />
-                  <Label htmlFor="developer" className="flex w-full cursor-pointer flex-col">
-                    <span className="font-semibold">Developer</span>
-                    <span className="text-sm text-gray-500">
-                      Find your first job opportunity in tech
-                    </span>
-                  </Label>
-                </div>
-                <div
-                  className="flex cursor-pointer items-center space-x-2 rounded-lg border p-4 hover:bg-gray-100 dark:hover:bg-muted"
-                  onClick={() => handleRoleSelect('recruiter')}
-                >
-                  <RadioGroupItem value="recruiter" id="recruiter" />
-                  <Label htmlFor="recruiter" className="flex w-full cursor-pointer flex-col">
-                    <span className="font-semibold">Recruiter</span>
-                    <span className="text-sm text-gray-500">
-                      Find great talent for your company
-                    </span>
-                  </Label>
-                </div>
-              </RadioGroup>
-            </DialogContent>
-          </Dialog>
+                  Change role
+                </Button>
+              </div>
+            )}
+          </CardHeader>
+          <CardContent>
+            {error && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-          <form onSubmit={handleSubmit} className="mt-4 bg-secondary">
-            <SignUp
-              path="/sign-up"
-              routing="path"
-              signInUrl="/sign-in"
-              fallbackRedirectUrl="/onboarding"
-              unsafeMetadata={{
-                role: selectedRole,
-                onboardingComplete: false,
-              }}
-            />
-          </form>
-        </CardContent>
-      </Card>
+            <Dialog open={showRoleDialog} onOpenChange={setShowRoleDialog}>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Choose your role</DialogTitle>
+                  <DialogDescription>Select how you want to use our platform</DialogDescription>
+                </DialogHeader>
+                <RadioGroup
+                  defaultValue={selectedRole || undefined}
+                  onValueChange={(value) => handleRoleSelect(value as 'developer' | 'recruiter')}
+                  className="flex flex-col space-y-3"
+                >
+                  <div
+                    className="flex cursor-pointer items-center space-x-3 rounded-lg border p-4 transition-colors hover:bg-accent"
+                    onClick={() => handleRoleSelect('developer')}
+                  >
+                    <RadioGroupItem value="developer" id="developer" className="h-5 w-5" />
+                    <Label
+                      htmlFor="developer"
+                      className="flex w-full cursor-pointer flex-col gap-1"
+                    >
+                      <span className="font-semibold">Developer</span>
+                      <span className="text-sm text-muted-foreground">
+                        Find your first job opportunity in tech
+                      </span>
+                    </Label>
+                  </div>
+                  <div
+                    className="flex cursor-pointer items-center space-x-3 rounded-lg border p-4 transition-colors hover:bg-accent"
+                    onClick={() => handleRoleSelect('recruiter')}
+                  >
+                    <RadioGroupItem value="recruiter" id="recruiter" className="h-5 w-5" />
+                    <Label
+                      htmlFor="recruiter"
+                      className="flex w-full cursor-pointer flex-col gap-1"
+                    >
+                      <span className="font-semibold">Recruiter</span>
+                      <span className="text-sm text-muted-foreground">
+                        Find great talent for your company
+                      </span>
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </DialogContent>
+            </Dialog>
+
+            {selectedRole && (
+              <form onSubmit={handleSubmit}>
+                <SignUp
+                  path="/sign-up"
+                  routing="path"
+                  signInUrl="/sign-in"
+                  unsafeMetadata={{
+                    role: selectedRole,
+                    onboardingComplete: false,
+                  }}
+                />
+              </form>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
