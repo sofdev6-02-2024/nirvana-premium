@@ -16,6 +16,7 @@ obj/
 
 ## Files
 *.binlog
+*.DotSettings.user
 
 ## Docker
 .containers/
