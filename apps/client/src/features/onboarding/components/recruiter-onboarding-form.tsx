@@ -77,9 +77,10 @@ export default function CompanyOnboardingForm() {
       });
 
       toast.success('Company profile created successfully!');
+      return <LoadingScreen fullScreen text="Redirecting to home page..." />;
       setTimeout(() => {
         router.push('/home');
-      }, 1200);
+      }, 2000);
     } catch (error) {
       console.error('Error saving company data:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to create company profile');

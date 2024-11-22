@@ -1,5 +1,5 @@
-export type Modality = 'Remote' | 'On Site' | 'Hybrid';
-export type Schedule = 'Full Time' | 'Part Time';
+export type Modality = 'Remote' | 'On Site' | 'Hybrid' | 'all';
+export type Schedule = 'Full Time' | 'Part Time' | 'all';
 
 export interface Job extends BaseEntity {
   title: string;
@@ -11,6 +11,7 @@ export interface Job extends BaseEntity {
   recruiterId: string;
   recruiterLogo: string;
   skills: string[];
+  status: string;
 }
 
 export interface JobFilters {

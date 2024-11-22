@@ -46,12 +46,6 @@ import { createDeveloper } from '../actions/create-developer-actions';
 import { Step } from '../lib/types';
 import { developerFormSchema, DeveloperFormValues } from '../lib/validations';
 
-interface StepFields {
-  personal: ['firstName', 'lastName', 'location', 'profilePicture'];
-  skills: ['skills', 'specialty', 'yearsOfExperience', 'spokenLanguages'];
-  preferences: ['modality', 'expectedSalary', 'portfolioUrl'];
-}
-
 export default function DeveloperOnboardingForm() {
   const { user, isSignedIn, isLoaded } = useUser();
   const router = useRouter();
@@ -127,20 +121,20 @@ export default function DeveloperOnboardingForm() {
       });
 
       toast.success('Developer profile created successfully!');
-
+      return <LoadingScreen fullScreen text="Redirecting to home page..." />;
       setTimeout(() => {
         router.push('/home');
-      }, 1200);
+      }, 2000);
     } catch (error) {
       console.error('Error creating developer profile:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to create profile');
     }
   };
 
-  const stepFields: StepFields = {
-    personal: ['firstName', 'lastName', 'location', 'profilePicture'],
-    skills: ['skills', 'specialty', 'yearsOfExperience', 'spokenLanguages'],
-    preferences: ['modality', 'expectedSalary', 'portfolioUrl'],
+  const stepFields = {
+    personal: ['firstName', 'lastName', 'location', 'profilePicture'] as const,
+    skills: ['skills', 'specializationId', 'yearsOfExperience', 'spokenLanguages'] as const,
+    preferences: ['modality', 'salaryExpected', 'portfolioUrl'] as const,
   } as const;
 
   const steps: Step[] = [

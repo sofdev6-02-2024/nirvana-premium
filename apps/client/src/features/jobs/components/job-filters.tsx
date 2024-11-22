@@ -12,6 +12,7 @@ import {
 import { X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { Modality, Schedule } from '../lib/constants';
 
 export interface JobFilters {
   search: string;
@@ -25,14 +26,14 @@ export function JobFilters() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<JobFilters>({
     search: searchParams.get('search') || '',
-    modality: (searchParams.get('modality') as JobFilters['modality']) || 'all',
-    schedule: (searchParams.get('schedule') as JobFilters['schedule']) || 'all',
+    modality: (searchParams.get('modality') as Modality) || 'all',
+    schedule: (searchParams.get('schedule') as Schedule) || 'all',
     minSalary: searchParams.get('minSalary') || '',
   });
 
-  const updateURL = (newFilters: typeof filters) => {
+  const updateURL = (newFilters: JobFilters) => {
     const params = new URLSearchParams();
 
     Object.entries(newFilters).forEach(([key, value]) => {
@@ -53,7 +54,7 @@ export function JobFilters() {
   };
 
   const resetFilters = () => {
-    const defaultFilters = {
+    const defaultFilters: JobFilters = {
       search: '',
       modality: 'all',
       schedule: 'all',
