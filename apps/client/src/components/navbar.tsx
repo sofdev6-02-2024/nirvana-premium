@@ -221,17 +221,6 @@ const Navbar: React.FC = () => {
             <ModeToggle />
           </div>
 
-          {isSignedIn && isCompany && (
-            <div className="hidden md:flex">
-              <Button variant="default" size="sm" className="h-11 gap-1" asChild>
-                <Link href="/jobs/new">
-                  <Plus className="h-4 w-4" />
-                  Post Job
-                </Link>
-              </Button>
-            </div>
-          )}
-
           {isSignedIn ? (
             <UserButton
               appearance={{

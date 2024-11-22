@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import { FileUpload } from '@/components/forms/file-upload';
 import LoadingButton from '@/components/forms/loading-button';
 import LocationInput from '@/components/forms/location-input';
+import LoadingScreen from '@/components/loading/loading-screen';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -126,7 +127,10 @@ export default function DeveloperOnboardingForm() {
       });
 
       toast.success('Developer profile created successfully!');
-      router.push('/dashboard');
+
+      setTimeout(() => {
+        router.push('/home');
+      }, 1200);
     } catch (error) {
       console.error('Error creating developer profile:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to create profile');
@@ -172,7 +176,7 @@ export default function DeveloperOnboardingForm() {
   }
 
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return <LoadingScreen fullScreen text="Loading  form..." />;
   }
 
   return (

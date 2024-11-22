@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { FileUpload } from '@/components/forms/file-upload';
 import LoadingButton from '@/components/forms/loading-button';
 import LocationInput from '@/components/forms/location-input';
+import LoadingScreen from '@/components/loading/loading-screen';
 import {
   Card,
   CardContent,
@@ -76,7 +77,9 @@ export default function CompanyOnboardingForm() {
       });
 
       toast.success('Company profile created successfully!');
-      router.push('/home');
+      setTimeout(() => {
+        router.push('/home');
+      }, 1200);
     } catch (error) {
       console.error('Error saving company data:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to create company profile');
@@ -84,7 +87,7 @@ export default function CompanyOnboardingForm() {
   };
 
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return <LoadingScreen fullScreen text="Loading your onboarding form..." />;
   }
 
   if (!isSignedIn) {

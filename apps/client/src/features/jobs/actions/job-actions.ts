@@ -1,45 +1,42 @@
-import { apiRequest } from '@/lib/api';
-import { toSlug } from '@/lib/utils';
-import { nanoid } from 'nanoid';
+'use server ';
 
-export async function createJobPosting(formData: FormData, accessToken: string) {
-  const values = Object.fromEntries(formData.entries());
+import { JobFormData } from '../lib/constants';
+import { JobFormValues } from '../lib/validation';
 
-  const {
-    title,
-    type,
-    companyName,
-    locationType,
-    location,
-    applicationEmail,
-    applicationUrl,
-    description,
-    salary,
-  } = createJobSchema.parse(values);
+interface CreateJobResponse {
+  success: boolean;
+  error?: string;
+  data?: JobFormData;
+}
 
-  const slug = `${toSlug(title)}-${nanoid(10)}`;
-  const companyLogoUrl = 'company-logo-placeholder.png';
-
-  const newJob = {
-    slug,
-    title: title.trim(),
-    type,
-    companyName: companyName.trim(),
-    companyLogoUrl,
-    locationType,
-    location,
-    applicationEmail: applicationEmail?.trim(),
-    applicationUrl: applicationUrl?.trim(),
-    description: description?.trim(),
-    salary: parseInt(salary),
-    approved: true,
-  };
-
+export async function createJobPosting(
+  userId: string,
+  formData: JobFormValues,
+): Promise<CreateJobResponse> {
   try {
-    const response = await apiRequest('/api/users-jobs/jobs', 'POST', newJob, accessToken);
-    return response;
+    const jobData = {
+      userId,
+      title: formData.title,
+      salaryPerHour: formData.salaryPerHour,
+      schedule: formData.schedule,
+      modality: formData.modality,
+      location: formData.location,
+      description: formData.description,
+      skills: formData.skills,
+      languages: formData.spokenLanguages,
+      specializationId: formData.specializationId,
+    };
+
+    console.log('Job Data ready for the APi', jobData);
+    return {
+      success: true,
+      data: jobData,
+    };
   } catch (error) {
-    console.error('Error creating job:', error);
-    throw error;
+    console.error('Error while creating a job post', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to create job post',
+    };
   }
 }

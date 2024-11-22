@@ -15,8 +15,8 @@ import { useState } from 'react';
 
 export interface JobFilters {
   search: string;
-  modality: 'Remote' | 'OnSite' | 'Hybrid' | 'all';
-  schedule: 'FullTime' | 'PartTime' | 'all';
+  modality: 'Remote' | 'On Site' | 'Hybrid' | 'all';
+  schedule: 'Full Time' | 'Part Time' | 'all';
   minSalary: string;
 }
 
@@ -85,7 +85,7 @@ export function JobFilters() {
           <SelectContent>
             <SelectItem value="all">All Modalities</SelectItem>
             <SelectItem value="Remote">Remote</SelectItem>
-            <SelectItem value="OnSite">On Site</SelectItem>
+            <SelectItem value="On Site">On Site</SelectItem>
             <SelectItem value="Hybrid">Hybrid</SelectItem>
           </SelectContent>
         </Select>
@@ -96,8 +96,8 @@ export function JobFilters() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Schedules</SelectItem>
-            <SelectItem value="FullTime">Full Time</SelectItem>
-            <SelectItem value="PartTime">Part Time</SelectItem>
+            <SelectItem value="Full Time">Full Time</SelectItem>
+            <SelectItem value="Part Time">Part Time</SelectItem>
           </SelectContent>
         </Select>
 

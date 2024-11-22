@@ -25,7 +25,8 @@ function normalizeModality(modality: string): string {
     case 'onsite':
     case 'on-site':
     case 'on site':
-      return 'OnSite';
+    case 'OnSite':
+      return 'On Site';
     case 'remote':
       return 'Remote';
     case 'hybrid':
@@ -40,11 +41,13 @@ function normalizeSchedule(schedule: string): string {
     case 'fulltime':
     case 'full-time':
     case 'full time':
-      return 'FullTime';
+    case 'FullTime':
+      return 'Full Time';
     case 'parttime':
     case 'part-time':
     case 'part time':
-      return 'PartTime';
+    case 'PartTime':
+      return 'Part Time';
     default:
       return schedule;
   }
@@ -156,23 +159,4 @@ export async function getJobById(id: string): Promise<Job> {
     console.error(`❌ Error fetching job ${id}:`, error);
     notFound();
   }
-}
-
-import { JobFormValues } from './validation';
-
-export async function createJob(formData: JobFormValues, recruiterId: string): Promise<Job> {
-  // TODO: add api endpoint and validation:3
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        recruiterId,
-        recruiterLogo: 'placeholder',
-        status: 'Open',
-        ...formData,
-      });
-    }, 1000);
-  });
 }
