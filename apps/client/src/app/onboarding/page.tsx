@@ -14,7 +14,7 @@ export default function OnboardingPage() {
   useEffect(() => {
     if (!isLoaded) return;
     if (user?.unsafeMetadata.onboardingComplete === true) {
-      router.push('/dashboard');
+      router.push('/home');
     }
   }, [user, isLoaded, router]);
 

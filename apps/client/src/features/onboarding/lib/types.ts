@@ -14,11 +14,24 @@ export interface StepFields {
   preferences: ['modality', 'expectedSalary', 'portfolioUrl'];
 }
 
-// Type for the step IDs
 export type StepId = keyof StepFields;
 
-// Update the steps array type
 export interface Step {
   id: StepId;
   name: string;
+}
+
+export interface CreateDeveloperData {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  modality: 'Remote' | 'Hybrid' | 'On Site';
+  yearsOfExperience: number;
+  salaryExpected: number;
+  location: string;
+  profilePicture?: string | File | null;
+  portfolioUrl?: string | null;
+  specializationId: string;
+  skills: string[];
+  spokenLanguages: string[];
 }

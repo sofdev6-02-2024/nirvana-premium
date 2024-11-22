@@ -6,6 +6,7 @@ import { CheckIcon, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
+import { FileUpload } from '@/components/forms/file-upload';
 import LoadingButton from '@/components/forms/loading-button';
 import LocationInput from '@/components/forms/location-input';
 import { Button } from '@/components/ui/button';
@@ -35,15 +36,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { mockLanguages, mockSkills } from '@/features/jobs/lib/mock';
+import { getLanguages, getSkills, getSpecializations } from '@/lib/developer-api';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { Language, Skill, Specialization } from '@/types/dev';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { createDeveloper } from '../actions/create-developer-actions';
 import { Step } from '../lib/types';
 import { developerFormSchema, DeveloperFormValues } from '../lib/validations';
 
 interface StepFields {
-  personal: ['firstName', 'lastName'];
+  personal: ['firstName', 'lastName', 'location', 'profilePicture'];
   skills: ['skills', 'specialty', 'yearsOfExperience', 'spokenLanguages'];
   preferences: ['modality', 'expectedSalary', 'portfolioUrl'];
 }
@@ -52,20 +55,46 @@ export default function DeveloperOnboardingForm() {
   const { user, isSignedIn, isLoaded } = useUser();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [specializations, setSpecializations] = useState<Specialization[]>([]);
+  const [languages, setLanguages] = useState<Language[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadFormData() {
+      try {
+        const [skillsData, specializationsData, languagesData] = await Promise.all([
+          getSkills(),
+          getSpecializations(),
+          getLanguages(),
+        ]);
+
+        setSkills(skillsData);
+        setSpecializations(specializationsData);
+        setLanguages(languagesData);
+      } catch (error) {
+        console.error('Error loading form data:', error);
+        toast.error('Failed to load form data. Please refresh the page.');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadFormData();
+  }, []);
 
   const form = useForm<DeveloperFormValues>({
     resolver: zodResolver(developerFormSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
-      location: '',
-      skills: [],
-      specialization: 'Frontend',
-      yearsOfExperience: 0,
-      spokenLanguages: [],
       modality: 'Remote',
-      expectedSalary: 0,
+      location: '',
+      specializationId: '',
+      skills: [],
+      spokenLanguages: [],
       portfolioUrl: '',
+      profilePicture: '',
     },
   });
 
@@ -78,9 +107,17 @@ export default function DeveloperOnboardingForm() {
   } = form;
 
   const onSubmit = async (data: DeveloperFormValues) => {
-    if (!user) return;
+    if (!user) {
+      toast.error('You must be signed in to create a profile');
+      return;
+    }
 
     try {
+      const result = await createDeveloper(user.id, data);
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to create profile');
+      }
+
       await user.update({
         unsafeMetadata: {
           ...user.unsafeMetadata,
@@ -88,18 +125,16 @@ export default function DeveloperOnboardingForm() {
         },
       });
 
-      console.log('Developer data ready for backend:', data);
-
-      toast.success('Profile created successfully!');
+      toast.success('Developer profile created successfully!');
       router.push('/dashboard');
     } catch (error) {
-      console.error('Error updating onboarding status:', error);
-      toast.error('Something went wrong. Please try again.');
+      console.error('Error creating developer profile:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to create profile');
     }
   };
 
   const stepFields: StepFields = {
-    personal: ['firstName', 'lastName'],
+    personal: ['firstName', 'lastName', 'location', 'profilePicture'],
     skills: ['skills', 'specialty', 'yearsOfExperience', 'spokenLanguages'],
     preferences: ['modality', 'expectedSalary', 'portfolioUrl'],
   } as const;
@@ -136,11 +171,15 @@ export default function DeveloperOnboardingForm() {
     return null;
   }
 
+  if (isLoading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
   return (
     <div className="container mx-auto max-w-3xl py-8">
-      <div className="mb-8">
+      <div className="mb-8 pb-8">
         <nav aria-label="Progress">
-          <ol role="list" className="flex items-center">
+          <ol role="list" className="flex items-center gap-8">
             {steps.map((step, index) => (
               <li
                 key={step.id}
@@ -202,7 +241,9 @@ export default function DeveloperOnboardingForm() {
                     name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>First Name</FormLabel>
+                        <FormLabel>
+                          First Name <span className="text-destructive">*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="Enter your first name" {...field} />
                         </FormControl>
@@ -215,7 +256,9 @@ export default function DeveloperOnboardingForm() {
                     name="lastName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Last Name</FormLabel>
+                        <FormLabel>
+                          Last Name <span className="text-destructive">*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="Enter your last name" {...field} />
                         </FormControl>
@@ -252,6 +295,27 @@ export default function DeveloperOnboardingForm() {
                       </FormItem>
                     )}
                   />
+
+                  <FormField
+                    control={control}
+                    name="profilePicture"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Profile Picture <span className="text-muted-foreground">(Optional)</span>
+                        </FormLabel>
+                        <FormControl>
+                          <FileUpload
+                            field={field}
+                            onUploadError={(error) => toast.error(error)}
+                            className="w-full"
+                          />
+                        </FormControl>
+                        <FormDescription>Upload your profile picture (Max 5MB)</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </>
               )}
 
@@ -262,9 +326,11 @@ export default function DeveloperOnboardingForm() {
                     name="skills"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Required Skills</FormLabel>
-                        <div className="grid grid-cols-3 gap-4">
-                          {mockSkills.map((skill) => (
+                        <FormLabel>
+                          Required Skills <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                          {skills.map((skill) => (
                             <FormItem
                               key={skill.id}
                               className="flex items-start space-x-3 space-y-0"
@@ -290,21 +356,24 @@ export default function DeveloperOnboardingForm() {
                   />
                   <FormField
                     control={control}
-                    name="specialization"
+                    name="specializationId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Specialization</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormLabel>
+                          Specialization <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Select specialization" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="Frontend">Frontend</SelectItem>
-                            <SelectItem value="Backend">Backend</SelectItem>
-                            <SelectItem value="DevOps">DevOps</SelectItem>
-                            <SelectItem value="Architect">Architect</SelectItem>
+                            {specializations.map((spec) => (
+                              <SelectItem key={spec.id} value={spec.id}>
+                                {spec.name}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -333,9 +402,11 @@ export default function DeveloperOnboardingForm() {
                     name="spokenLanguages"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Required Languages</FormLabel>
-                        <div className="grid grid-cols-3 gap-4">
-                          {mockLanguages.map((language) => (
+                        <FormLabel>
+                          Spoken Languages <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                          {languages.map((language) => (
                             <FormItem
                               key={language.id}
                               className="flex items-start space-x-3 space-y-0"
@@ -369,7 +440,9 @@ export default function DeveloperOnboardingForm() {
                     name="modality"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Modality</FormLabel>
+                        <FormLabel>
+                          Modality <span className="text-destructive">*</span>
+                        </FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
@@ -378,7 +451,7 @@ export default function DeveloperOnboardingForm() {
                           </FormControl>
                           <SelectContent>
                             <SelectItem value="Remote">Remote</SelectItem>
-                            <SelectItem value="OnSite">On Site</SelectItem>
+                            <SelectItem value="On Site">On Site</SelectItem>
                             <SelectItem value="Hybrid">Hybrid</SelectItem>
                           </SelectContent>
                         </Select>
@@ -388,10 +461,12 @@ export default function DeveloperOnboardingForm() {
                   />
                   <FormField
                     control={control}
-                    name="expectedSalary"
+                    name="salaryExpected"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Expected Hourly Rate (USD)</FormLabel>
+                        <FormLabel>
+                          Expected Hourly Rate (USD) <span className="text-destructive">*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input
                             type="number"
@@ -408,24 +483,17 @@ export default function DeveloperOnboardingForm() {
                     name="portfolioUrl"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Portfolio URL</FormLabel>
+                        <FormLabel>
+                          Portfolio URL{' '}
+                          <span className="text-muted-foreground text-sm">(Optional)</span>
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="https://your-portfolio.com" {...field} />
+                          <Input
+                            placeholder="https://your-portfolio.com"
+                            {...field}
+                            value={field.value ?? ''}
+                          />
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={control}
-                    name="profilePicture"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Upload a profile image</FormLabel>
-                        <FormControl>
-                          <Input type="file" accept="image/*" placeholder="A file" {...field} />
-                        </FormControl>
-                        <FormDescription>Upload your profile picture</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}

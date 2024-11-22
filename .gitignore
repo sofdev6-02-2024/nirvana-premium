@@ -1,5 +1,5 @@
 # Git ignore Configuration
-
+.env
 ## Git
 .git/
 
