@@ -22,6 +22,8 @@ public static class MigrationExtensions
 
         await using T dbContext = scope.ServiceProvider.GetRequiredService<T>();
 
+        await dbContext.Database.EnsureDeletedAsync();
+
         await dbContext.Database.MigrateAsync();
 
         await dbContext.SeedDataAsync(scope);

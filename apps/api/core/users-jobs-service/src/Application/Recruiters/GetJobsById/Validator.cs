@@ -1,8 +1,8 @@
-namespace Application.Jobs.GetByRecruiterId;
+namespace Application.Recruiters.GetJobsById;
 
 using FluentValidation;
 
-internal sealed class Validator : AbstractValidator<GetByRecruiterIdQuery>
+internal sealed class Validator : AbstractValidator<GetJobsByIdQuery>
 {
     public Validator()
     {

@@ -89,7 +89,9 @@ namespace Infrastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    identity_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    identity_id = table.Column<string>(type: "text", nullable: false),
+                    role = table.Column<int>(type: "integer", nullable: false),
+                    do_onboarding = table.Column<bool>(type: "boolean", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     updated_at = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     is_active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
@@ -111,7 +113,8 @@ namespace Infrastructure.Migrations
                     salary_per_hour_expected = table.Column<double>(type: "double precision", nullable: false),
                     modality_preferred = table.Column<int>(type: "integer", nullable: false),
                     location = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    profile_picture_url = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    portfolio_url = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    profile_picture_url = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     specialization_id = table.Column<Guid>(type: "uuid", nullable: false),

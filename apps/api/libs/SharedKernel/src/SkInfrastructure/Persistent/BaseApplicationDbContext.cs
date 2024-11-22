@@ -54,7 +54,7 @@ public abstract class BaseApplicationDbContext(
         }
     }
 
-    public virtual async Task SeedDataAsync(IServiceScope scope)
+    public  async Task SeedDataAsync(IServiceScope scope)
     {
         IOrderedEnumerable<ISeedEntity> seedEntities = scope.ServiceProvider
             .GetServices<ISeedEntity>()

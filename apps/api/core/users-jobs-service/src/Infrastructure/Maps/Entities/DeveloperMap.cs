@@ -27,8 +27,14 @@ internal sealed class DeveloperMap : BaseEntityMap<Developer>
             .ValueGeneratedOnAdd();
 
         _ = builder
-            .Property(static u => u.ProfilePictureUrl)
+            .Property(static u => u.PortfolioUrl)
             .HasMaxLength(255)
+            .HasDefaultValue(null)
+            .ValueGeneratedOnAdd();
+
+        _ = builder
+            .Property(static u => u.ProfilePictureUrl)
+            .HasMaxLength(500)
             .HasDefaultValue(null)
             .ValueGeneratedOnAdd();
 

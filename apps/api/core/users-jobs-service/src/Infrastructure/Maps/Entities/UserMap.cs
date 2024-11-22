@@ -18,6 +18,10 @@ internal sealed class UserMap : BaseEntityMap<User>
         _ = builder.HasIndex(static u => u.IdentityId).IsUnique();
         _ = builder.Property(static u => u.IdentityId).IsRequired();
 
+        _ = builder.Property(static u => u.Role).HasConversion<int>().IsRequired();
+
+        _ = builder.Property(static u => u.DoOnboarding).IsRequired();
+
         _ = builder
             .HasOne(static u => u.Recruiter)
             .WithOne(static r => r.User)
