@@ -12,17 +12,11 @@ internal sealed class GetAll : IEndpoint
     {
         _ = app.MapGet(
                 "api/users-jobs/languages",
-                static async (
-                    ISender sender,
-                    CancellationToken cancellationToken
-                ) =>
+                static async (ISender sender, CancellationToken cancellationToken) =>
                 {
                     GetAllQuery query = new();
 
-                    Result<IList<Response>> result = await sender.Send(
-                        query,
-                        cancellationToken
-                    );
+                    Result<IList<Response>> result = await sender.Send(query, cancellationToken);
 
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }

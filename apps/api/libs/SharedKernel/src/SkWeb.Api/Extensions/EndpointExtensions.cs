@@ -1,8 +1,8 @@
 namespace SkWeb.Api.Extensions;
 
 using System.Reflection;
+using Endpoints;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using SkWeb.Api.Endpoints;
 
 public static class EndpointExtensions
 {

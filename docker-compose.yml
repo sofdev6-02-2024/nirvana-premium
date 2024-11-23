@@ -5,8 +5,6 @@ networks:
 services:
   chamba_users_jobs_db:
     image: postgres:16.0
-    container_name: chamba_users_jobs_db
-    restart: always
     environment:
       POSTGRES_DB: chamba_users_jobs_db
       POSTGRES_USER: root
@@ -17,35 +15,11 @@ services:
       - 4040:4040
     volumes:
       - chamba-users-jobs-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -h chamba_users_jobs_db -p 4040 -d chamba_users_jobs_db']
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    networks:
-      - chamba_network
-
-  chamba_db_admin:
-    image: dpage/pgadmin4:7.8
-    container_name: chamba_db_admin
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_LISTEN_PORT: 5050
-    ports:
-      - 5050:5050
-    volumes:
-      - chamba-db-admin-data:/var/lib/pgadmin
-    depends_on:
-      chamba_users_jobs_db:
-        condition: service_healthy
     networks:
       - chamba_network
 
   chamba_seq:
     image: datalust/seq:2024
-    container_name: chamba_seq
     environment:
       - ACCEPT_EULA=Y
     ports:
@@ -55,9 +29,7 @@ services:
 
   consul:
     image: hashicorp/consul:1.20
-    container_name: consul
     command: consul agent -dev -log-level=warn -ui -client=0.0.0.0
-    hostname: consul
     ports:
       - '8500:8500'
     volumes:
@@ -65,24 +37,7 @@ services:
     networks:
       - chamba_network
 
-  keycloak:
-    image: quay.io/keycloak/keycloak:26.0.2
-    container_name: Keycloak
-    command: start-dev --import-realm
-    environment:
-      - KC_HEALTH_ENABLED=true
-      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
-      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-    volumes:
-      - ./keycloak:/opt/keycloak/data/import
-      - keycloak-data:/opt/keycloak/data
-    ports:
-      - 18080:8080
-    networks:
-      - chamba_network
-
 volumes:
   chamba-users-jobs-data:
   chamba-db-admin-data:
   consul-data:
-  keycloak-data:
