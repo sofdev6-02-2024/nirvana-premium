@@ -1,13 +1,10 @@
-export interface Recruiter {
+export interface Recruiter extends BaseEntity {
   name: string;
   location: string;
   description: string;
   profilePictureUrl: string;
-  id: string;
   isVerified: boolean;
-  createdAt: string;
   userId: string;
-  updatedAt: string;
 }
 
 export interface PaginatedResponse<T> {

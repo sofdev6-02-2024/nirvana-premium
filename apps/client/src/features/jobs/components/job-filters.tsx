@@ -12,11 +12,12 @@ import {
 import { X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { Modality, Schedule } from '../lib/constants';
 
 export interface JobFilters {
   search: string;
-  modality: 'Remote' | 'OnSite' | 'Hybrid' | 'all';
-  schedule: 'FullTime' | 'PartTime' | 'all';
+  modality: 'Remote' | 'On Site' | 'Hybrid' | 'all';
+  schedule: 'Full Time' | 'Part Time' | 'all';
   minSalary: string;
 }
 
@@ -25,14 +26,14 @@ export function JobFilters() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<JobFilters>({
     search: searchParams.get('search') || '',
-    modality: (searchParams.get('modality') as JobFilters['modality']) || 'all',
-    schedule: (searchParams.get('schedule') as JobFilters['schedule']) || 'all',
+    modality: (searchParams.get('modality') as Modality) || 'all',
+    schedule: (searchParams.get('schedule') as Schedule) || 'all',
     minSalary: searchParams.get('minSalary') || '',
   });
 
-  const updateURL = (newFilters: typeof filters) => {
+  const updateURL = (newFilters: JobFilters) => {
     const params = new URLSearchParams();
 
     Object.entries(newFilters).forEach(([key, value]) => {
@@ -53,7 +54,7 @@ export function JobFilters() {
   };
 
   const resetFilters = () => {
-    const defaultFilters = {
+    const defaultFilters: JobFilters = {
       search: '',
       modality: 'all',
       schedule: 'all',
@@ -85,7 +86,7 @@ export function JobFilters() {
           <SelectContent>
             <SelectItem value="all">All Modalities</SelectItem>
             <SelectItem value="Remote">Remote</SelectItem>
-            <SelectItem value="OnSite">On Site</SelectItem>
+            <SelectItem value="On Site">On Site</SelectItem>
             <SelectItem value="Hybrid">Hybrid</SelectItem>
           </SelectContent>
         </Select>
@@ -96,8 +97,8 @@ export function JobFilters() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Schedules</SelectItem>
-            <SelectItem value="FullTime">Full Time</SelectItem>
-            <SelectItem value="PartTime">Part Time</SelectItem>
+            <SelectItem value="Full Time">Full Time</SelectItem>
+            <SelectItem value="Part Time">Part Time</SelectItem>
           </SelectContent>
         </Select>
 

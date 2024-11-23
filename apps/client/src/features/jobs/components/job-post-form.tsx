@@ -2,11 +2,11 @@
 
 import LoadingButton from '@/components/forms/loading-button';
 import LocationInput from '@/components/forms/location-input';
+import LoadingScreen from '@/components/loading/loading-screen';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,33 +21,71 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { getLanguages, getSkills, getSpecializations } from '@/lib/developer-api';
+import { Language, Skill, Specialization } from '@/types/dev';
+import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react';
 import { draftToMarkdown } from 'markdown-draft-js';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { mockLanguages, mockSkills } from '../lib/mock';
+import { createJobPosting } from '../actions/job-actions';
 import { jobFormSchema, type JobFormValues } from '../lib/validation';
 import RichTextEditor from './rich-text-editor';
 
 export function JobPostForm() {
+  const { user } = useUser();
   const router = useRouter();
   const form = useForm<JobFormValues>({
     resolver: zodResolver(jobFormSchema),
     defaultValues: {
       title: '',
-      specialization: 'Frontend',
+      specializationId: '',
       salaryPerHour: 0,
-      schedule: 'FullTime',
+      schedule: 'Full Time',
       modality: 'Remote',
       location: '',
       description: '',
       skills: [],
-      languages: [],
-      attachments: [],
+      spokenLanguages: [],
     },
   });
+
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [specializations, setSpecializations] = useState<Specialization[]>([]);
+  const [languages, setLanguages] = useState<Language[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadFormData() {
+      try {
+        const [skillsData, specializationsData, languagesData] = await Promise.all([
+          getSkills(),
+          getSpecializations(),
+          getLanguages(),
+        ]);
+
+        setSkills(skillsData);
+        setSpecializations(specializationsData);
+        setLanguages(languagesData);
+      } catch (error) {
+        console.error('Error loading form data:', error);
+        toast.error('Failed to load form data. Please refresh the page.');
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadFormData();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const {
     handleSubmit,
@@ -58,50 +96,44 @@ export function JobPostForm() {
     formState: { isSubmitting },
   } = form;
 
-  async function onSubmit(values: JobFormValues) {
-    try {
-      console.log('Form submission started', values);
-
-      const transformedValues = {
-        ...values,
-        skills: values.skills.map(Number),
-        languages: values.languages.map(Number),
-      };
-
-      console.log('Transformed values:', transformedValues);
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      toast.success('Job posted successfully');
-      console.log('Toast should have appeared');
-
-      try {
-        await router.push('/jobs');
-      } catch (routerError) {
-        console.error('Router push failed:', routerError);
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error('Failed to post job. Please try again.');
+  const onSubmit = async (data: JobFormValues) => {
+    if (!user) {
+      toast.error('You must be signed in to create a job');
+      return;
     }
+    try {
+      const result = await createJobPosting(user.id, data);
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to create job');
+      }
+
+      toast.success('Job  created successfully!');
+      console.log('Submission result:', result);
+      toast.success('Job created successfully!');
+      return <LoadingScreen fullScreen text="Redirecting to home page..." />;
+      setTimeout(() => {
+        router.push('/home');
+      }, 1200);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to create job');
+    }
+  };
+
+  if (isLoading) {
+    return <LoadingScreen fullScreen text="Loading developer data" />;
   }
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={(e) => {
-          console.log('Form submitted');
-          console.log(e);
-          handleSubmit(onSubmit)(e);
-        }}
-        className="space-y-8"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={control}
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Job Title</FormLabel>
+              <FormLabel>
+                Job Title <span className="text-destructive">*</span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder="e.g. Senior Frontend Developer" {...field} />
               </FormControl>
@@ -113,10 +145,13 @@ export function JobPostForm() {
         <div className="grid grid-cols-2 gap-6">
           <FormField
             control={control}
-            name="specialization"
+            name="specializationId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Specialization</FormLabel>
+                <FormLabel>
+                  Specialization
+                  <span className="text-destructive">*</span>
+                </FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
@@ -124,10 +159,11 @@ export function JobPostForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Frontend">Frontend</SelectItem>
-                    <SelectItem value="Backend">Backend</SelectItem>
-                    <SelectItem value="DevOps">DevOps</SelectItem>
-                    <SelectItem value="Architect">Architect</SelectItem>
+                    {specializations.map((spec) => (
+                      <SelectItem key={spec.id} value={spec.id}>
+                        {spec.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -195,8 +231,8 @@ export function JobPostForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="FullTime">Full Time</SelectItem>
-                    <SelectItem value="PartTime">Part Time</SelectItem>
+                    <SelectItem value="Full Time">Full Time</SelectItem>
+                    <SelectItem value="Part Time">Part Time</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -218,7 +254,7 @@ export function JobPostForm() {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="Remote">Remote</SelectItem>
-                    <SelectItem value="OnSite">On Site</SelectItem>
+                    <SelectItem value="On Site">On Site</SelectItem>
                     <SelectItem value="Hybrid">Hybrid</SelectItem>
                   </SelectContent>
                 </Select>
@@ -250,9 +286,11 @@ export function JobPostForm() {
           name="skills"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Required Skills</FormLabel>
+              <FormLabel>
+                Required Skills <span className="text-destructive">*</span>
+              </FormLabel>
               <div className="grid grid-cols-3 gap-4">
-                {mockSkills.map((skill) => (
+                {skills.map((skill) => (
                   <FormItem key={skill.id} className="flex items-start space-x-3 space-y-0">
                     <FormControl>
                       <Checkbox
@@ -276,12 +314,14 @@ export function JobPostForm() {
 
         <FormField
           control={control}
-          name="languages"
+          name="spokenLanguages"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Required Languages</FormLabel>
+              <FormLabel>
+                Required Languages <span className="text-destructive">*</span>
+              </FormLabel>
               <div className="grid grid-cols-3 gap-4">
-                {mockLanguages.map((language) => (
+                {languages.map((language) => (
                   <FormItem key={language.id} className="flex items-start space-x-3 space-y-0">
                     <FormControl>
                       <Checkbox
@@ -298,29 +338,6 @@ export function JobPostForm() {
                   </FormItem>
                 ))}
               </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={control}
-          name="attachments"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Attachments</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={(e) => {
-                    const files = Array.from(e.target.files || []);
-                    field.onChange(files);
-                  }}
-                />
-              </FormControl>
-              <FormDescription>Upload any relevant documents (max 5MB per file)</FormDescription>
               <FormMessage />
             </FormItem>
           )}

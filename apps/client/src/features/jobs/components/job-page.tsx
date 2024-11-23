@@ -16,7 +16,7 @@ export default function JobPage({
       <div className="text-muted-foreground">
         <p className="flex items-center gap-1.5">
           <Briefcase size={16} className="shrink-0" />
-          {schedule === 'FullTime' ? 'Full-Time' : 'Part-Time'}
+          {schedule === 'Full Time' ? 'Full Time' : 'Part Time'}
         </p>
         <p className="flex items-center gap-1.5">
           <MapPin size={16} className="shrink-0" />

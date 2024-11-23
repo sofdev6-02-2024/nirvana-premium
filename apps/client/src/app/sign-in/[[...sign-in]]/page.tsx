@@ -1,5 +1,6 @@
 'use client';
 
+import LoadingScreen from '@/components/loading/loading-screen';
 import { SignIn, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -23,11 +24,7 @@ export default function SignInPage(): JSX.Element {
   }, [isLoaded, user, router]);
 
   if (!isLoaded) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div>Loading...</div>
-      </div>
-    );
+    return <LoadingScreen fullScreen text="..." />;
   }
 
   const appearance: AppearanceProps = {

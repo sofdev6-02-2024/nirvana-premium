@@ -5,8 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
+import { FileUpload } from '@/components/forms/file-upload';
 import LoadingButton from '@/components/forms/loading-button';
 import LocationInput from '@/components/forms/location-input';
+import LoadingScreen from '@/components/loading/loading-screen';
 import {
   Card,
   CardContent,
@@ -25,10 +27,9 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/text-area';
 import { X } from 'lucide-react';
 import { toast } from 'sonner';
-import { Company } from '../lib/types';
+import { createCompany } from '../actions/create-company-action';
 import { companyFormSchema, CompanyFormValues } from '../lib/validations';
 
 export default function CompanyOnboardingForm() {
@@ -40,7 +41,6 @@ export default function CompanyOnboardingForm() {
     defaultValues: {
       name: '',
       location: '',
-      description: '',
       profilePicture: '',
     },
   });
@@ -54,15 +54,20 @@ export default function CompanyOnboardingForm() {
   } = form;
 
   const onSubmit = async (data: CompanyFormValues) => {
-    if (!user) return;
+    if (!user) {
+      toast.error('You must be signed in to create a company profile');
+      return;
+    }
 
     try {
-      const companyData: Company = {
+      const result = await createCompany({
         ...data,
-        isVerified: false,
-        isActive: true,
         userId: user.id,
-      };
+      });
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to create company profile');
+      }
 
       await user.update({
         unsafeMetadata: {
@@ -71,17 +76,23 @@ export default function CompanyOnboardingForm() {
         },
       });
 
-      console.log('Company data ready for backend:', companyData);
-
       toast.success('Company profile created successfully!');
-      router.push('/dashboard');
+      return <LoadingScreen fullScreen text="Redirecting to home page..." />;
+      setTimeout(() => {
+        router.push('/home');
+      }, 2000);
     } catch (error) {
       console.error('Error saving company data:', error);
-      toast.error('Failed to create company profile. Please try again.');
+      toast.error(error instanceof Error ? error.message : 'Failed to create company profile');
     }
   };
 
-  if (!isLoaded || !isSignedIn) {
+  if (!isLoaded) {
+    return <LoadingScreen fullScreen text="Loading your onboarding form..." />;
+  }
+
+  if (!isSignedIn) {
+    router.push('/sign-in');
     return null;
   }
 
@@ -100,7 +111,9 @@ export default function CompanyOnboardingForm() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Company Name</FormLabel>
+                    <FormLabel>
+                      Company Name <span className="text-destructive">*</span>{' '}
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="Enter company name" {...field} />
                     </FormControl>
@@ -115,7 +128,9 @@ export default function CompanyOnboardingForm() {
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>
+                      Location <span className="text-destructive">*</span>
+                    </FormLabel>
                     <FormControl>
                       <LocationInput onLocationSelected={field.onChange} ref={field.ref} />
                     </FormControl>
@@ -139,33 +154,20 @@ export default function CompanyOnboardingForm() {
 
               <FormField
                 control={control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Company Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Tell us about your company..."
-                        className="min-h-[100px]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Briefly describe your company&aposs mission and values
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={control}
                 name="profilePicture"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Upload a profile image</FormLabel>
+                    <FormLabel>
+                      Upload a profile image
+                      <span className="text-destructive">*</span>
+                    </FormLabel>
                     <FormControl>
-                      <Input type="file" accept="image/*" placeholder="A file" {...field} />
+                      <FileUpload
+                        field={field}
+                        onUploadError={(error) => {
+                          toast.error(error);
+                        }}
+                      />
                     </FormControl>
                     <FormDescription>Upload your profile picture</FormDescription>
                     <FormMessage />

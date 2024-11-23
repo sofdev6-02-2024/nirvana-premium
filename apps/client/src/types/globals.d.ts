@@ -9,4 +9,9 @@ declare global {
       onboardingComplete?: boolean;
     };
   }
+  interface BaseEntity {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+  }
 }
