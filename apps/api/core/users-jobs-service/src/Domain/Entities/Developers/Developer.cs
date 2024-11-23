@@ -22,6 +22,7 @@ public sealed class Developer : BaseEntity
     public required DeveloperModality ModalityPreferred { get; set; }
 
     public string? Location { get; set; }
+    public Uri? PortfolioUrl { get; set; }
     public Uri? ProfilePictureUrl { get; set; }
     public string? Description { get; set; }
 

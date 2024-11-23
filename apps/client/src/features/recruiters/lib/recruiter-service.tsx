@@ -79,7 +79,7 @@ export async function getJobsByRecruiter(
 ): Promise<Job[]> {
   try {
     const response = await apiRequest<PaginatedResponse<Job>>({
-      endpoint: `/users-jobs/jobs/recruiter/${recruiterId}`,
+      endpoint: `/users-jobs/recruiters/${recruiterId}/jobs`,
       method: 'GET',
       params: {
         page,

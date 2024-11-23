@@ -1,4 +1,4 @@
-namespace Application.Jobs.GetByRecruiterId;
+namespace Application.Recruiters.GetJobsById;
 
 using Domain.Entities.Jobs;
 using SkApplication.Contracts;

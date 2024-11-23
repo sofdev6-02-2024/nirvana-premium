@@ -1,18 +1,18 @@
-namespace Users.Jobs.Service.Api.Endpoints.Jobs;
+namespace Users.Jobs.Service.Api.Endpoints.Recruiters;
 
-using Application.Jobs.GetByRecruiterId;
+using Application.Recruiters.GetJobsById;
 using MediatR;
 using SkApplication.Responses;
 using SkDomain.Results;
 using SkWeb.Api.Endpoints;
 using SkWeb.Api.Infrastructure;
 
-internal sealed class GetByRecruiterId : IEndpoint
+internal sealed class GetJobsById : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         _ = app.MapGet(
-                "api/users-jobs/jobs/recruiter/{recruiterId:guid}",
+                "api/users-jobs/recruiters/{recruiterId:guid}/jobs",
                 static async (
                     Guid recruiterId,
                     ISender sender,
@@ -21,7 +21,7 @@ internal sealed class GetByRecruiterId : IEndpoint
                     int pageSize = 10
                 ) =>
                 {
-                    GetByRecruiterIdQuery query = new(recruiterId, page, pageSize);
+                    GetJobsByIdQuery query = new(recruiterId, page, pageSize);
 
                     Result<PagedList<Response>> result = await sender.Send(
                         query,
@@ -31,6 +31,6 @@ internal sealed class GetByRecruiterId : IEndpoint
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }
             )
-            .WithTags(Tags.Jobs);
+            .WithTags(Tags.Recruiters);
     }
 }

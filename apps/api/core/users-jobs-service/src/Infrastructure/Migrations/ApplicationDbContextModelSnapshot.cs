@@ -367,10 +367,16 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("name");
 
-                    b.Property<string>("ProfilePictureUrl")
+                    b.Property<string>("PortfolioUrl")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
+                        .HasColumnName("portfolio_url");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasColumnName("profile_picture_url");
 
                     b.Property<double>("SalaryPerHourExpected")
@@ -573,14 +579,19 @@ namespace Infrastructure.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                    b.Property<bool>("DoOnboarding")
+                        .HasColumnType("boolean")
+                        .HasColumnName("do_onboarding");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("email");
 
-                    b.Property<Guid>("IdentityId")
-                        .HasColumnType("uuid")
+                    b.Property<string>("IdentityId")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("identity_id");
 
                     b.Property<bool>("IsActive")
@@ -588,6 +599,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(true)
                         .HasColumnName("is_active");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer")
+                        .HasColumnName("role");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()

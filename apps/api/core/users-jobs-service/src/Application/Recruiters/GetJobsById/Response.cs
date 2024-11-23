@@ -1,4 +1,4 @@
-namespace Application.Jobs.GetByRecruiterId;
+namespace Application.Recruiters.GetJobsById;
 
 public sealed class Response
 {

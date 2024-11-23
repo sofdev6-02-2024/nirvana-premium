@@ -1,4 +1,4 @@
-namespace Application.Jobs.GetByRecruiterId;
+namespace Application.Recruiters.GetJobsById;
 
 using Domain.Entities.Jobs;
 using Domain.Entities.Recruiters;
@@ -8,11 +8,11 @@ using SkApplication.Contracts;
 using SkApplication.Responses;
 using SkDomain.Results;
 
-internal sealed class GetByRecruiterIdQueryHandler(IApplicationDbContext context)
-    : IQueryHandler<GetByRecruiterIdQuery, PagedList<Response>>
+internal sealed class GetJobsByIdQueryHandler(IApplicationDbContext context)
+    : IQueryHandler<GetJobsByIdQuery, PagedList<Response>>
 {
     public async Task<Result<PagedList<Response>>> Handle(
-        GetByRecruiterIdQuery query,
+        GetJobsByIdQuery query,
         CancellationToken cancellationToken
     )
     {
