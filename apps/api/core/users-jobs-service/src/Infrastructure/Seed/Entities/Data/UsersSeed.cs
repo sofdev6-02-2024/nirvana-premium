@@ -1,7 +1,8 @@
-namespace Infrastructure.Seed.Entities;
+namespace Infrastructure.Seed.Entities.Data;
 
 using Domain.Entities.Users;
 using Domain.Enums;
+using Ids;
 using SkInfrastructure.Seed;
 
 internal sealed class UsersSeed : BaseSeedEntity<User>
@@ -12,241 +13,241 @@ internal sealed class UsersSeed : BaseSeedEntity<User>
         [
             new User
             {
-                Id = Guid.Parse("04eba753-86b6-4575-9308-52933fd3494d"),
+                Id = UsersId.One,
                 Email = "dev1@example.com",
-                IdentityId = "1",
+                IdentityId = "user_2pFw6yUg4yDsbDni74l5gjU7XjV",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("d5632548-07d2-451c-ab49-08332e6d7d5d"),
+                Id = UsersId.Two,
                 Email = "dev2@example.com",
-                IdentityId = "2",
+                IdentityId = "user_2pFwEjcnsTa7P3OkaQsPNWAYnru",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("a4db4e7a-9984-4392-a51f-3d5dea04968c"),
+                Id = UsersId.Three,
                 Email = "dev3@example.com",
-                IdentityId = "3",
+                IdentityId = "user_2pFwG9ynQJbE0e77F7qqN85TjoE",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("7366c6e1-4eba-4c78-bdce-a031f896f5a2"),
+                Id = UsersId.Four,
                 Email = "dev4@example.com",
-                IdentityId = "4",
+                IdentityId = "user_2pFwH7R74g9gt4XCqJHiO6Xljvg",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("567ae4fe-6118-4183-a094-b543b5504361"),
+                Id = UsersId.Five,
                 Email = "dev5@example.com",
-                IdentityId = "5",
+                IdentityId = "user_2pFwIQTmgGk0vGjO8AXovPHB6Mf",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("ed519d80-7d95-4f42-9239-fa742777afc8"),
+                Id = UsersId.Six,
                 Email = "dev6@example.com",
-                IdentityId = "6",
+                IdentityId = "user_2pFwKCcYEoyks6ffvq5qOfGcESy",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("3cf7872d-2e6c-4767-b612-f5325db2637e"),
+                Id = UsersId.Seven,
                 Email = "dev7@example.com",
-                IdentityId = "7",
+                IdentityId = "user_2pFwLIfMLgJrmdio0TnhEup4aEc",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("b5b277ac-9a62-4c11-8b30-759af7f8b48b"),
+                Id = UsersId.Eight,
                 Email = "dev8@example.com",
-                IdentityId = "8",
+                IdentityId = "user_2pFwOJ9aIIHDTW54Y5bMxCWLWCd",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("0d971e63-6891-4dea-9e68-125176e56033"),
+                Id = UsersId.Nine,
                 Email = "dev9@example.com",
-                IdentityId = "9",
+                IdentityId = "user_2pFwPwcGGdlVmruD04FLg2DLegB",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("8ee72569-f38d-4ac3-b4e9-91b2676dc17f"),
+                Id = UsersId.Ten,
                 Email = "dev10@example.com",
-                IdentityId = "10",
+                IdentityId = "user_2pFwR8Za1cAFUl4cLsXcMIiqsnJ",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("33210350-a20d-4bb3-912d-723bf3d1c537"),
+                Id = UsersId.Eleven,
                 Email = "dev11@example.com",
-                IdentityId = "11",
+                IdentityId = "user_2pFwS8fjdLXkAkp8t8sUbFxGVKs",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("c36f135d-7ea2-4c8e-b240-047054013e29"),
+                Id = UsersId.Twelve,
                 Email = "dev12@example.com",
-                IdentityId = "12",
+                IdentityId = "user_2pFwTfngw6LeJwG3DmH55zOAYN5",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("9cb663cd-5c63-47c2-bb26-6369dc6eb1c3"),
+                Id = UsersId.Thirteen,
                 Email = "dev13@example.com",
-                IdentityId = "13",
+                IdentityId = "user_2pFwVldHV5wOayYQ2OJfOiSr2lH",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("02156345-a6a8-4fbf-8a50-8617dd994559"),
+                Id = UsersId.Fourteen,
                 Email = "dev14@example.com",
-                IdentityId = "14",
+                IdentityId = "user_2pFwXL4xciC3wCsOTkJcpxQuKuh",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("825a9f03-9b9f-4eb0-b312-b90ce6d88a3b"),
+                Id = UsersId.Fifteen,
                 Email = "dev15@example.com",
-                IdentityId = "15",
+                IdentityId = "user_2pFwYlPg3VeSxZyl47JUZ92s1M9",
                 Role = UserRole.Developer,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("b96d1b8f-c0e3-47fb-97fa-0f034ce98769"),
+                Id = UsersId.Sixteen,
                 Email = "rec1@example.com",
-                IdentityId = "16",
+                IdentityId = "user_2pFwccn8Rsp6eVdXMvoCT1lAR6j",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("948c059b-4524-4a0a-9915-1eeab5784959"),
+                Id = UsersId.Seventeen,
                 Email = "rec2@example.com",
-                IdentityId = "17",
+                IdentityId = "user_2pFwfqNd4sxB1xPMenYQrNWuDgv",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("663a7ff2-f7f7-43c7-83b3-f53b9fbfc950"),
+                Id = UsersId.Eighteen,
                 Email = "rec3@example.com",
-                IdentityId = "18",
+                IdentityId = "user_2pFwgzBTFpfvbnhIMHBf2uy4svc",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("17d635c0-46a9-4907-ab71-f84b87cc42e1"),
+                Id = UsersId.Nineteen,
                 Email = "rec4@example.com",
-                IdentityId = "19",
+                IdentityId = "user_2pFwibTEn6teMmR1kOplBBJoHnd",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("65dbc8bc-6c59-46dd-9b04-7c0cc30cd8bc"),
+                Id = UsersId.Twenty,
                 Email = "rec5@example.com",
-                IdentityId = "20",
+                IdentityId = "user_2pFwjchfq1eSjYGfqzysH3OodxE",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("32b9cafe-9106-4727-b864-5c829bfca883"),
+                Id = UsersId.TwentyOne,
                 Email = "rec6@example.com",
-                IdentityId = "21",
+                IdentityId = "user_2pFwkjkKyh1tzm7KgvchouerUYG",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("b9e8e393-9f41-4af8-b3a8-6926908b8562"),
+                Id = UsersId.TwentyTwo,
                 Email = "rec7@example.com",
-                IdentityId = "22",
+                IdentityId = "user_2pFwllSgUOb99emZMyEmBjsltx5",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("0641ba75-8890-4a04-97db-50921078b6fc"),
+                Id = UsersId.TwentyThree,
                 Email = "rec8@example.com",
-                IdentityId = "23",
+                IdentityId = "user_2pFwmiC95TOWzjPi1uwGTamf9ef",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("408f86b6-387c-4f25-a5b6-f9bbc141b845"),
+                Id = UsersId.TwentyFour,
                 Email = "rec9@example.com",
-                IdentityId = "24",
+                IdentityId = "user_2pFwnsVV0EwKTiJAOzLxZQKge8o",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("4c6b3d04-bba4-46d6-be91-7e1c4138e65e"),
+                Id = UsersId.TwentyFive,
                 Email = "rec10@example.com",
-                IdentityId = "25",
+                IdentityId = "user_2pFwp7zEnoFWA2GEtRlNP6KcXX6",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("d862feaf-9724-4d77-b8c9-c9954509ed44"),
+                Id = UsersId.TwentySix,
                 Email = "rec11@example.com",
-                IdentityId = "26",
+                IdentityId = "user_2pFwqeCIht2pJDB0jw8ib5syj89",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("6589cd98-a925-478d-812a-761f92d877dd"),
+                Id = UsersId.TwentySeven,
                 Email = "rec12@example.com",
-                IdentityId = "27",
+                IdentityId = "user_2pFwrS6A4QWZne6cZGXjnbCWoni",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("a70f3710-28b1-4a46-9840-f770867ce90c"),
+                Id = UsersId.TwentyEight,
                 Email = "rec13@example.com",
-                IdentityId = "28",
+                IdentityId = "user_2pFwskLZ5k4U5xLfkXbf9g0SvGZ",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("dd10cf52-e377-4aab-a994-b5d2aca8b06f"),
+                Id = UsersId.TwentyNine,
                 Email = "rec14@example.com",
-                IdentityId = "29",
+                IdentityId = "user_2pFwtlCuQeHED2WY78JSi6IGqzl",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },
             new User
             {
-                Id = Guid.Parse("175f4cbc-2101-4c19-b331-2cfb0daea1f7"),
+                Id = UsersId.Thirty,
                 Email = "rec15@example.com",
-                IdentityId = "30",
+                IdentityId = "user_2pFwuwOECUZzpPJI5XvAgazlhSD",
                 Role = UserRole.Recruiter,
                 DoOnboarding = true,
             },

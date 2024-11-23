@@ -1,12 +1,12 @@
 namespace SkWeb.Api.Extensions;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddSwaggerGenWithAuth(
         this IServiceCollection services,
-        IConfiguration configuration,
         string title,
         string description,
         string version
@@ -26,25 +26,18 @@ public static class ServiceCollectionExtensions
 
             o.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));
 
-            o.AddSecurityDefinition(
-                "Keycloak",
-                new OpenApiSecurityScheme
+            OpenApiSecurityScheme securityScheme =
+                new()
                 {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Implicit = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(configuration["Keycloak:AuthorizationUrl"]!),
-                            Scopes = new Dictionary<string, string>
-                            {
-                                { "openid", "openid" },
-                                { "profile", "profile" },
-                            },
-                        },
-                    },
-                }
-            );
+                    Name = "JWT Authentication",
+                    Description = "Enter your JWT token in this field",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    BearerFormat = "JWT",
+                };
+
+            o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
 
             OpenApiSecurityRequirement securityRequirement =
                 new()
@@ -54,12 +47,9 @@ public static class ServiceCollectionExtensions
                         {
                             Reference = new OpenApiReference
                             {
-                                Id = "Keycloak",
                                 Type = ReferenceType.SecurityScheme,
+                                Id = JwtBearerDefaults.AuthenticationScheme,
                             },
-                            In = ParameterLocation.Header,
-                            Name = "Bearer",
-                            Scheme = "Bearer",
                         },
                         []
                     },
