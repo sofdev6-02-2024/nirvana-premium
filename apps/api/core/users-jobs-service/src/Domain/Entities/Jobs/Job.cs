@@ -21,7 +21,7 @@ public sealed class Job : BaseEntity
     public required JobModality Modality { get; set; }
     public required JobStatus Status { get; set; }
 
-    public string? Description { get; set; }
+    public required string Description { get; set; }
     public string? Location { get; set; }
 
     public required Guid RecruiterId { get; init; }

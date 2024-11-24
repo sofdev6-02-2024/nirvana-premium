@@ -13,4 +13,9 @@ public static class JobErrors
     {
         return Error.NotFound("Jobs.JobNotFound", $"Job with id {jobId} was not found");
     }
+
+    public static readonly Error JobNotCreated = Error.Failure(
+        "Jobs.JobNotCreated",
+        "Job was not created"
+    );
 }
