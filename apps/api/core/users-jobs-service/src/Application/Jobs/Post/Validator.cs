@@ -61,11 +61,11 @@ internal sealed class Validator : AbstractValidator<PostCommand>
 
         _ = RuleFor(static c => c.Languages)
             .NotEmpty()
-            .WithMessage("The Languages should not be empty")
+            .WithMessage("The SpokenLanguages should not be empty")
             .NotNull()
-            .WithMessage("The Languages are required")
+            .WithMessage("The SpokenLanguages are required")
             .Must(static languages => languages.Count > 0)
-            .WithMessage("The Languages should have at least one language.");
+            .WithMessage("The SpokenLanguages should have at least one language.");
 
         _ = RuleFor(static c => c.RecruiterId)
             .NotEmpty()

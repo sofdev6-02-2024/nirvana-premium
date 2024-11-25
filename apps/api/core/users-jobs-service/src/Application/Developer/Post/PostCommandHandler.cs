@@ -1,10 +1,10 @@
-namespace Application.Jobs.Post;
+namespace Application.Developer.Post;
 
 using Domain.Attributes.Languages;
 using Domain.Attributes.Skills;
 using Domain.Attributes.Specializations;
-using Domain.Entities.Jobs;
-using Domain.Entities.Recruiters;
+using Domain.Entities.Developers;
+using Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Persistent;
 using SkApplication.Contracts;
@@ -15,14 +15,14 @@ internal sealed class PostCommandHandler(IApplicationDbContext context)
 {
     public async Task<Result> Handle(PostCommand request, CancellationToken cancellationToken)
     {
-        Recruiter? recruiter = await context.Recruiters.FirstOrDefaultAsync(
-            recruiter => recruiter.Id == request.RecruiterId,
+        User? user = await context.Users.FirstOrDefaultAsync(
+            recruiter => recruiter.Id == request.UserId,
             cancellationToken
         );
 
-        if (recruiter is null)
+        if (user is null)
         {
-            return Result.Failure(RecruiterErrors.RecruiterNotFound(request.RecruiterId));
+            return Result.Failure(UserErrors.UserNotFound(request.UserId));
         }
 
         Specialization? specialization = await context.Specializations.FirstOrDefaultAsync(
@@ -45,7 +45,7 @@ internal sealed class PostCommandHandler(IApplicationDbContext context)
             }
         }
 
-        foreach (Guid languageId in request.Languages)
+        foreach (Guid languageId in request.SpokenLanguages)
         {
             if (
                 !await context.Languages.AnyAsync(
@@ -58,9 +58,9 @@ internal sealed class PostCommandHandler(IApplicationDbContext context)
             }
         }
 
-        Job job = new Converter().Convert(request);
+        Developer developer = new Converter().Convert(request);
 
-        await context.Jobs.AddAsync(job, cancellationToken);
+        await context.Developers.AddAsync(developer, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
 

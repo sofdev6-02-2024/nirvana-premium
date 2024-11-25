@@ -8,4 +8,12 @@ public static class SpecializationErrors
         "Specializations.NotSpecializationsFound",
         "No specializations were found"
     );
+
+    public static Error SpecializationNotFound(Guid specializationId)
+    {
+        return Error.NotFound(
+            "Specializations.SpecializationNotFound",
+            $"Specialization with ID {specializationId} was not found"
+        );
+    }
 }

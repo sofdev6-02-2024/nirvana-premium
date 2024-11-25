@@ -358,7 +358,7 @@ namespace Infrastructure.Migrations
                     schedule = table.Column<int>(type: "integer", nullable: false),
                     modality = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     location = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     recruiter_id = table.Column<Guid>(type: "uuid", nullable: false),
                     specialization_id = table.Column<Guid>(type: "uuid", nullable: false),
