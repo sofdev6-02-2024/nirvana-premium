@@ -4,8 +4,8 @@ using SkDomain.Errors;
 
 public static class DeveloperErrors
 {
-    public static readonly Error NotDevelopoersFound = Error.NotFound(
-        "Developers.NotDevelopoersFound",
+    public static readonly Error NotDevelopersFound = Error.NotFound(
+        "Developers.NotDevelopersFound",
         "No developers were found"
     );
 

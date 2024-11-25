@@ -1,39 +1,39 @@
-namespace Users.Jobs.Service.Api.Endpoints.Developers;
+namespace Users.Jobs.Service.Api.Endpoints.Jobs;
 
-using Application.Developer.PatchDescription;
+using Application.Jobs.PostApply;
 using MediatR;
 using SkDomain.Results;
 using SkInfrastructure.Authorization;
 using SkWeb.Api.Endpoints;
 using SkWeb.Api.Infrastructure;
 
-internal sealed class PatchDescription : IEndpoint
+internal sealed class PostApply : IEndpoint
 {
     public sealed class Request
     {
-        public required string Description { get; init; }
+        public required Guid DeveloperId { get; init; }
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        _ = app.MapPatch(
-                "api/users-jobs/developers/{developerId:guid}/about",
+        _ = app.MapPost(
+                "api/users-jobs/jobs/apply/{jobId:guid}",
                 static async (
-                    Guid developerId,
+                    Guid jobId,
                     Request request,
                     ISender sender,
                     CancellationToken cancellationToken
                 ) =>
                 {
-                    PatchDescriptionCommand command =
-                        new() { DeveloperId = developerId, Description = request.Description };
+                    PostCommand command =
+                        new() { JobId = jobId, DeveloperId = request.DeveloperId };
 
                     Result result = await sender.Send(command, cancellationToken);
 
-                    return result.Match(() => Results.Ok(), CustomResults.Problem);
+                    return result.Match(Results.Created, CustomResults.Problem);
                 }
             )
-            .WithTags(Tags.Developers)
+            .WithTags(Tags.Jobs)
             .RequireAuthorization(Permissions.Developer);
     }
 }
