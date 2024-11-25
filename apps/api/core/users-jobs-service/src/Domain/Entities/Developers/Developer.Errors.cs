@@ -9,11 +9,11 @@ public static class DeveloperErrors
         "No developers were found"
     );
 
-    public static Error DeveloperNotFound(Guid jobId)
+    public static Error DeveloperNotFound(Guid developerId)
     {
         return Error.NotFound(
             "Developers.DeveloperNotFound",
-            $"Developer with id {jobId} was not found"
+            $"Developer with id {developerId} was not found"
         );
     }
 }
