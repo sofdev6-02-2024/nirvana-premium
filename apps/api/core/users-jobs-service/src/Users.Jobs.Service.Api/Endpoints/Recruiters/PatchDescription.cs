@@ -9,21 +9,28 @@ using SkWeb.Api.Infrastructure;
 
 internal sealed class PatchDescription : IEndpoint
 {
+    public sealed class Request
+    {
+        public required string Description { get; init; }
+    }
+
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         _ = app.MapPatch(
                 "api/users-jobs/recruiters/{recruiterId:guid}/about",
                 static async (
                     Guid recruiterId,
-                    PatchDescriptionCommand command,
+                    Request request,
                     ISender sender,
                     CancellationToken cancellationToken
                 ) =>
                 {
-                    command = command with { RecruiterId = recruiterId };
+                    PatchDescriptionCommand command =
+                        new() { RecruiterId = recruiterId, Description = request.Description };
+
                     Result result = await sender.Send(command, cancellationToken);
 
-                    return result.Match(Results.Created, CustomResults.Problem);
+                    return result.Match(() => Results.Ok(), CustomResults.Problem);
                 }
             )
             .WithTags(Tags.Recruiters)

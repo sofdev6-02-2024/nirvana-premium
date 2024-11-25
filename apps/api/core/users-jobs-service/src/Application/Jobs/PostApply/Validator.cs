@@ -1,6 +1,5 @@
 namespace Application.Jobs.PostApply;
 
-using Domain.Enums;
 using FluentValidation;
 
 internal sealed class Validator : AbstractValidator<PostCommand>
@@ -18,14 +17,5 @@ internal sealed class Validator : AbstractValidator<PostCommand>
             .WithMessage("The Job Id should not be empty")
             .NotNull()
             .WithMessage("The Job Id is required");
-
-        _ = RuleFor(static c => c.Status)
-            .NotEmpty()
-            .WithMessage("The Applicant Status should not be empty")
-            .NotNull()
-            .WithMessage("The Applicant Status is required")
-            .IsEnumName(typeof(ApplicantStatus))
-            .WithMessage("The Applicant Status should be Published, Viewed, Rejected, or Accepted");
-
     }
 }

@@ -9,17 +9,27 @@ using SkWeb.Api.Infrastructure;
 
 internal sealed class PostApply : IEndpoint
 {
+    public sealed class Request
+    {
+        public required Guid DeveloperId { get; init; }
+    }
+
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         _ = app.MapPost(
-                "api/users-jobs/jobs/{jobId:guid}/apply ",
+                "api/users-jobs/jobs/apply/{jobId:guid}",
                 static async (
-                    PostCommand command,
+                    Guid jobId,
+                    Request request,
                     ISender sender,
                     CancellationToken cancellationToken
                 ) =>
                 {
+                    PostCommand command =
+                        new() { JobId = jobId, DeveloperId = request.DeveloperId };
+
                     Result result = await sender.Send(command, cancellationToken);
+
                     return result.Match(Results.Created, CustomResults.Problem);
                 }
             )

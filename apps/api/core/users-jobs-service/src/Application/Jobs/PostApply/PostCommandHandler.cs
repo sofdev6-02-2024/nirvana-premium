@@ -3,8 +3,8 @@ namespace Application.Jobs.PostApply;
 using Domain.Entities.Developers;
 using Domain.Entities.Jobs;
 using Domain.Joins.JobDevelopers;
-using Persistent;
 using Microsoft.EntityFrameworkCore;
+using Persistent;
 using SkApplication.Contracts;
 using SkDomain.Results;
 
@@ -13,10 +13,9 @@ internal sealed class PostCommandHandler(IApplicationDbContext context)
 {
     public async Task<Result> Handle(PostCommand request, CancellationToken cancellationToken)
     {
-        Job? job = await context.Jobs.FirstOrDefaultAsync(
-            job => job.Id == request.JobId,
-            cancellationToken
-        );
+        Job? job = await context
+            .Jobs.Include(j => j.JobDevelopers)
+            .FirstOrDefaultAsync(job => job.Id == request.JobId, cancellationToken);
 
         if (job is null)
         {
@@ -33,9 +32,16 @@ internal sealed class PostCommandHandler(IApplicationDbContext context)
             return Result.Failure(DeveloperErrors.DeveloperNotFound(request.DeveloperId));
         }
 
-        JobDeveloper jobDeveloper = new Converter().Convert(request);
+        if (job.JobDevelopers.Any(jd => jd.DeveloperId == request.DeveloperId))
+        {
+            return Result.Failure(
+                JobDeveloperErrors.DeveloperAlreadyApplied(request.DeveloperId, request.JobId)
+            );
+        }
 
-        await context.JobDevelopers.AddAsync(jobDeveloper, cancellationToken);
+        job.JobDevelopers.Add(new Converter().Convert(request));
+
+        context.Jobs.Update(job);
 
         await context.SaveChangesAsync(cancellationToken);
 
