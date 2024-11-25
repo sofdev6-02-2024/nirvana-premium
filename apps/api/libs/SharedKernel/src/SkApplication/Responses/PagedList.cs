@@ -13,6 +13,7 @@ public static class PagedList
     )
     {
         int totalCount = await query.CountAsync();
+
         IList<TTo> items = await query
             .Skip((page - 1) * pageSize)
             .Take(pageSize)

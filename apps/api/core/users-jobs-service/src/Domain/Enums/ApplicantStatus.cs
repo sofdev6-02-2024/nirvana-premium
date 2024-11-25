@@ -15,4 +15,7 @@ public enum ApplicantStatus
 
     [Description("Rejected")]
     Rejected = 3,
+
+    [Description("All")]
+    All = 4,
 }
