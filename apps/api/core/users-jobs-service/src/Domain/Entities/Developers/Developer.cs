@@ -33,10 +33,10 @@ public sealed class Developer : BaseEntity
     public Specialization Specialization { get; init; } = null!;
 
     public IList<Skill> Skills { get; } = [];
-    public IList<DeveloperSkill> DeveloperSkills { get; } = [];
+    public IList<DeveloperSkill> DeveloperSkills { get; init; } = [];
 
     public IList<Language> Languages { get; } = [];
-    public IList<DeveloperLanguage> DeveloperLanguages { get; } = [];
+    public IList<DeveloperLanguage> DeveloperLanguages { get; init; } = [];
 
     public IList<Job> Jobs { get; } = [];
     public IList<JobDeveloper> JobDevelopers { get; } = [];
