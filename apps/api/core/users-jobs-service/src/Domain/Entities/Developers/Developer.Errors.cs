@@ -4,16 +4,16 @@ using SkDomain.Errors;
 
 public static class DeveloperErrors
 {
-    public static readonly Error NotDevelopoersFound = Error.NotFound(
-        "Developers.NotDevelopoersFound",
+    public static readonly Error NotDevelopersFound = Error.NotFound(
+        "Developers.NotDevelopersFound",
         "No developers were found"
     );
 
-    public static Error DeveloperNotFound(Guid developerId)
+    public static Error DeveloperNotFound(Guid jobId)
     {
         return Error.NotFound(
             "Developers.DeveloperNotFound",
-            $"Developer with id {developerId} was not found"
+            $"Developer with id {jobId} was not found"
         );
     }
 }
