@@ -197,7 +197,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("job_attachments", "public");
                 });
 
-            modelBuilder.Entity("Domain.Attributes.SpokenLanguages.Language", b =>
+            modelBuilder.Entity("Domain.Attributes.Languages.Language", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -428,6 +428,7 @@ namespace Infrastructure.Migrations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)")
@@ -1055,7 +1056,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_developer_languages_developers_developer_id");
 
-                    b.HasOne("Domain.Attributes.SpokenLanguages.Language", "Language")
+                    b.HasOne("Domain.Attributes.Languages.Language", "Language")
                         .WithMany("DeveloperLanguages")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1118,7 +1119,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_job_languages_jobs_job_id");
 
-                    b.HasOne("Domain.Attributes.SpokenLanguages.Language", "Language")
+                    b.HasOne("Domain.Attributes.Languages.Language", "Language")
                         .WithMany("JobLanguages")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1193,7 +1194,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("UserReviewer");
                 });
 
-            modelBuilder.Entity("Domain.Attributes.SpokenLanguages.Language", b =>
+            modelBuilder.Entity("Domain.Attributes.Languages.Language", b =>
                 {
                     b.Navigation("DeveloperLanguages");
 
