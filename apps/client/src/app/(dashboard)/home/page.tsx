@@ -7,7 +7,6 @@ import { useUser } from '@clerk/nextjs';
 export default function HomePage() {
   const { user, isLoaded } = useUser();
   const userRole = user?.unsafeMetadata?.role as 'developer' | 'recruiter';
-  console.log(userRole);
   if (!isLoaded) {
     return null;
   }

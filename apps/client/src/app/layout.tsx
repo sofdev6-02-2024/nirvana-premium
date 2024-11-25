@@ -1,8 +1,9 @@
 import Navbar from '@/components/navbar';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
-import { Toaster } from 'sonner';
+import { Toaster as Sonner } from 'sonner';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -33,9 +34,11 @@ export default function RootLayout({
                 colorPrimary: 'hsl(263.4, 70%, 50.4%)',
               },
             }}
+            afterSignOutUrl="/"
           >
             <Navbar />
             {children}
+            <Sonner />
             <Toaster />
           </ClerkProvider>
         </ThemeProvider>

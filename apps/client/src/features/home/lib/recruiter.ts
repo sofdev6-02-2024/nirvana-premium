@@ -79,6 +79,7 @@ const mockStats = {
 export const recruiterService = {
   getJobs: async (recruiterId: string) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log(recruiterId);
     return {
       items: mockJobs,
       page: 1,
@@ -90,6 +91,7 @@ export const recruiterService = {
   },
 
   getJobApplicants: async (recruiterId: string, jobId: string): Promise<ApplicantsResponse> => {
+    console.log(recruiterId);
     await new Promise((resolve) => setTimeout(resolve, 800));
     return (
       mockApplicants[jobId] || {

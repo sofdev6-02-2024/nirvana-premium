@@ -303,3 +303,46 @@ h1[data-localization-key='userProfile.navbar.title'] {
 .cl-userButtonPopoverMain {
   @apply rounded-lg border-input bg-background;
 }
+
+.profile-viewer {
+  --section-gap: 2rem;
+  --content-max-width: 1200px;
+}
+
+@media (min-width: 768px) {
+  .profile-viewer {
+    --section-gap: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .profile-viewer {
+    --section-gap: 3rem;
+  }
+}
+
+.grid-layout-custom {
+  @apply mx-auto max-w-7xl;
+}
+
+.grid-layout-custom [data-section-type='about'],
+.grid-layout-custom [data-section-type='contact'] {
+  @apply rounded-lg bg-card shadow-sm;
+}
+
+.grid-layout-custom [data-section-type='skills'],
+.grid-layout-custom [data-section-type='experience'] {
+  @apply rounded-lg bg-muted p-6;
+}
+
+[data-section-type='about'].minimal {
+  @apply prose max-w-none;
+}
+
+[data-section-type='skills'].card {
+  @apply bg-primary/5;
+}
+
+[data-section-type='experience'].bordered {
+  @apply border-primary/20;
+}

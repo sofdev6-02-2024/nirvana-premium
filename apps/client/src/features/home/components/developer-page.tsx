@@ -66,11 +66,11 @@ export default function DevPage() {
         <div className="flex gap-3">
           <Button
             variant="outline"
-            onClick={() => router.push('/profile/cv')}
+            onClick={() => router.push('/profile/portafolio')}
             className="flex items-center gap-2"
           >
             <FileText className="w-4 h-4" />
-            Edit CV
+            Edit your profile
           </Button>
         </div>
       </div>
@@ -120,7 +120,7 @@ function StatsCard({
 }: {
   label: string;
   value: number;
-  icon: unknown;
+  icon: React.ComponentType<{ className?: string }>;
   color?: 'blue' | 'green' | 'yellow' | 'red';
 }) {
   const colorClasses = {

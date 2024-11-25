@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -83,7 +84,7 @@ export default function RecruiterHome() {
         <div className="flex gap-3">
           <Button
             variant="outline"
-            onClick={() => router.push('/profile/company/about')}
+            onClick={() => router.push('/profile/about')}
             className="flex items-center gap-2"
           >
             <Building2 className="w-4 h-4" />
@@ -185,7 +186,7 @@ function StatsCard({
 }: {
   label: string;
   value: number;
-  icon: unknown;
+  icon: React.ComponentType<{ className?: string }>;
   color?: 'blue' | 'green' | 'yellow' | 'red';
 }) {
   const colorClasses = {
