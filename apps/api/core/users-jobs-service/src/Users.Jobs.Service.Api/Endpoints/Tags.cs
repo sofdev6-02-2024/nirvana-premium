@@ -8,4 +8,5 @@ public static class Tags
     public const string Skills = "Skills";
     public const string Specializations = "Specializations";
     public const string Users = "Users";
+    public const string Developers = "Developers";
 }
