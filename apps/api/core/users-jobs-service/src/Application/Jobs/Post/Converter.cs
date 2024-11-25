@@ -21,11 +21,13 @@ internal sealed class Converter : IConverter<PostCommand, Job>
             Description = from.Description,
             RecruiterId = from.RecruiterId,
             SpecializationId = from.SpecializationId,
-            JobSkills = from.Skills.Select(s => new JobSkill() { SkillId = s }).ToList(),
-            JobLanguages = from.Languages.Select(languageId => new JobLanguage
-            {
-                LanguageId = languageId
-            }).ToList()
+
+            JobSkills = from
+                .Skills.Select(skillId => new JobSkill() { SkillId = skillId })
+                .ToList(),
+            JobLanguages = from
+                .Languages.Select(languageId => new JobLanguage { LanguageId = languageId })
+                .ToList(),
         };
     }
 }

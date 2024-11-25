@@ -1,6 +1,5 @@
 namespace Application.Jobs.Post;
 
-using System.Collections.ObjectModel;
 using Domain.Attributes.Languages;
 using Domain.Attributes.Skills;
 using Domain.Attributes.Specializations;
@@ -9,69 +8,60 @@ using Domain.Entities.Recruiters;
 using Microsoft.EntityFrameworkCore;
 using Persistent;
 using SkApplication.Contracts;
-using SkDomain.Extensions;
 using SkDomain.Results;
 
 internal sealed class PostCommandHandler(IApplicationDbContext context)
-    : ICommandHandler<PostCommand, Response>
+    : ICommandHandler<PostCommand>
 {
-    public async Task<Result<Response>> Handle(PostCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Result> Handle(PostCommand request, CancellationToken cancellationToken)
     {
-        Recruiter? recruiter = await context.Recruiters.FindAsync(
-            new object?[] { request.RecruiterId }, cancellationToken: cancellationToken);
+        Recruiter? recruiter = await context.Recruiters.FirstOrDefaultAsync(
+            recruiter => recruiter.Id == request.RecruiterId,
+            cancellationToken
+        );
+
         if (recruiter is null)
         {
-            return Result.Failure<Response>(RecruiterErrors.RecruiterNotFound(request.RecruiterId));
+            return Result.Failure(RecruiterErrors.RecruiterNotFound(request.RecruiterId));
         }
 
-        Specialization? specialization = await context.Specializations.FindAsync(
-            new object?[] { request.SpecializationId }, cancellationToken: cancellationToken);
+        Specialization? specialization = await context.Specializations.FirstOrDefaultAsync(
+            specialization => specialization.Id == request.SpecializationId,
+            cancellationToken
+        );
+
         if (specialization is null)
         {
-            return Result.Failure<Response>(SpecializationErrors.NotSpecializationsFound);
+            return Result.Failure(SpecializationErrors.NotSpecializationsFound);
         }
 
-        List<Skill> skills = await context.Skills.Where(s => request.Skills.Contains(s.Id))
-            .ToListAsync(cancellationToken);
-
-        if (skills.Count != request.Skills.Count)
+        foreach (Guid skillId in request.Skills)
         {
-            return Result.Failure<Response>(SkillErrors.NoSkillsFound);
+            if (!await context.Skills.AnyAsync(skill => skill.Id == skillId, cancellationToken))
+            {
+                return Result.Failure(SkillErrors.SkillNotFound(skillId));
+            }
         }
 
-        List<Language> languages = await context.Languages
-            .Where(s => request.Languages.Contains(s.Id))
-            .ToListAsync(cancellationToken);
-
-        if (languages.Count != request.Languages.Count)
+        foreach (Guid languageId in request.Languages)
         {
-            return Result.Failure<Response>(LanguageErrors.NoLanguagesFound);
+            if (
+                !await context.Languages.AnyAsync(
+                    language => language.Id == languageId,
+                    cancellationToken
+                )
+            )
+            {
+                return Result.Failure(LanguageErrors.LanguageNotFound(languageId));
+            }
         }
 
-        Converter converter = new();
-        Job job = converter.Convert(request);
+        Job job = new Converter().Convert(request);
+
         await context.Jobs.AddAsync(job, cancellationToken);
 
-        int result = await context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
-        if (result == 0)
-        {
-            return Result.Failure<Response>(JobErrors.JobNotCreated);
-        }
-
-        return Result.Success(new Response()
-        {
-            Title = job.Title,
-            SalaryPerHour = job.SalaryPerHour,
-            Schedule = job.Schedule.GetDescription(),
-            Modality = job.Modality.GetDescription(),
-            Location = job.Location,
-            Description = job.Description,
-            Skills = new ReadOnlyCollection<Guid>(job.Skills.Select(s => s.Id).ToList()),
-            Languages = new ReadOnlyCollection<Guid>(job.Languages.Select(l => l.Id).ToList()),
-            RecruiterId = job.RecruiterId,
-            SpecializationId = job.SpecializationId
-        });
+        return Result.Success();
     }
 }

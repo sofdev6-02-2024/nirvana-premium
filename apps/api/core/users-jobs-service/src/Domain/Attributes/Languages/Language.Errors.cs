@@ -8,4 +8,12 @@ public static class LanguageErrors
         "Languages.NoLanguagesFound",
         "No languages were found"
     );
+
+    public static Error LanguageNotFound(Guid languageId)
+    {
+        return Error.NotFound(
+            "Languages.LanguageNotFound",
+            $"The language with the ID {languageId} was not found"
+        );
+    }
 }

@@ -2,27 +2,16 @@ namespace Application.Jobs.Post;
 
 using SkApplication.Contracts;
 
-public sealed class PostCommand(
-    string title,
-    double salaryPerHour,
-    string schedule,
-    string modality,
-    string? location,
-    string description,
-    IReadOnlyList<Guid> skills,
-    IReadOnlyList<Guid> languages,
-    Guid recruiterId,
-    Guid specializationId)
-    : ICommand<Response>
+public sealed class PostCommand : ICommand
 {
-    public string Title { get; } = title;
-    public double SalaryPerHour { get; } = salaryPerHour;
-    public string Schedule { get; } = schedule;
-    public string Modality { get; } = modality;
-    public string? Location { get; } = location;
-    public string Description { get; } = description;
-    public IReadOnlyList<Guid> Skills { get; } = skills;
-    public IReadOnlyList<Guid> Languages { get; } = languages;
-    public Guid RecruiterId { get; } = recruiterId;
-    public Guid SpecializationId { get; } = specializationId;
+    public required string Title { get; init; }
+    public required double SalaryPerHour { get; init; }
+    public required string Schedule { get; init; }
+    public required string Modality { get; init; }
+    public string? Location { get; init; }
+    public required string Description { get; init; }
+    public IList<Guid> Skills { get; init; } = [];
+    public IList<Guid> Languages { get; init; } = [];
+    public required Guid RecruiterId { get; init; }
+    public required Guid SpecializationId { get; init; }
 }
