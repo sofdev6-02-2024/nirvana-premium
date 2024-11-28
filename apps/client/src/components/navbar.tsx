@@ -116,6 +116,9 @@ const Navbar: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <link rel="manifest" href="/manifest.json" />
+      <link rel="icon" href="/icon512_maskable.png" />
+      <link rel="icon" href="/icon512_rounded.png" />
       <nav className="container mx-auto flex h-16 items-center px-4">
         <Link href="/" className="flex items-center gap-2 min-h-[44px] min-w-[44px]">
           <Image src={logo} alt="tp chamba logo" width={30} height={30} priority />
