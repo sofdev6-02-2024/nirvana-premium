@@ -1,5 +1,6 @@
 namespace Users.Jobs.Service.Api.Endpoints.Developers;
 
+using Application;
 using Application.Developer.PatchDescription;
 using MediatR;
 using SkDomain.Results;

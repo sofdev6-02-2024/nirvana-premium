@@ -31,13 +31,33 @@ services:
     image: hashicorp/consul:1.20
     command: consul agent -dev -log-level=warn -ui -client=0.0.0.0
     ports:
-      - '8500:8500'
+      - 8500:8500
     volumes:
       - consul-data:/consul/data
     networks:
       - chamba_network
-
+      
+  redis:
+    image: redislabs/redismod
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+    networks:
+      - chamba_network
+  
+  redisinsight:
+    image: redislabs/redisinsight:2.62.0
+    ports:
+      - 5540:5540
+    volumes:
+      - redisinsight:/data
+    networks:
+      - chamba_network
+      
 volumes:
   chamba-users-jobs-data:
   chamba-db-admin-data:
   consul-data:
+  redis:
+  redisinsight:

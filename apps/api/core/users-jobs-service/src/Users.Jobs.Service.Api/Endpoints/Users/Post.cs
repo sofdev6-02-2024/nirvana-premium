@@ -1,5 +1,6 @@
 namespace Users.Jobs.Service.Api.Endpoints.Users;
 
+using Application;
 using Application.Users.Post;
 using MediatR;
 using SkDomain.Results;

@@ -1,10 +1,12 @@
 namespace Users.Jobs.Service.Api.Endpoints.Recruiters;
 
+using Application;
 using Application.Recruiters.GetJobsById;
 using MediatR;
 using SkApplication.Responses;
 using SkDomain.Results;
 using SkWeb.Api.Endpoints;
+using SkWeb.Api.Extensions;
 using SkWeb.Api.Infrastructure;
 
 internal sealed class GetJobsById : IEndpoint
@@ -31,6 +33,7 @@ internal sealed class GetJobsById : IEndpoint
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }
             )
-            .WithTags(Tags.Recruiters);
+            .WithTags(Tags.Recruiters)
+            .AddCache(Tags.Recruiters);
     }
 }

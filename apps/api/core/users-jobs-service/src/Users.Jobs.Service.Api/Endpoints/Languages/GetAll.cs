@@ -1,9 +1,11 @@
 namespace Users.Jobs.Service.Api.Endpoints.Languages;
 
+using Application;
 using Application.Languages.GetAll;
 using MediatR;
 using SkDomain.Results;
 using SkWeb.Api.Endpoints;
+using SkWeb.Api.Extensions;
 using SkWeb.Api.Infrastructure;
 
 internal sealed class GetAll : IEndpoint
@@ -21,6 +23,7 @@ internal sealed class GetAll : IEndpoint
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }
             )
-            .WithTags(Tags.Languages);
+            .WithTags(Tags.Languages)
+            .AddCache(Tags.Languages);
     }
 }

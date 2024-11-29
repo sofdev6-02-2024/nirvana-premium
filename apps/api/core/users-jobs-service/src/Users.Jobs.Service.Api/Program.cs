@@ -21,6 +21,8 @@ builder.Services.AddApplication().AddPresentation().AddInfrastructure(builder.Co
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
+builder.Services.AddRedisCache(builder.Configuration);
+
 if (builder.Environment.IsStaging())
 {
     builder.Services.AddConsulInternal(builder.Configuration.GetServiceConfig());
@@ -44,6 +46,8 @@ app.UseRequestContextLogging();
 app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
+
+app.UseOutputCache();
 
 app.UseAuthentication();
 

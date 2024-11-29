@@ -1,13 +1,16 @@
 namespace Application.Developer.PatchDescription;
 
 using Domain.Entities.Developers;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using Persistent;
 using SkApplication.Contracts;
 using SkDomain.Results;
 
-internal sealed class PatchDescriptionCommandHandler(IApplicationDbContext context)
-    : ICommandHandler<PatchDescriptionCommand>
+internal sealed class PatchDescriptionCommandHandler(
+    IApplicationDbContext context,
+    IOutputCacheStore cacheStore
+) : ICommandHandler<PatchDescriptionCommand>
 {
     public async Task<Result> Handle(
         PatchDescriptionCommand request,
@@ -30,6 +33,8 @@ internal sealed class PatchDescriptionCommandHandler(IApplicationDbContext conte
         context.Developers.Update(developer);
 
         await context.SaveChangesAsync(cancellationToken);
+
+        await cacheStore.EvictByTagAsync(Tags.Developers, cancellationToken);
 
         return Result.Success();
     }

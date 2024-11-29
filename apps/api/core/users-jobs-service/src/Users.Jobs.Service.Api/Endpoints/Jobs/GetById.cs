@@ -1,9 +1,11 @@
 namespace Users.Jobs.Service.Api.Endpoints.Jobs;
 
+using Application;
 using Application.Jobs.GetById;
 using MediatR;
 using SkDomain.Results;
 using SkWeb.Api.Endpoints;
+using SkWeb.Api.Extensions;
 using SkWeb.Api.Infrastructure;
 
 internal sealed class GetById : IEndpoint
@@ -21,6 +23,7 @@ internal sealed class GetById : IEndpoint
                     return result.Match(Results.Ok, CustomResults.Problem);
                 }
             )
-            .WithTags(Tags.Jobs);
+            .WithTags(Tags.Jobs)
+            .AddCache(Tags.Jobs);
     }
 }

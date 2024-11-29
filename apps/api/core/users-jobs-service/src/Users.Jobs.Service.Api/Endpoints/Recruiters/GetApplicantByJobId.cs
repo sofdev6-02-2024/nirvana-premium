@@ -1,10 +1,12 @@
 namespace Users.Jobs.Service.Api.Endpoints.Recruiters;
 
+using Application;
 using Application.Recruiters.GetApplicantsByJobId;
 using MediatR;
 using SkDomain.Results;
 using SkInfrastructure.Authorization;
 using SkWeb.Api.Endpoints;
+using SkWeb.Api.Extensions;
 using SkWeb.Api.Infrastructure;
 
 internal sealed class GetApplicantByJobId : IEndpoint
@@ -32,6 +34,7 @@ internal sealed class GetApplicantByJobId : IEndpoint
                 }
             )
             .WithTags(Tags.Recruiters)
-            .RequireAuthorization(Permissions.Recruiter);
+            .RequireAuthorization(Permissions.Recruiter)
+            .AddCacheWithAuthorization(Tags.Recruiters);
     }
 }
