@@ -1,4 +1,3 @@
-// components/recruiter-info.tsx
 import defaultImage from '@/assets/company-logo-placeholder.png';
 import Badge from '@/components/badge';
 import { Card } from '@/components/ui/card';

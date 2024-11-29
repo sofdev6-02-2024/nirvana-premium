@@ -1,17 +1,22 @@
-'use client';
-
+import { LoadingSpinner } from '@/components/loading/loading-spinner';
 import DevPage from '@/features/home/components/developer-page';
 import RecruiterHome from '@/features/home/components/recruiter-page';
-import { useUser } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default function HomePage() {
-  const { user, isLoaded } = useUser();
-  const userRole = user?.unsafeMetadata?.role as 'developer' | 'recruiter';
-  if (!isLoaded) {
-    return null;
+export default async function HomePage() {
+  const { userId, sessionClaims } = await auth();
+
+  if (!userId) {
+    redirect('/sign-in');
   }
-  if (userRole === 'developer') {
-    return <DevPage />;
-  }
-  return <RecruiterHome />;
+
+  const userRole = sessionClaims?.metadata?.role as 'Developer' | 'Recruiter';
+
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      {userRole === 'Developer' ? <DevPage /> : <RecruiterHome />}
+    </Suspense>
+  );
 }

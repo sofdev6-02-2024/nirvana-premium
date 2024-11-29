@@ -3,7 +3,7 @@ import Badge from '@/components/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Building2, CheckCircle, MapPin, MessageSquare, User2 } from 'lucide-react';
+import { CheckCircle, MapPin, User2 } from 'lucide-react';
 import Image from 'next/image';
 import { Recruiter } from '../lib/constant';
 
@@ -80,17 +80,6 @@ export function RecruiterListItem({
           </div>
 
           <p className={cn('line-clamp-2 text-sm text-muted-foreground')}>{description}</p>
-
-          <div className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <Building2 className="h-4 w-4" />
-              <span>15 Active Jobs</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <MessageSquare className="h-4 w-4" />
-              <span>94% Response Rate</span>
-            </div>
-          </div>
 
           <div className={cn('flex flex-wrap gap-2 pt-1')}>
             <Button variant="outline" size="sm" className="h-9 flex-1 sm:flex-none">

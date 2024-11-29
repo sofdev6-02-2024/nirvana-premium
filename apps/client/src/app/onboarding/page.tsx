@@ -3,45 +3,52 @@ import LoadingScreen from '@/components/loading/loading-screen';
 import DeveloperOnboardingForm from '@/features/onboarding/components/developer-onboarding-form';
 import CompanyOnboardingForm from '@/features/onboarding/components/recruiter-onboarding-form';
 import { UserService } from '@/features/users/lib/user-service';
-import { Roles } from '@/types/globals';
-import { useUser } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/features/users/store/user-store';
+import { useAuth, useUser } from '@clerk/nextjs';
 import { useEffect, useState } from 'react';
 
-type LoadingState = 'initial' | 'creating-user' | 'redirecting' | 'complete';
+type LoadingState = 'initial' | 'creating-user' | 'fetching-user' | 'complete';
 
 export default function OnboardingPage() {
   const { user, isLoaded } = useUser();
-  const router = useRouter();
   const [loadingState, setLoadingState] = useState<LoadingState>('initial');
   const [error, setError] = useState(false);
-
-  const getBackendRole = (clerkRole: string): Roles => {
-    return clerkRole === 'developer' ? 'Developer' : 'Recruiter';
-  };
-
-  const isDeveloper = user?.unsafeMetadata.role === 'developer';
+  const { getToken } = useAuth();
+  const { setUser, setToken, setIdentityId, user: storedUser } = useUserStore();
 
   useEffect(() => {
     const initializeUser = async () => {
       if (!isLoaded || !user) return;
 
       try {
-        if (user.unsafeMetadata.onboardingComplete === true) {
-          setLoadingState('redirecting');
-          await router.push('/home');
-          return;
+        const token = await getToken();
+        if (!token) {
+          throw new Error('Failed to get authentication token');
         }
+        setToken(token);
 
-        setLoadingState('creating-user');
+        setLoadingState('fetching-user');
+        try {
+          const userData = await UserService.getUserByIdentityId(user.id, token);
+          setUser(userData);
+          setLoadingState('complete');
+          return;
+        } catch (err) {
+          if (err && typeof err === 'object' && 'status' in err && err.status === 404) {
+            setLoadingState('creating-user');
+            await UserService.createUser({
+              identityId: user.id,
+              role: user.unsafeMetadata.role === 'developer' ? 'Developer' : 'Recruiter',
+              email: user.emailAddresses[0].emailAddress,
+            });
 
-        await UserService.createUser({
-          identityId: user.id,
-          role: getBackendRole(user.unsafeMetadata.role as string),
-          email: user.emailAddresses[0].emailAddress,
-        });
-
-        setLoadingState('complete');
+            const userData = await UserService.getUserByIdentityId(user.id, token);
+            setUser(userData);
+            setLoadingState('complete');
+          } else {
+            throw err;
+          }
+        }
       } catch (err) {
         console.error('Error during user initialization:', err);
         setError(true);
@@ -50,7 +57,7 @@ export default function OnboardingPage() {
     };
 
     initializeUser();
-  }, [isLoaded, user, router]);
+  }, [isLoaded, user, getToken, setUser, setToken, setIdentityId]);
 
   if (!isLoaded || loadingState === 'initial') {
     return <LoadingScreen fullScreen text="Verifying your information..." />;
@@ -60,11 +67,11 @@ export default function OnboardingPage() {
     return <LoadingScreen fullScreen text="Setting up your account..." />;
   }
 
-  if (loadingState === 'redirecting') {
-    return <LoadingScreen fullScreen text="Taking you to your dashboard..." />;
+  if (loadingState === 'fetching-user') {
+    return <LoadingScreen fullScreen text="Loading your profile..." />;
   }
 
-  if (!user) {
+  if (!user || !storedUser) {
     return <LoadingScreen fullScreen text="Please sign in to continue..." />;
   }
 
@@ -84,7 +91,7 @@ export default function OnboardingPage() {
 
   return (
     <div className="min-h-screen">
-      {isDeveloper ? <DeveloperOnboardingForm /> : <CompanyOnboardingForm />}
+      {storedUser.role === 'Developer' ? <DeveloperOnboardingForm /> : <CompanyOnboardingForm />}
     </div>
   );
 }

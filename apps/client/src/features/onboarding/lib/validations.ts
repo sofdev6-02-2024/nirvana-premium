@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 export const companyFormSchema = z.object({
   name: z
@@ -12,18 +10,9 @@ export const companyFormSchema = z.object({
   location: z.string().min(3, { message: 'Location is required' }),
 
   profilePicture: z
-    .union([
-      z.string().url({ message: 'Invalid image URL' }),
-      z
-        .custom<File>((file) => file instanceof File, { message: 'Invalid file' })
-        .refine((file) => !file || file.size <= MAX_FILE_SIZE, {
-          message: 'Max image size is 5MB.',
-        })
-        .refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), {
-          message: 'Only .jpg, .jpeg, .png, and .webp formats are supported.',
-        }),
-    ])
-    .optional(),
+    .union([z.string().url('Invalid image URL'), z.custom<File>()])
+    .optional()
+    .nullable(),
 });
 
 export type CompanyFormValues = z.infer<typeof companyFormSchema>;

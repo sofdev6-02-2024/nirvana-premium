@@ -6,11 +6,11 @@ import { redirect } from 'next/navigation';
 
 export default function PortafolioPage() {
   const { user, isLoaded } = useUser();
-  const userRole = user?.unsafeMetadata?.role as 'developer' | 'recruiter';
+  const userRole = user?.unsafeMetadata?.role as 'Developer' | 'Recruiter';
 
   if (!isLoaded) return null;
   if (!user) redirect('/sign-in');
-  if (userRole !== 'developer') redirect('/profile-builder');
+  if (userRole !== 'Developer') redirect('/profile-builder');
 
-  return <ProfileBuilder role="developer" />;
+  return <ProfileBuilder role="Developer" />;
 }

@@ -9,6 +9,11 @@ interface ApiRequestOptions {
   params?: Record<string, string | number>;
 }
 
+export interface ApiError {
+  status?: number;
+  message?: string;
+}
+
 export async function apiRequest<T>({
   endpoint,
   method,
@@ -86,4 +91,8 @@ export async function apiRequest<T>({
     console.error(`❌ API Request Failed for ${url}:`, error);
     throw error;
   }
+}
+
+export function isApiError(error: unknown): error is ApiError {
+  return typeof error === 'object' && error !== null && 'status' in error;
 }

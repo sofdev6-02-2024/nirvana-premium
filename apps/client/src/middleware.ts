@@ -35,11 +35,11 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.next();
   }
 
-  if (ROUTES.RECRUITER(req) && userRole !== 'recruiter') {
+  if (ROUTES.RECRUITER(req) && userRole !== 'Recruiter') {
     return createRedirectResponse(REDIRECTS.ACCESS_DENIED, req);
   }
 
-  if (ROUTES.DEVELOPER(req) && userRole !== 'developer') {
+  if (ROUTES.DEVELOPER(req) && userRole !== 'Developer') {
     return createRedirectResponse(REDIRECTS.ACCESS_DENIED, req);
   }
 

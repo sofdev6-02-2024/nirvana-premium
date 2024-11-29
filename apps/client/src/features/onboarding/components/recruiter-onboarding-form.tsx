@@ -27,14 +27,16 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useUserStore } from '@/features/users/store/user-store';
 import { X } from 'lucide-react';
 import { toast } from 'sonner';
 import { createCompany } from '../actions/create-company-action';
 import { companyFormSchema, CompanyFormValues } from '../lib/validations';
 
 export default function CompanyOnboardingForm() {
-  const { user, isSignedIn, isLoaded } = useUser();
+  const { user, isLoaded } = useUser();
   const router = useRouter();
+  const { user: backendUser, token } = useUserStore();
 
   const form = useForm<CompanyFormValues>({
     resolver: zodResolver(companyFormSchema),
@@ -53,17 +55,18 @@ export default function CompanyOnboardingForm() {
     formState: { isSubmitting },
   } = form;
 
-  const onSubmit = async (data: CompanyFormValues) => {
-    if (!user) {
-      toast.error('You must be signed in to create a company profile');
-      return;
-    }
+  if (!isLoaded) {
+    return <LoadingScreen fullScreen text="Loading your onboarding form..." />;
+  }
 
+  if (!user || !backendUser || !token) {
+    router.push('/sign-in');
+    return null;
+  }
+
+  const onSubmit = async (data: CompanyFormValues) => {
     try {
-      const result = await createCompany({
-        ...data,
-        userId: user.id,
-      });
+      const result = await createCompany(data, backendUser.id, token);
 
       if (!result.success) {
         throw new Error(result.error || 'Failed to create company profile');
@@ -77,24 +80,15 @@ export default function CompanyOnboardingForm() {
       });
 
       toast.success('Company profile created successfully!');
-      return <LoadingScreen fullScreen text="Redirecting to home page..." />;
-      setTimeout(() => {
-        router.push('/home');
-      }, 2000);
+      router.push('/home');
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to create company profile';
+
       console.error('Error saving company data:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to create company profile');
+      toast.error(errorMessage);
     }
   };
-
-  if (!isLoaded) {
-    return <LoadingScreen fullScreen text="Loading your onboarding form..." />;
-  }
-
-  if (!isSignedIn) {
-    router.push('/sign-in');
-    return null;
-  }
 
   return (
     <div className="container mx-auto max-w-2xl py-8">

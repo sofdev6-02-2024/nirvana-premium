@@ -1,32 +1,32 @@
 import { apiRequest } from '@/lib/api';
-import { ApplicationsResponse, ApplicationStats, PaginationParams } from '../types/home';
+import { ApplicationsResponse, ApplicationStats } from '../types/home';
 
-export async function getDeveloperApplications(
-  developerId: string,
-  params: PaginationParams,
-): Promise<ApplicationsResponse> {
-  const queryParams: Record<string, string | number> = Object.fromEntries(
-    Object.entries(params).map(([key, value]) => [key, String(value)]),
-  );
+export class ApplicationService {
+  private static BASE_PATH = '/users-jobs/developers';
+  private static auxToken =
+    'eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDIyMkFBQSIsImtpZCI6Imluc18ycEZ2Y3JTS1hvQzgwVVJmcUY2bTVMTFRBcXQiLCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL3N1YnRsZS1ncmlmZm9uLTk5LmFjY291bnRzLmRldiIsImV4cCI6MjA0Nzc0NTY1MCwiaWF0IjoxNzMyMzg1NjUwLCJpc3MiOiJodHRwczovL3N1YnRsZS1ncmlmZm9uLTk5LmNsZXJrLmFjY291bnRzLmRldiIsImp0aSI6ImU4MTJiNmM4MDY0ZjQwNDdiYzcyIiwibWV0YWRhdGEiOnsib25ib2FyZGluZ0NvbXBsZXRlIjp0cnVlLCJyb2xlIjoiZGV2ZWxvcGVyIn0sIm5iZiI6MTczMjM4NTY0NSwic3ViIjoidXNlcl8ycEZ3NnlVZzR5RHNiRG5pNzRsNWdqVTdYalYifQ.WEUTnLgYbwEt40M8XVqENUsKjkSjvwurNEtQKwR5fAGh4Zpowk3HLKCxaTso4cHxYxnWxoIdUNnrJL3U8C9FgirEMICtbVcBD3hVkHkRpO9QbGm8Qvx6y-pJZOsXekSpFxwV3fnYT0qf3obU9yHxGp1MotbUkEN8myWFRdUBP7u2maa_zx51sAxSCEHUgzz1FkAB9qaIzLuBBSKfEwHjySl1zmhq3d2p3cEmCntbZRQLyIGi1Do-cCyJZQHCeXKf41PViGqkWW_dSO5ZTQOt3sWLInPYQoeLYqQTd_LGxTbGfqsy8AxgL6PSmqXgvT02iaKkV01GLBhwlj1VNqEn-w';
+  static async getApplications(
+    developerId: string,
+    token: string,
+    params?: {
+      status?: 'Published' | 'Viewed' | 'Accepted' | 'Rejected';
+      page?: number;
+      pageSize?: number;
+    },
+  ) {
+    return apiRequest<ApplicationsResponse>({
+      endpoint: `${this.BASE_PATH}/${developerId}/applications`,
+      method: 'GET',
+      token: this.auxToken,
+      params,
+    });
+  }
 
-  return apiRequest({
-    endpoint: `/users-jobs/developers/${developerId}/applications`,
-    method: 'GET',
-    params: queryParams,
-  });
-}
-
-export async function getApplicationStats(developerId: string): Promise<ApplicationStats> {
-  return apiRequest({
-    endpoint: `/users-jobs/developers/${developerId}/applications/stats`,
-    method: 'GET',
-  });
-}
-
-export async function updateUserProfile(userId: string, description: string): Promise<void> {
-  return apiRequest({
-    endpoint: `/users-jobs/users/${userId}/profile`,
-    method: 'PUT',
-    body: { description },
-  });
+  static async getStats(developerId: string, token: string) {
+    return apiRequest<ApplicationStats>({
+      endpoint: `${this.BASE_PATH}/${developerId}/applications/stats`,
+      method: 'GET',
+      token: this.auxToken,
+    });
+  }
 }

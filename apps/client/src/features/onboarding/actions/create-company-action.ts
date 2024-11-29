@@ -1,36 +1,39 @@
 'use server';
 
 import { z } from 'zod';
-import { companyFormSchema } from '../lib/validations';
+import { CompanyService } from '../lib/api';
+import { CompanyFormValues } from '../lib/validations';
 
-interface ActionResponse {
+interface CreateCompanyResponse {
   success: boolean;
   error?: string;
-  data?: unknown;
 }
 
 export async function createCompany(
-  formData: z.infer<typeof companyFormSchema> & { userId: string },
-): Promise<ActionResponse> {
+  formData: CompanyFormValues,
+  userId: string,
+  token: string,
+): Promise<CreateCompanyResponse> {
   try {
-    const validatedData = companyFormSchema.parse({
-      name: formData.name,
-      location: formData.location,
-      profilePicture: formData.profilePicture,
-    });
+    await CompanyService.createCompany(
+      {
+        userId,
+        name: formData.name,
+        location: formData.location,
+        profilePicture: formData.profilePicture || null,
+      },
+      token,
+    );
 
-    const companyData = {
-      userId: formData.userId,
-      ...validatedData,
-    };
-
-    console.log('Company data ready for backend submission:', companyData);
-
-    return {
-      success: true,
-      data: companyData,
-    };
+    return { success: true };
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: 'Invalid form data provided',
+      };
+    }
+
     console.error('Error in createCompany action:', error);
     return {
       success: false,

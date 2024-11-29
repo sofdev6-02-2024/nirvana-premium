@@ -1,5 +1,5 @@
 import { apiRequest } from '@/lib/api';
-import { CreateUserDTO } from '../types/user';
+import { CreateUserDTO, User } from '../types/user';
 
 export class UserService {
   private static readonly BASE_PATH = '/users-jobs/users';
@@ -9,6 +9,14 @@ export class UserService {
       endpoint: this.BASE_PATH,
       method: 'POST',
       body: data,
+    });
+  }
+
+  static async getUserByIdentityId(identityId: string, token: string): Promise<User> {
+    return apiRequest<User>({
+      endpoint: `${this.BASE_PATH}/${identityId}`,
+      method: 'GET',
+      token,
     });
   }
 }

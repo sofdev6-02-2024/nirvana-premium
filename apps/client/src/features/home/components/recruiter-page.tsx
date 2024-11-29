@@ -1,22 +1,31 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
+import Badge from '@/components/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Job } from '@/features/jobs/lib/constants';
+import {
+  getJobApplicants,
+  getJobsByRecruiter,
+  getJobStats,
+  updateApplicationStatus,
+} from '@/features/recruiters/lib/recruiter-service';
+import { useUserStore } from '@/features/users/store/user-store';
 import { cn } from '@/lib/utils';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@clerk/nextjs';
 import { Briefcase, Building2, Clock, FileText, Plus, User, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { recruiterService } from '../lib/recruiter';
-import { ApplicantsStats, JobApplicant, RecruiterJob } from '../types/recruiter';
+import { ApplicantsStats, JobApplicant } from '../types/recruiter';
 
 export default function RecruiterHome() {
-  const { user } = useUser();
+  const { user } = useUserStore();
+  const { getToken } = useAuth();
   const router = useRouter();
-  const [jobs, setJobs] = useState<RecruiterJob[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedJob, setSelectedJob] = useState<string | null>(null);
   const [applicants, setApplicants] = useState<JobApplicant[]>([]);
   const [stats, setStats] = useState<ApplicantsStats | null>(null);
@@ -24,18 +33,21 @@ export default function RecruiterHome() {
 
   useEffect(() => {
     loadInitialData();
-  }, [user?.id]);
+  }, [user?.recruiterId]);
 
   const loadInitialData = async () => {
-    if (!user?.id) return;
+    if (!user?.recruiterId) return;
 
     try {
       setIsLoading(true);
-      const jobsData = await recruiterService.getJobs(user.id);
-      setJobs(jobsData.items);
+      const token = await getToken();
+      if (!token) throw new Error('Authentication token not available');
 
-      if (jobsData.items.length > 0) {
-        const firstJobId = jobsData.items[0].id;
+      const jobsData = await getJobsByRecruiter(user.recruiterId);
+      setJobs(jobsData);
+
+      if (jobsData.length > 0) {
+        const firstJobId = jobsData[0].id;
         setSelectedJob(firstJobId);
         await loadJobDetails(firstJobId);
       }
@@ -48,12 +60,15 @@ export default function RecruiterHome() {
   };
 
   const loadJobDetails = async (jobId: string) => {
-    if (!user?.id) return;
+    if (!user?.recruiterId) return;
 
     try {
+      const token = await getToken();
+      if (!token) throw new Error('Authentication token not available');
+
       const [applicantsData, statsData] = await Promise.all([
-        recruiterService.getJobApplicants(user.id, jobId),
-        recruiterService.getJobStats(user.id, jobId),
+        getJobApplicants(user.recruiterId, jobId, token),
+        getJobStats(user.recruiterId, jobId, token),
       ]);
 
       setApplicants(applicantsData.developers.items);
@@ -61,6 +76,23 @@ export default function RecruiterHome() {
     } catch (error) {
       console.error('Error loading job details:', error);
       toast.error('Failed to load job details');
+    }
+  };
+
+  const handleStatusChange = async (developerId: string, status: JobApplicant['status']) => {
+    if (!user?.recruiterId || !selectedJob) return;
+
+    try {
+      const token = await getToken();
+      if (!token) throw new Error('Authentication token not available');
+
+      await updateApplicationStatus(user.recruiterId, selectedJob, developerId, status, token);
+
+      await loadJobDetails(selectedJob);
+      toast.success(`Application ${status.toLowerCase()}`);
+    } catch (error) {
+      console.error('Error updating status:', error);
+      toast.error('Failed to update application status');
     }
   };
 
@@ -76,7 +108,7 @@ export default function RecruiterHome() {
     <div className="container mx-auto py-8 px-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Welcome back, {user?.firstName}!</h1>
+          <h1 className="text-3xl font-bold">Welcome back</h1>
           <p className="text-muted-foreground">
             You have {stats?.pending || 0} applications pending review
           </p>
@@ -160,9 +192,7 @@ export default function RecruiterHome() {
                     <ApplicantCard
                       key={applicant.developerId}
                       applicant={applicant}
-                      onStatusChange={async (status) => {
-                        toast.success(`Status updated to ${status}`);
-                      }}
+                      onStatusChange={(status) => handleStatusChange(applicant.developerId, status)}
                     />
                   ))}
               </TabsContent>
@@ -218,33 +248,43 @@ function JobCard({
   isSelected,
   onClick,
 }: {
-  job: RecruiterJob;
+  job: Job;
   isSelected: boolean;
   onClick: () => void;
 }) {
+  const router = useRouter();
+
   return (
-    <button
-      onClick={onClick}
-      className={cn(
-        'w-full p-4 rounded-lg border text-left transition-colors',
-        isSelected ? 'border-primary bg-primary/5' : 'border-muted hover:border-primary/50',
-      )}
-    >
-      <h3 className="font-semibold">{job.title}</h3>
-      <p className="text-sm text-muted-foreground">{job.location || 'Remote'}</p>
-      <div className="flex gap-2 mt-2">
-        <span className="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700">
-          {job.modality}
-        </span>
-        <span className="text-xs px-2 py-1 rounded-full bg-green-50 text-green-700">
-          {job.schedule}
-        </span>
-      </div>
-      <p className="text-sm mt-2">${job.salaryPerHour}/hr</p>
-    </button>
+    <div className="relative">
+      <button
+        onClick={onClick}
+        className={cn(
+          'w-full p-4 rounded-lg border text-left transition-colors',
+          isSelected ? 'border-primary bg-primary/5' : 'border-muted hover:border-primary/50',
+        )}
+      >
+        <h3 className="font-semibold">{job.title}</h3>
+        <p className="text-sm text-muted-foreground">{job.location || 'Remote'}</p>
+        <div className="flex gap-2 mt-2">
+          <Badge variant="secondary">{job.modality}</Badge>
+          <Badge variant="secondary">{job.schedule}</Badge>
+        </div>
+        <p className="text-sm mt-2">${job.salaryPerHour}/hr</p>
+      </button>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="absolute top-2 right-2"
+        onClick={(e) => {
+          e.stopPropagation();
+          router.push(`/job/${job.id}`);
+        }}
+      >
+        View
+      </Button>
+    </div>
   );
 }
-
 function ApplicantCard({
   applicant,
   onStatusChange,
@@ -252,44 +292,40 @@ function ApplicantCard({
   applicant: JobApplicant;
   onStatusChange: (status: JobApplicant['status']) => Promise<void>;
 }) {
-  const statusStyles = {
-    Published: 'bg-blue-50 text-blue-700',
-    Viewed: 'bg-yellow-50 text-yellow-700',
-    Accepted: 'bg-green-50 text-green-700',
-    Rejected: 'bg-red-50 text-red-700',
-  };
+  const router = useRouter();
 
   return (
     <Card>
       <div className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex gap-4">
-            {applicant.developerProfileUrl ? (
-              <img
-                src={applicant.developerProfileUrl}
-                alt={`${applicant.developerName} ${applicant.developerLastName}`}
-                className="w-12 h-12 rounded-full object-cover"
-              />
-            ) : (
-              <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-                <User className="w-6 h-6 text-muted-foreground" />
-              </div>
-            )}
+            <button
+              onClick={() => router.push(`/developer/${applicant.developerId}`)}
+              className="focus:outline-none focus:ring-2 focus:ring-primary rounded-full"
+            >
+              {applicant.developerProfileUrl ? (
+                <img
+                  src={applicant.developerProfileUrl}
+                  alt={`${applicant.developerName} ${applicant.developerLastName}`}
+                  className="w-12 h-12 rounded-full object-cover hover:ring-2 hover:ring-primary"
+                />
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80">
+                  <User className="w-6 h-6 text-muted-foreground" />
+                </div>
+              )}
+            </button>
             <div>
-              <h3 className="font-semibold">
+              <button
+                onClick={() => router.push(`/developer/${applicant.developerId}`)}
+                className="font-semibold hover:text-primary text-left"
+              >
                 {applicant.developerName} {applicant.developerLastName}
-              </h3>
+              </button>
               <p className="text-sm text-muted-foreground">
                 Applied {new Date(applicant.createdAt).toLocaleDateString()}
               </p>
-              <span
-                className={cn(
-                  'text-xs px-2 py-1 rounded-full mt-2 inline-block',
-                  statusStyles[applicant.status],
-                )}
-              >
-                {applicant.status}
-              </span>
+              <Badge variant={getStatusVariant(applicant.status)}>{applicant.status}</Badge>
             </div>
           </div>
           <div className="flex gap-2">
@@ -315,4 +351,21 @@ function ApplicantCard({
       </div>
     </Card>
   );
+}
+
+function getStatusVariant(
+  status: JobApplicant['status'],
+): 'default' | 'secondary' | 'destructive' | 'outline' {
+  switch (status) {
+    case 'Published':
+      return 'default';
+    case 'Viewed':
+      return 'secondary';
+    case 'Accepted':
+      return 'outline';
+    case 'Rejected':
+      return 'destructive';
+    default:
+      return 'default';
+  }
 }

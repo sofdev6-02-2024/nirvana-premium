@@ -1,19 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
+import Badge from '@/components/badge';
+import LoadingScreen from '@/components/loading/loading-screen';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { applicationsService } from '@/features/home/lib/mock';
 import { Application, ApplicationStats } from '@/features/home/types/home';
+import { useUserStore } from '@/features/users/store/user-store';
 import { cn } from '@/lib/utils';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@clerk/nextjs';
 import { Building2, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { ApplicationService } from '../api/api-home';
 
 export default function DevPage() {
-  const { user, isSignedIn, isLoaded } = useUser();
+  const { user } = useUserStore();
+  const { getToken } = useAuth();
   const router = useRouter();
   const [currentTab, setCurrentTab] = useState('all');
   const [applications, setApplications] = useState<Application[]>([]);
@@ -22,29 +27,32 @@ export default function DevPage() {
 
   useEffect(() => {
     async function loadData() {
-      if (!user?.id) return;
+      if (!user?.developerId) return;
 
-      setIsLoading(true);
       try {
+        const token = await getToken();
+        if (!token) throw new Error('Authentication token not available');
+
         const [applicationsData, statsData] = await Promise.all([
-          applicationsService.getApplications(user.id),
-          applicationsService.getStats(user.id),
+          ApplicationService.getApplications(user.developerId, token),
+          ApplicationService.getStats(user.developerId, token),
         ]);
 
         setApplications(applicationsData.items);
         setStats(statsData);
       } catch (error) {
         console.error('Error loading data:', error);
+        toast.error('Failed to load applications');
       } finally {
         setIsLoading(false);
       }
     }
 
     loadData();
-  }, [user?.id]);
+  }, [user?.developerId, getToken]);
 
-  if (!isLoaded || !isSignedIn) {
-    return null;
+  if (isLoading) {
+    return <LoadingScreen />;
   }
 
   const filteredApplications = applications.filter((app) => {
@@ -56,7 +64,7 @@ export default function DevPage() {
     <div className="container mx-auto py-8 px-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Welcome back, {user.firstName}!</h1>
+          <h1 className="text-3xl font-bold">Welcome back!</h1>
           <p className="text-muted-foreground">
             {stats
               ? `You have ${stats.pending} pending applications`
@@ -148,8 +156,10 @@ function StatsCard({
 }
 
 function ApplicationCard({ application }: { application: Application }) {
+  const router = useRouter();
+
   return (
-    <Card>
+    <Card className="hover:shadow-md transition-shadow">
       <div className="p-6">
         <div className="flex items-start justify-between">
           <div className="flex gap-4">
@@ -161,8 +171,18 @@ function ApplicationCard({ application }: { application: Application }) {
               />
             )}
             <div>
-              <h3 className="font-semibold text-lg">{application.jobTitle}</h3>
-              <p className="text-sm text-muted-foreground">{application.recruiterName}</p>
+              <button
+                onClick={() => router.push(`/jobs/${application.jobId}`)}
+                className="font-semibold text-lg hover:text-primary text-left"
+              >
+                {application.jobTitle}
+              </button>
+              <button
+                onClick={() => router.push(`/recruiters/${application.recruiterId}`)}
+                className="text-sm text-muted-foreground hover:text-primary block"
+              >
+                {application.recruiterName}
+              </button>
               <p className="text-sm text-muted-foreground">
                 Applied {new Date(application.createdAt).toLocaleDateString()}
               </p>
@@ -176,18 +196,16 @@ function ApplicationCard({ application }: { application: Application }) {
 }
 
 function ApplicationStatus({ status }: { status: Application['status'] }) {
-  const statusStyles = {
-    Published: 'bg-blue-50 text-blue-700',
-    Viewed: 'bg-yellow-50 text-yellow-700',
-    Accepted: 'bg-green-50 text-green-700',
-    Rejected: 'bg-red-50 text-red-700',
+  const statusConfig = {
+    Published: { variant: 'default' as const, label: 'Pending' },
+    Viewed: { variant: 'secondary' as const, label: 'Viewed' },
+    Accepted: { variant: 'success' as const, label: 'Accepted' },
+    Rejected: { variant: 'destructive' as const, label: 'Rejected' },
   };
 
-  return (
-    <span className={cn('px-3 py-1 rounded-full text-sm font-medium', statusStyles[status])}>
-      {status}
-    </span>
-  );
+  const config = statusConfig[status];
+
+  return <Badge variant={config.variant}>{config.label}</Badge>;
 }
 
 function EmptyState() {
