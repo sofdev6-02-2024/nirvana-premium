@@ -110,6 +110,17 @@ export function ProfileBuilder({ role, initialData, onSave }: ProfileBuilderProp
 
   const addSection = (type: SectionType) => {
     try {
+      const sectionExists = profileData.sections.some((section) => section.type === type);
+
+      if (sectionExists) {
+        toast({
+          variant: 'destructive',
+          title: 'Section Limit Reached',
+          description: `Only one ${type} section is allowed.`,
+        });
+        return;
+      }
+
       const newSection: ProfileSectionType = {
         id: generateSectionId(),
         type,

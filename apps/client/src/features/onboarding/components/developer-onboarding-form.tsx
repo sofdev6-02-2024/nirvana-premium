@@ -121,8 +121,8 @@ export default function DeveloperOnboardingForm() {
       });
 
       toast.success('Developer profile created successfully!');
-      return <LoadingScreen fullScreen text="Redirecting to home page..." />;
       setTimeout(() => {
+        return <LoadingScreen fullScreen text="Redirecting to home page..." />;
         router.push('/home');
       }, 2000);
     } catch (error) {

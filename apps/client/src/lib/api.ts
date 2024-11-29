@@ -35,6 +35,16 @@ export async function apiRequest<T>({
   const url = `${API_PATH}/api${endpoint}${queryParams}`;
   console.log(`🚀 Making API request to: ${url}`);
 
+  if (params) {
+    console.log('🔍 Query Parameters:', JSON.stringify(params, null, 2));
+  }
+
+  if (method !== 'GET' && body) {
+    console.log('📤 Request Body:', JSON.stringify(body, null, 2));
+  }
+
+  console.log(`🔐 Authentication: ${token ? 'Token Provided' : 'No Token'}`);
+
   const options: RequestInit = {
     method,
     headers,
@@ -43,11 +53,16 @@ export async function apiRequest<T>({
 
   if (revalidate !== undefined) {
     options.next = { revalidate };
+    console.log(`🔄 Revalidation Interval: ${revalidate} seconds`);
   }
 
   try {
     const response = await fetch(url, options);
     console.log(`📥 Response status: ${response.status}`);
+    console.log(
+      '📋 Response Headers:',
+      JSON.stringify(Object.fromEntries(response.headers.entries()), null, 2),
+    );
 
     if (!response.ok) {
       const errorBody = await response.text();
@@ -59,9 +74,14 @@ export async function apiRequest<T>({
       throw new Error(`HTTP error! status: ${response.status}, body: ${errorBody}`);
     }
 
-    const data = await response.json();
-    console.log(`✅ Successful response from ${url}`, { dataPreview: data });
-    return data;
+    if (response.status === 201) {
+      return undefined as T;
+    }
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log(`✅ Successful response from ${url}`, { dataPreview: data });
+      return data;
+    }
   } catch (error) {
     console.error(`❌ API Request Failed for ${url}:`, error);
     throw error;

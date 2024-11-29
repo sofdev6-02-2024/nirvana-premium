@@ -90,5 +90,19 @@ export const skillsSchema = z.object({
   selectedSkills: z
     .array(z.string())
     .min(1, 'Select at least one skill')
-    .max(20, 'You can select up to 20 skills'), // You can adjust this limit
+    .max(20, 'You can select up to 20 skills'),
+});
+
+export const profileFormSchema = z.object({
+  sections: z.array(
+    z.object({
+      id: z.string(),
+      type: z.string(),
+      content: z.string(),
+      layout: z.object({
+        columns: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+        order: z.number(),
+      }),
+    }),
+  ),
 });

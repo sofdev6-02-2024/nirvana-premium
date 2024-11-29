@@ -1,6 +1,6 @@
 export {};
 
-export type Roles = 'developer' | 'recruiter';
+export type Roles = 'Developer' | 'Recruiter';
 
 declare global {
   interface CustomJwtSessionClaims {
