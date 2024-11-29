@@ -20,7 +20,9 @@ internal sealed class RoleRequirementHandler : AuthorizationHandler<RoleRequirem
 
         if (
             metadata.RootElement.TryGetProperty("role", out JsonElement roleProperty)
-            && roleProperty.GetString() == requirement.Role
+            && roleProperty
+                .GetString()!
+                .Equals(requirement.Role, StringComparison.OrdinalIgnoreCase)
         )
         {
             context.Succeed(requirement);

@@ -1,6 +1,6 @@
 namespace SkWeb.Api.Extensions;
 
-using SkWeb.Api.Middleware;
+using Middleware;
 
 public static class MiddlewareExtensions
 {

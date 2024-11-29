@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 public static class EndpointExtensions
 {
+    private const int DefaultCacheDuration = 5;
+
     public static IServiceCollection AddEndpoints(
         this IServiceCollection services,
         Assembly assembly
@@ -41,5 +43,41 @@ public static class EndpointExtensions
         }
 
         return app;
+    }
+
+    public static IEndpointConventionBuilder AddCache(
+        this IEndpointConventionBuilder builder,
+        string tagName,
+        int duration = DefaultCacheDuration
+    )
+    {
+        builder.CacheOutput(b => b.Expire(TimeSpan.FromMinutes(duration)).Tag(tagName));
+
+        return builder;
+    }
+
+    public static IEndpointConventionBuilder AddCacheWithAuthorization(
+        this IEndpointConventionBuilder builder,
+        string tagName,
+        int duration = DefaultCacheDuration
+    )
+    {
+        builder.CacheOutput(
+            b =>
+                b.Expire(TimeSpan.FromMinutes(duration))
+                    .Tag(tagName)
+                    .VaryByValue(context =>
+                    {
+                        string? token = context.Request.Headers["Authorization"].FirstOrDefault();
+
+                        return new KeyValuePair<string, string>(
+                            "Authorization",
+                            token ?? string.Empty
+                        );
+                    }),
+            true
+        );
+
+        return builder;
     }
 }

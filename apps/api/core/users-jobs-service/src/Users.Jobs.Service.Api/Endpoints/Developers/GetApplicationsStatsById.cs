@@ -1,10 +1,12 @@
 namespace Users.Jobs.Service.Api.Endpoints.Developers;
 
+using Application;
 using Application.Developer.GetApplicationsStatsById;
 using MediatR;
 using SkDomain.Results;
 using SkInfrastructure.Authorization;
 using SkWeb.Api.Endpoints;
+using SkWeb.Api.Extensions;
 using SkWeb.Api.Infrastructure;
 
 internal sealed class GetApplicationsStatsById : IEndpoint
@@ -23,6 +25,7 @@ internal sealed class GetApplicationsStatsById : IEndpoint
                 }
             )
             .WithTags(Tags.Developers)
-            .RequireAuthorization(Permissions.Developer);
+            .RequireAuthorization(Permissions.Developer)
+            .AddCacheWithAuthorization(Tags.Developers);
     }
 }

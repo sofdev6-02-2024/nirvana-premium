@@ -2,6 +2,7 @@ namespace SkWeb.Api.Extensions;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using OutputCaching;
 
 public static class ServiceCollectionExtensions
 {
@@ -57,5 +58,27 @@ public static class ServiceCollectionExtensions
 
             o.AddSecurityRequirement(securityRequirement);
         });
+    }
+
+    public static IServiceCollection AddRedisCache(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
+    {
+        services.AddOutputCache(options =>
+        {
+            options.AddBasePolicy(
+                b => b.AddPolicy<CustomPolicy>().SetCacheKeyPrefix("custom-"),
+                true
+            );
+        });
+
+        services.AddStackExchangeRedisOutputCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis");
+            options.InstanceName = configuration["Redis:InstanceName"];
+        });
+
+        return services;
     }
 }

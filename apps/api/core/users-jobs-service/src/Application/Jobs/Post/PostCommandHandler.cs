@@ -5,13 +5,16 @@ using Domain.Attributes.Skills;
 using Domain.Attributes.Specializations;
 using Domain.Entities.Jobs;
 using Domain.Entities.Recruiters;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using Persistent;
 using SkApplication.Contracts;
 using SkDomain.Results;
 
-internal sealed class PostCommandHandler(IApplicationDbContext context)
-    : ICommandHandler<PostCommand>
+internal sealed class PostCommandHandler(
+    IApplicationDbContext context,
+    IOutputCacheStore cacheStore
+) : ICommandHandler<PostCommand>
 {
     public async Task<Result> Handle(PostCommand request, CancellationToken cancellationToken)
     {
@@ -63,6 +66,8 @@ internal sealed class PostCommandHandler(IApplicationDbContext context)
         await context.Jobs.AddAsync(job, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
+
+        await cacheStore.EvictByTagAsync(Tags.Jobs, cancellationToken);
 
         return Result.Success();
     }

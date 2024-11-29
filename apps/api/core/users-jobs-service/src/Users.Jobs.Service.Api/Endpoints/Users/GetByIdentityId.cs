@@ -1,9 +1,11 @@
 namespace Users.Jobs.Service.Api.Endpoints.Users;
 
+using Application;
 using Application.Users.GetByIdentityId;
 using MediatR;
 using SkDomain.Results;
 using SkWeb.Api.Endpoints;
+using SkWeb.Api.Extensions;
 using SkWeb.Api.Infrastructure;
 
 internal sealed class GetByIdentityId : IEndpoint
@@ -26,6 +28,7 @@ internal sealed class GetByIdentityId : IEndpoint
                 }
             )
             .WithTags(Tags.Users)
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .AddCacheWithAuthorization(Tags.Users);
     }
 }

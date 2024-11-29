@@ -1,4 +1,4 @@
-namespace Users.Jobs.Service.Api.Endpoints;
+namespace Application;
 
 public static class Tags
 {
