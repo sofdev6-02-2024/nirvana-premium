@@ -1,4 +1,3 @@
-import companyLogoUrl from '@/assets/company-logo-placeholder.png';
 import Badge from '@/components/badge';
 import { Card } from '@/components/ui/card';
 import { CheckCircle, Globe, MapPin } from 'lucide-react';
@@ -18,7 +17,7 @@ export function RecruiterDetailHeader({ recruiter }: RecruiterDetailHeaderProps)
         <div className="relative -mt-16 flex justify-between">
           <div className="relative">
             <Image
-              src={companyLogoUrl}
+              src={recruiter.profilePictureUrl}
               alt={`${recruiter.name} logo`}
               width={120}
               height={120}
@@ -30,7 +29,6 @@ export function RecruiterDetailHeader({ recruiter }: RecruiterDetailHeaderProps)
               </div>
             )}
           </div>
-
         </div>
 
         <div className="mt-4 space-y-4">
@@ -58,8 +56,6 @@ export function RecruiterDetailHeader({ recruiter }: RecruiterDetailHeaderProps)
               </div>
             </div>
           </div>
-
-          <p className="text-base text-muted-foreground">{recruiter.description}</p>
         </div>
       </div>
     </Card>

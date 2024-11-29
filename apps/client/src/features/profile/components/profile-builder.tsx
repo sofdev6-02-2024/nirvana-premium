@@ -23,7 +23,6 @@ import { profileDataSchema } from '../lib/validations';
 import { AddSectionDialog } from './add-section-dialog';
 import { ProfileSection } from './profile-section';
 import { ProfileViewer } from './profile-viewer';
-import { useLayoutStyles } from './use-layout-styles';
 
 type DeviceType = 'desktop' | 'tablet' | 'mobile';
 
@@ -57,12 +56,9 @@ export function ProfileBuilder({ role, initialData, onSave }: ProfileBuilderProp
   const [previewDevice, setPreviewDevice] = useState<DeviceType>('desktop');
   const [isAddingSectionOpen, setIsAddingSectionOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading] = useState(false);
   const { toast } = useToast();
   const [layoutConfig, setLayoutConfig] = useState<LayoutConfig>(layoutConfigs.default);
-
-  const layoutStyles = useLayoutStyles(layoutConfig);
 
   useEffect(() => {
     try {
@@ -187,7 +183,6 @@ export function ProfileBuilder({ role, initialData, onSave }: ProfileBuilderProp
   const handleSave = async () => {
     try {
       setIsSaving(true);
-      setError(null);
 
       profileDataSchema.parse(profileData);
       const serializedData = serializeProfile(profileData);
@@ -204,7 +199,6 @@ export function ProfileBuilder({ role, initialData, onSave }: ProfileBuilderProp
       }
     } catch (error) {
       console.error('Save error:', error);
-      setError(error instanceof Error ? error.message : 'Failed to save profile');
       toast({
         variant: 'destructive',
         title: 'Failed to save profile',
@@ -227,7 +221,7 @@ export function ProfileBuilder({ role, initialData, onSave }: ProfileBuilderProp
     <div className="container mx-auto py-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <h1 className="text-2xl font-bold">
-          {role === 'developer' ? 'Portfolio Builder' : 'Company Profile Builder'}
+          {role === 'Developer' ? 'Portfolio Builder' : 'Company Profile Builder'}
         </h1>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">

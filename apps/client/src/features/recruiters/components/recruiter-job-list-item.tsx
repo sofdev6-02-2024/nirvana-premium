@@ -4,30 +4,16 @@ import { Card } from '@/components/ui/card';
 import { Job } from '@/features/jobs/lib/constants';
 import { cn, formatMoney, relativeDate } from '@/lib/utils';
 import { Banknote, Building2, Clock, MapPin } from 'lucide-react';
-import Image from 'next/image';
 
 interface JobListItemProps {
   job: Job;
   className?: string;
 }
 
-export default function JobListItem({ job, className }: JobListItemProps) {
+export default function RecruiterJobListItem({ job, className }: JobListItemProps) {
   return (
-    <Card className={cn('group transition-all hover:shadow-md ', className)}>
+    <Card className={cn('group transition-all hover:shadow-md', className)}>
       <div className={cn('flex flex-col sm:flex-row w-full gap-4 sm:gap-5 p-4 sm:p-6')}>
-        <div className="flex justify-center sm:justify-start">
-          <Image
-            src={job.recruiterLogo}
-            alt={`${job.title} company logo`}
-            width={80}
-            height={80}
-            className={cn(
-              'rounded-xl border border-border bg-background shadow-sm',
-              'sm:w-[130px] sm:h-[130px] w-[80px] h-[80px] object-cover',
-            )}
-          />
-        </div>
-
         <div className={cn('flex-grow space-y-2 sm:space-y-3')}>
           {/* Header Section */}
           <div className="space-y-2">

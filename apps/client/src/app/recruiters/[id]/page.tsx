@@ -20,7 +20,6 @@ export async function generateMetadata(
 
     return {
       title: `${recruiter.name} | Developer Jobs`,
-      description: recruiter.description,
     };
   } catch {
     return {

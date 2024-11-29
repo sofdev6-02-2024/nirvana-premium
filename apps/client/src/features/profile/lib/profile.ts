@@ -27,14 +27,14 @@ export type SectionType =
   | 'company-benefits';
 
 export const SECTION_CONFIGS = {
-  developer: [
+  Developer: [
     { type: 'about', label: 'About Me' },
     { type: 'skills', label: 'Skills' },
     { type: 'experience', label: 'Experience' },
     { type: 'projects', label: 'Projects' },
     { type: 'contact', label: 'Contact' },
   ],
-  recruiter: [
+  Recruiter: [
     { type: 'about', label: 'About Company' },
     { type: 'mission', label: 'Mission & Values' },
     { type: 'company-benefits', label: 'Company Benefits' },

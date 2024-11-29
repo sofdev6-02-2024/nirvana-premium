@@ -46,7 +46,7 @@ export function JobPostForm() {
       title: '',
       specializationId: '',
       salaryPerHour: 0,
-      schedule: 'Full Time',
+      schedule: 'FullTime',
       modality: 'Remote',
       location: '',
       description: '',
@@ -97,7 +97,7 @@ export function JobPostForm() {
 
       console.log('Submitting job data:', jobData);
 
-      const result = await JobService.createJob(jobData, token);
+      await JobService.createJob(jobData, token);
 
       toast.success('Job created successfully!');
       router.push('/home');

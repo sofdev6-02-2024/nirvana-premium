@@ -61,6 +61,7 @@ export function SkillsEditor({ content, onChange }: SkillsEditorProps) {
       skillsSchema.parse({ selectedSkills: newSkills });
       onChange({ selectedSkills: newSkills });
     } catch (error) {
+      console.error(error);
       toast({
         variant: 'destructive',
         title: 'Invalid selection',

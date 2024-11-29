@@ -1,4 +1,3 @@
-import defaultImage from '@/assets/company-logo-placeholder.png';
 import Badge from '@/components/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -13,7 +12,7 @@ interface RecruiterListItemProps {
 }
 
 export function RecruiterListItem({
-  recruiter: { name, location, description, profilePictureUrl, isVerified },
+  recruiter: { name, location, profilePictureUrl, isVerified },
   className,
 }: RecruiterListItemProps) {
   return (
@@ -26,11 +25,11 @@ export function RecruiterListItem({
     >
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 
-      <div className={cn('relative flex flex-col sm:flex-row items-start gap-4 p-4 sm:p-6')}>
+      <div className="relative flex flex-col sm:flex-row items-start gap-4 p-4 sm:p-6">
         <div className="relative flex-shrink-0">
           <div className="relative h-16 w-16 sm:h-20 sm:w-20">
             <Image
-              src={defaultImage || profilePictureUrl}
+              src={profilePictureUrl}
               alt={`${name}'s profile picture`}
               width={80}
               height={80}
@@ -78,8 +77,6 @@ export function RecruiterListItem({
               Following
             </Button>
           </div>
-
-          <p className={cn('line-clamp-2 text-sm text-muted-foreground')}>{description}</p>
 
           <div className={cn('flex flex-wrap gap-2 pt-1')}>
             <Button variant="outline" size="sm" className="h-9 flex-1 sm:flex-none">

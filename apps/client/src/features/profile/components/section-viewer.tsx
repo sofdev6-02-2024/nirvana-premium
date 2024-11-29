@@ -24,7 +24,7 @@ export function SectionViewer({ section, role }: SectionViewerProps) {
       return (
         <Card className="p-6">
           <h2 className="text-2xl font-bold mb-4">
-            {role === 'developer' ? 'About Me' : 'About Company'}
+            {role === 'Developer' ? 'About Me' : 'About Company'}
           </h2>
           <div className="prose max-w-none">
             <p>{content.text}</p>
@@ -66,7 +66,7 @@ export function SectionViewer({ section, role }: SectionViewerProps) {
       return (
         <Card className="p-6">
           <h2 className="text-2xl font-bold mb-6">
-            {role === 'developer' ? 'Projects' : 'Success Stories'}
+            {role === 'Developer' ? 'Projects' : 'Success Stories'}
           </h2>
           <div className="grid gap-6">
             {content.projects?.map((project: ProjectContent, index: number) => (
@@ -80,7 +80,7 @@ export function SectionViewer({ section, role }: SectionViewerProps) {
                 )}
                 <h3 className="text-xl font-semibold">{project.title}</h3>
                 <p className="text-muted-foreground">{project.description}</p>
-                {role === 'developer' && project.technologies && (
+                {role === 'Developer' && project.technologies && (
                   <div className="flex flex-wrap gap-2">
                     {project.technologies.map((tech, idx) => (
                       <Badge key={idx} variant="outline">
@@ -96,7 +96,7 @@ export function SectionViewer({ section, role }: SectionViewerProps) {
                     rel="noopener noreferrer"
                     className="inline-flex items-center text-primary hover:underline"
                   >
-                    View {role === 'developer' ? 'Project' : 'Case Study'}
+                    View {role === 'Developer' ? 'Project' : 'Case Study'}
                     <ExternalLink className="w-4 h-4 ml-1" />
                   </a>
                 )}
@@ -228,7 +228,7 @@ export function SectionViewer({ section, role }: SectionViewerProps) {
                 )}
                 <h3 className="text-xl font-semibold">{item.title}</h3>
                 <p className="text-muted-foreground">{item.description}</p>
-                {role === 'developer' && item.technologies && (
+                {role === 'Developer' && item.technologies && (
                   <div className="flex flex-wrap gap-2">
                     {item.technologies.map((tech, techIndex) => (
                       <Badge key={techIndex} variant="outline">
@@ -245,7 +245,7 @@ export function SectionViewer({ section, role }: SectionViewerProps) {
                     className="inline-flex items-center text-primary hover:underline"
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
-                    {role === 'developer' ? 'View Project' : 'Read More'}
+                    {role === 'Developer' ? 'View Project' : 'Read More'}
                   </a>
                 )}
               </div>

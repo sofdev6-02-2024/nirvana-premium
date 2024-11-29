@@ -107,15 +107,19 @@ export async function getJobApplicants(
     pageSize?: number;
   },
 ) {
+  console.log('Token:', token);
+
   return apiRequest<ApplicantsResponse>({
     endpoint: `/users-jobs/recruiters/${recruiterId}/applicants/${jobId}`,
     method: 'GET',
-    token: auxToken,
+    token,
     params,
   });
 }
 
 export async function getJobStats(recruiterId: string, jobId: string, token: string) {
+  console.log(token);
+
   return apiRequest<ApplicantsStats>({
     endpoint: `/users-jobs/recruiters/${recruiterId}/applicants/${jobId}/stats`,
     method: 'GET',
@@ -130,10 +134,11 @@ export async function updateApplicationStatus(
   status: 'Published' | 'Viewed' | 'Accepted' | 'Rejected',
   token: string,
 ) {
+  console.log(token);
   return apiRequest<void>({
     endpoint: `/users-jobs/recruiters/${recruiterId}/applicants/${jobId}/${developerId}/status`,
     method: 'PUT',
-    token,
+    token: auxToken,
     body: { status },
   });
 }

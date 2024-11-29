@@ -1,6 +1,6 @@
 import { Roles } from '@/types/globals';
 import { SectionType } from '../../lib/profile';
-import { AboutEditor } from './about-editor';
+import AboutEditor from './about-editor';
 import { CompanyBenefitsEditor } from './benefits-editor';
 import { ContactEditor } from './contact-editor';
 import { ExperienceEditor } from './experience-editor';

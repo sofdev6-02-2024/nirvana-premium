@@ -58,7 +58,7 @@ export function ProjectsEditor({ content, role, onChange }: ProjectsEditorProps)
         <Card key={field.id} className="p-6">
           <div className="flex justify-between items-start mb-4">
             <h3 className="text-lg font-semibold">
-              {role === 'developer' ? 'Project' : 'Success Story'} {index + 1}
+              {role === 'Developer' ? 'Project' : 'Success Story'} {index + 1}
             </h3>
             <Button type="button" variant="destructive" size="sm" onClick={() => remove(index)}>
               <X className="w-4 h-4" />
@@ -70,7 +70,7 @@ export function ProjectsEditor({ content, role, onChange }: ProjectsEditorProps)
               <Label>Title</Label>
               <Input
                 {...register(`projects.${index}.title`)}
-                placeholder={`${role === 'developer' ? 'Project' : 'Story'} title`}
+                placeholder={`${role === 'Developer' ? 'Project' : 'Story'} title`}
               />
               {errors.projects?.[index]?.title && (
                 <p className="text-sm text-destructive mt-1">
@@ -83,7 +83,7 @@ export function ProjectsEditor({ content, role, onChange }: ProjectsEditorProps)
               <Label>Description</Label>
               <Textarea
                 {...register(`projects.${index}.description`)}
-                placeholder={`${role === 'developer' ? 'Project' : 'Story'} description`}
+                placeholder={`${role === 'Developer' ? 'Project' : 'Story'} description`}
               />
               {errors.projects?.[index]?.description && (
                 <p className="text-sm text-destructive mt-1">
@@ -92,7 +92,7 @@ export function ProjectsEditor({ content, role, onChange }: ProjectsEditorProps)
               )}
             </div>
 
-            {role === 'developer' && (
+            {role === 'Developer' && (
               <div>
                 <Label>Technologies (comma-separated)</Label>
                 <Input
@@ -139,14 +139,14 @@ export function ProjectsEditor({ content, role, onChange }: ProjectsEditorProps)
           append({
             title: '',
             description: '',
-            technologies: role === 'developer' ? [] : undefined,
+            technologies: role === 'Developer' ? [] : undefined,
             link: '',
             imageUrl: '',
           });
         }}
       >
         <PlusCircle className="w-4 h-4 mr-2" />
-        Add {role === 'developer' ? 'Project' : 'Success Story'}
+        Add {role === 'Developer' ? 'Project' : 'Success Story'}
       </Button>
     </div>
   );

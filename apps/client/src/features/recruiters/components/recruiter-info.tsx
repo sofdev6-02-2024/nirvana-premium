@@ -1,4 +1,3 @@
-import defaultImage from '@/assets/company-logo-placeholder.png';
 import Badge from '@/components/badge';
 import { Card } from '@/components/ui/card';
 import { MapPin, Shield, ShieldCheck } from 'lucide-react';
@@ -10,7 +9,7 @@ interface RecruiterInfoProps {
 }
 
 export default function RecruiterInfo({ recruiter }: RecruiterInfoProps) {
-  const { name, location, description, profilePictureUrl, isVerified } = recruiter;
+  const { name, location, profilePictureUrl, isVerified } = recruiter;
 
   return (
     <Card className="overflow-hidden">
@@ -20,7 +19,7 @@ export default function RecruiterInfo({ recruiter }: RecruiterInfoProps) {
         <div className="absolute -top-10 flex items-end">
           <div className="relative">
             <Image
-              src={defaultImage || profilePictureUrl}
+              src={profilePictureUrl}
               alt={`${name}'s profile picture`}
               width={80}
               height={80}
@@ -54,10 +53,6 @@ export default function RecruiterInfo({ recruiter }: RecruiterInfoProps) {
               <MapPin className="h-4 w-4" />
               <span>{location}</span>
             </div>
-          </div>
-
-          <div className="mt-4 space-y-4">
-            <div className="text-sm text-muted-foreground">{description}</div>
           </div>
         </div>
       </div>

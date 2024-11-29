@@ -14,6 +14,7 @@ export class ApplicationService {
       pageSize?: number;
     },
   ) {
+    console.log(token);
     return apiRequest<ApplicationsResponse>({
       endpoint: `${this.BASE_PATH}/${developerId}/applications`,
       method: 'GET',
@@ -23,6 +24,8 @@ export class ApplicationService {
   }
 
   static async getStats(developerId: string, token: string) {
+    console.log(token);
+
     return apiRequest<ApplicationStats>({
       endpoint: `${this.BASE_PATH}/${developerId}/applications/stats`,
       method: 'GET',
