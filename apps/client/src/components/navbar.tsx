@@ -3,12 +3,14 @@
 import logo from '@/assets/logo.png';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { useUserStore } from '@/features/users/store/user-store';
 import { cn } from '@/lib/utils';
 import { UserButton, useUser } from '@clerk/nextjs';
 import { Briefcase, Building2, Code2, LucideIcon, Menu, Plus } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 import { ModeToggle } from './ui/mode-toggle';
 
 interface NavItem {
@@ -47,10 +49,9 @@ const RecruiterNavItems: React.FC = () => {
   const pathname = usePathname();
 
   const items: NavItem[] = [
-    { href: '/dashboard', label: 'Dashboard', icon: Briefcase },
-    { href: '/dashboard/jobs', label: 'My Jobs', icon: Building2 },
-    { href: '/dashboard/applicants', label: 'Applicants', icon: Code2 },
-    { href: '/dashboard/profile', label: 'Profile', icon: Building2 },
+    { href: '/home', label: 'Home', icon: Briefcase },
+    { href: '/profile/about', label: 'Profile', icon: Building2 },
+    { href: '/jobs/new', label: 'New Job', icon: Plus },
   ];
 
   return (
@@ -80,9 +81,8 @@ const DeveloperNavItems: React.FC = () => {
   const pathname = usePathname();
 
   const items: NavItem[] = [
-    { href: '/dashboard', label: 'Dashboard', icon: Briefcase },
-    { href: '/dashboard/applications', label: 'Applications', icon: Building2 },
-    { href: '/dashboard/profile', label: 'Profile', icon: Code2 },
+    { href: '/home', label: 'Home', icon: Briefcase },
+    { href: '/profile/portafolio', label: 'Your CV', icon: Building2 },
   ];
 
   return (
@@ -107,12 +107,30 @@ const DeveloperNavItems: React.FC = () => {
     </div>
   );
 };
+type UserMetadata = {
+  role: string;
+};
 
 const Navbar: React.FC = () => {
   const { user, isSignedIn } = useUser();
   const pathname = usePathname();
-  const isCompany = user?.unsafeMetadata.role === 'recruiter';
-  const isDeveloper = user?.unsafeMetadata.role === 'developer';
+
+  const role = (user?.unsafeMetadata as UserMetadata)?.role;
+  const isCompany = role?.toLowerCase() === 'recruiter';
+  const isDeveloper = role?.toLowerCase() === 'developer';
+
+  const clearStore = useUserStore((state) => state.clearStore);
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      console.log('User signed out, clearing store...');
+      const beforeClear = localStorage.getItem('user-storage');
+      clearStore();
+      const afterClear = localStorage.getItem('user-storage');
+      console.log('Store before:', beforeClear);
+      console.log('Store after:', afterClear);
+    }
+  }, [isSignedIn, clearStore]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -193,19 +211,6 @@ const Navbar: React.FC = () => {
                     <SheetTitle>Actions</SheetTitle>
                   </SheetHeader>
                   <ModeToggle variant="mobile" />
-                  {isCompany && (
-                    <Button
-                      variant="default"
-                      size="sm"
-                      className="w-full justify-start gap-2 h-11"
-                      asChild
-                    >
-                      <Link href="/jobs/new">
-                        <Plus className="h-4 w-4" />
-                        Post Job
-                      </Link>
-                    </Button>
-                  )}
                 </div>
 
                 {!isSignedIn && (
@@ -225,13 +230,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {isSignedIn ? (
-            <UserButton
-              appearance={{
-                elements: {
-                  avatarBox: 'h-11 w-11',
-                },
-              }}
-            />
+            <CustomUserButton />
           ) : (
             <div className="hidden md:block">
               <AuthButtons />
@@ -243,4 +242,24 @@ const Navbar: React.FC = () => {
   );
 };
 
+const CustomUserButton: React.FC = () => {
+  const { isSignedIn } = useUser();
+  const clearStore = useUserStore((state) => state.clearStore);
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      clearStore();
+    }
+  }, [isSignedIn, clearStore]);
+
+  return (
+    <UserButton
+      appearance={{
+        elements: {
+          avatarBox: 'h-11 w-11',
+        },
+      }}
+    />
+  );
+};
 export default Navbar;

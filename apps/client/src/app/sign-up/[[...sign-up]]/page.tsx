@@ -30,8 +30,9 @@ const SignUpPage = () => {
   }, []);
 
   const handleRoleSelect = (value: Roles) => {
-    setSelectedRole(value);
-    localStorage.setItem('selectedRole', value);
+    const formattedRole = (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) as Roles;
+    setSelectedRole(formattedRole);
+    localStorage.setItem('selectedRole', formattedRole);
     setShowRoleDialog(false);
   };
 
@@ -117,7 +118,7 @@ const SignUpPage = () => {
                 path="/sign-up"
                 routing="path"
                 signInUrl="/sign-in"
-                forceRedirectUrl="/onboarding"
+                forceRedirectUrl="/onboarding/create"
                 unsafeMetadata={{
                   role: selectedRole,
                   onboardingComplete: false,

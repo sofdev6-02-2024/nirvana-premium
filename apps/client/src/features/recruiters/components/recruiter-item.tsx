@@ -71,11 +71,6 @@ export function RecruiterListItem({
                 <span className="truncate">{location}</span>
               </div>
             </div>
-
-            <Button variant="secondary" size="sm" className="h-9 hidden sm:flex items-center gap-2">
-              <User2 className="h-4 w-4" />
-              Following
-            </Button>
           </div>
 
           <div className={cn('flex flex-wrap gap-2 pt-1')}>

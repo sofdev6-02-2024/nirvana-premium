@@ -6,13 +6,6 @@ export interface CreateUserDTO {
   email: string;
 }
 
-export interface UserData {
-  id: string;
-  identityId: string;
-  role: 'Developer' | 'Recruiter';
-  email: string;
-}
-
 export interface User {
   id: string;
   role: Roles;

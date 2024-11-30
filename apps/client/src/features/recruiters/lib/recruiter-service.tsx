@@ -10,9 +10,6 @@ interface GetRecruitersOptions {
   location?: string;
 }
 
-const auxToken =
-  'eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDIyMkFBQSIsImtpZCI6Imluc18ycEZ2Y3JTS1hvQzgwVVJmcUY2bTVMTFRBcXQiLCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL3N1YnRsZS1ncmlmZm9uLTk5LmFjY291bnRzLmRldiIsImV4cCI6MjA0Nzc0NTUzMiwiaWF0IjoxNzMyMzg1NTMyLCJpc3MiOiJodHRwczovL3N1YnRsZS1ncmlmZm9uLTk5LmNsZXJrLmFjY291bnRzLmRldiIsImp0aSI6IjVmMjZmN2Q4ZjNmY2Q3NzE5MjZjIiwibWV0YWRhdGEiOnsib25ib2FyZGluZ0NvbXBsZXRlIjp0cnVlLCJyb2xlIjoicmVjcnVpdGVyIn0sIm5iZiI6MTczMjM4NTUyNywic3ViIjoidXNlcl8ycEZ3Y2NuOFJzcDZlVmRYTXZvQ1QxbEFSNmoifQ.INYYylklvHJWFKkyZ2sRdZ5R7dVYBC0SSYb4aZ3oyNl73Ux8IqYW02EloyxDGWfkBM3i9ZCtnE8R0uqho0KfijOHp4YMdZFMaLawo4RekxIkGCemy8gTkf_bg_cLmi9hkPg_emvpa3_5JadOOu0Hx9ZQgqn5AwEnOxRUyS_rNJwvErFKT29XlxLX_j3zYFn0O9BxtS1HmguF2F_w_3f6SyctDwbSJHBNayyZqzXzlPQVwFucBBTbXuXc1BqIUir7x1xiM4qv4uS0GQATnTQ_92WdVXb_0wM4s3M3hB4zWiwJ-zmfdBde3uTE5oV3YDsdjmMEZxA2iLkiO0saHqQtVg';
-
 export async function readCompany(page: number = 1, pageSize: number = 10): Promise<Recruiter[]> {
   try {
     const response = await apiRequest<PaginatedResponse<Recruiter>>({
@@ -107,8 +104,6 @@ export async function getJobApplicants(
     pageSize?: number;
   },
 ) {
-  console.log('Token:', token);
-
   return apiRequest<ApplicantsResponse>({
     endpoint: `/users-jobs/recruiters/${recruiterId}/applicants/${jobId}`,
     method: 'GET',
@@ -118,12 +113,10 @@ export async function getJobApplicants(
 }
 
 export async function getJobStats(recruiterId: string, jobId: string, token: string) {
-  console.log(token);
-
   return apiRequest<ApplicantsStats>({
     endpoint: `/users-jobs/recruiters/${recruiterId}/applicants/${jobId}/stats`,
     method: 'GET',
-    token: auxToken,
+    token,
   });
 }
 
@@ -138,7 +131,7 @@ export async function updateApplicationStatus(
   return apiRequest<void>({
     endpoint: `/users-jobs/recruiters/${recruiterId}/applicants/${jobId}/${developerId}/status`,
     method: 'PUT',
-    token: auxToken,
+    token,
     body: { status },
   });
 }

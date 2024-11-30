@@ -1,4 +1,4 @@
-import { LoadingSpinner } from '@/components/loading/loading-spinner';
+import LoadingScreen from '@/components/loading/loading-screen';
 import DevPage from '@/features/home/components/developer-page';
 import RecruiterHome from '@/features/home/components/recruiter-page';
 import { auth } from '@clerk/nextjs/server';
@@ -12,11 +12,16 @@ export default async function HomePage() {
     redirect('/sign-in');
   }
 
-  const userRole = sessionClaims?.metadata?.role as 'Developer' | 'Recruiter';
+  const userRole = sessionClaims?.metadata?.role as
+    | 'Developer'
+    | 'Recruiter'
+    | 'develoer'
+    | 'recruiter';
+  const formatRole = userRole.toLowerCase();
 
   return (
-    <Suspense fallback={<LoadingSpinner />}>
-      {userRole === 'Developer' ? <DevPage /> : <RecruiterHome />}
+    <Suspense fallback={<LoadingScreen fullScreen text="Loading home..." />}>
+      {formatRole === 'developer' ? <DevPage /> : <RecruiterHome />}
     </Suspense>
   );
 }

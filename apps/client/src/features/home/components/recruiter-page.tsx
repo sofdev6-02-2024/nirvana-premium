@@ -2,6 +2,7 @@
 'use client';
 
 import Badge from '@/components/badge';
+import LoadingScreen from '@/components/loading/loading-screen';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -97,11 +98,7 @@ export default function RecruiterHome() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-      </div>
-    );
+    return <LoadingScreen fullScreen text="Loading..." />;
   }
 
   return (
@@ -277,7 +274,7 @@ function JobCard({
         className="absolute top-2 right-2"
         onClick={(e) => {
           e.stopPropagation();
-          router.push(`/job/${job.id}`);
+          router.push(`/jobs/${job.id}`);
         }}
       >
         View

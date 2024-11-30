@@ -43,7 +43,6 @@ export default async function RecruiterDetailPage({ params }: Props) {
             <div className="mt-10 space-y-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Open Positions</h2>
-                <span className="text-sm text-muted-foreground">Showing 0 positions</span>
               </div>
 
               <Suspense

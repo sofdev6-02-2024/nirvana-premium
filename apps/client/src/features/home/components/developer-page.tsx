@@ -11,6 +11,7 @@ import { useUserStore } from '@/features/users/store/user-store';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@clerk/nextjs';
 import { Building2, FileText } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -19,7 +20,6 @@ import { ApplicationService } from '../api/api-home';
 export default function DevPage() {
   const { user } = useUserStore();
   const { getToken } = useAuth();
-  const router = useRouter();
   const [currentTab, setCurrentTab] = useState('all');
   const [applications, setApplications] = useState<Application[]>([]);
   const [stats, setStats] = useState<ApplicationStats | null>(null);
@@ -52,7 +52,7 @@ export default function DevPage() {
   }, [user?.developerId, getToken]);
 
   if (isLoading) {
-    return <LoadingScreen />;
+    return <LoadingScreen fullScreen text="Loading home" />;
   }
 
   const filteredApplications = applications.filter((app) => {
@@ -72,13 +72,11 @@ export default function DevPage() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button
-            variant="outline"
-            onClick={() => router.push('/profile/portafolio')}
-            className="flex items-center gap-2"
-          >
-            <FileText className="w-4 h-4" />
-            Edit your profile
+          <Button variant="outline" className="flex items-center gap-2" asChild>
+            <Link href="/profile/portafolio">
+              <FileText className="w-4 h-4" />
+              Edit your profile
+            </Link>
           </Button>
         </div>
       </div>

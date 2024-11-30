@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useUserStore } from '@/features/users/store/user-store';
 import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { JobService } from '../lib/job-service';
 
@@ -15,6 +16,7 @@ export function ApplyJobButton({ jobId }: ApplyJobButtonProps) {
   const { user } = useUserStore();
   const { getToken } = useAuth();
   const router = useRouter();
+  const [isApplied, setIsApplied] = useState(false);
 
   const handleApply = async () => {
     if (!user?.developerId) {
@@ -27,26 +29,26 @@ export function ApplyJobButton({ jobId }: ApplyJobButtonProps) {
       if (!token) throw new Error('Authentication token not available');
 
       await JobService.applyToJob(jobId, user.developerId, token);
+      setIsApplied(true);
       toast.success('Application submitted successfully!');
       router.refresh();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to submit application');
+      if (
+        error instanceof Error &&
+        error.message.includes('status: 409') &&
+        error.message.includes('DeveloperAlreadyApplied')
+      ) {
+        setIsApplied(true);
+        toast.error('You have already applied to this job');
+      } else {
+        toast.error('Failed to submit application');
+      }
     }
   };
 
   return (
-    <Button size="lg" className="w-full sm:w-auto" onClick={handleApply}>
-      <span className="flex items-center justify-center gap-2">
-        Apply now
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M13 7l5 5m0 0l-5 5m5-5H6"
-          />
-        </svg>
-      </span>
+    <Button size="lg" className="w-full sm:w-auto" onClick={handleApply} disabled={isApplied}>
+      {isApplied ? 'You already applied to this job' : 'Apply now'}
     </Button>
   );
 }

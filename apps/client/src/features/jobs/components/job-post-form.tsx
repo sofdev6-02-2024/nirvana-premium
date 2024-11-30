@@ -100,7 +100,7 @@ export function JobPostForm() {
       await JobService.createJob(jobData, token);
 
       toast.success('Job created successfully!');
-      router.push('/home');
+      router.push('/job-submitted');
     } catch (error) {
       console.error('Error creating job:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to create job');

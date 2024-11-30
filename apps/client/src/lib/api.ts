@@ -48,7 +48,8 @@ export async function apiRequest<T>({
     console.log('📤 Request Body:', JSON.stringify(body, null, 2));
   }
 
-  console.log(`🔐 Authentication: ${token ? 'Token Provided' : 'No Token'}`);
+  if (token) console.log('🔐 Authentication: Token Provided');
+  if (body) console.log('📦 Request Body:', body);
 
   const options: RequestInit = {
     method,
@@ -86,6 +87,10 @@ export async function apiRequest<T>({
       const data = await response.json();
       console.log(`✅ Successful response from ${url}`, { dataPreview: data });
       return data;
+    }
+
+    if (response.status === 204) {
+      return null as T;
     }
   } catch (error) {
     console.error(`❌ API Request Failed for ${url}:`, error);
