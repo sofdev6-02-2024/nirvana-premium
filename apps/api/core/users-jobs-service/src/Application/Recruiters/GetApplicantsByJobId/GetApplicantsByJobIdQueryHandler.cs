@@ -10,7 +10,7 @@ using SkApplication.Contracts;
 using SkApplication.Responses;
 using SkDomain.Results;
 
-public class GetApplicantsByJobIdQueryHandler(IApplicationDbContext context)
+internal sealed class GetApplicantsByJobIdQueryHandler(IApplicationDbContext context)
     : IQueryHandler<GetApplicantsByJobIdQuery, Response>
 {
     public async Task<Result<Response>> Handle(
