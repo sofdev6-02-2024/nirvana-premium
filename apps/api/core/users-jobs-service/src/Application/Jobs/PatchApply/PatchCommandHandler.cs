@@ -33,6 +33,14 @@ internal sealed class PatchCommandHandler(
 
         JobDeveloper jobDeveloper = new Converter().Convert(request);
 
+        JobDeveloper? existingJobDeveloper =
+            await context.JobDevelopers.FirstOrDefaultAsync(
+                jd => jd.JobId == jobDeveloper.JobId && jd.DeveloperId == jobDeveloper.DeveloperId,
+                cancellationToken);
+
+        if (existingJobDeveloper is null)
+            return Result.Failure(
+                JobErrors.JobDeveloperNotFound(jobDeveloper.JobId, jobDeveloper.DeveloperId));
 
         jobDeveloper.UpdatedAt = DateTime.UtcNow;
 
