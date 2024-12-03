@@ -3,7 +3,7 @@ namespace Application.Jobs.PatchApply;
 using Domain.Enums;
 using FluentValidation;
 
-public sealed class Validator : AbstractValidator<PatchCommand>
+internal sealed class Validator : AbstractValidator<PatchCommand>
 {
     public Validator()
     {

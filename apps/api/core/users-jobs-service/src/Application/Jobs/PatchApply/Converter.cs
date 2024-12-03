@@ -4,7 +4,7 @@ using Domain.Enums;
 using Domain.Joins.JobDevelopers;
 using SkApplication.Contracts;
 
-public sealed class Converter : IConverter<PatchCommand, JobDeveloper>
+internal sealed class Converter : IConverter<PatchCommand, JobDeveloper>
 {
     public JobDeveloper Convert(PatchCommand from)
     {

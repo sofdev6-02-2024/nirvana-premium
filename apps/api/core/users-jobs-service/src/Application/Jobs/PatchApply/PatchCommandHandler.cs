@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using SkApplication.Contracts;
 using SkDomain.Results;
 
-public sealed class PatchCommandHandler(
+internal sealed class PatchCommandHandler(
     IApplicationDbContext context,
     IOutputCacheStore cacheStore
 ) : ICommandHandler<PatchCommand>
@@ -32,7 +32,6 @@ public sealed class PatchCommandHandler(
 
 
         JobDeveloper jobDeveloper = new Converter().Convert(request);
-
 
 
         jobDeveloper.UpdatedAt = DateTime.UtcNow;
