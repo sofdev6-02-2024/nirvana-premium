@@ -33,6 +33,8 @@ public sealed class PatchCommandHandler(
 
         JobDeveloper jobDeveloper = new Converter().Convert(request);
 
+
+
         jobDeveloper.UpdatedAt = DateTime.UtcNow;
 
         context.JobDevelopers.Update(jobDeveloper);
