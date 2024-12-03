@@ -4,6 +4,14 @@ using SkDomain.Errors;
 
 public static class JobErrors
 {
+    public static Error JobDeveloperNotFound(Guid jobId, Guid developerId)
+    {
+        return Error.NotFound(
+            "Jobs.JobDeveloperNotFound",
+            $"Appliance for Job with id {jobId} and developer with id {developerId} was not found");
+    }
+
+
     public static readonly Error NotJobsFound = Error.NotFound(
         "Jobs.NotJobsFound",
         "No jobs were found"
