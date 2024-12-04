@@ -1,5 +1,6 @@
 'use client';
 
+import LoadingScreen from '@/components/loading/loading-screen';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -11,7 +12,7 @@ import {
 } from '@/components/ui/select';
 import { X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Modality, Schedule } from '../lib/constants';
 
 export interface JobFilters {
@@ -21,7 +22,7 @@ export interface JobFilters {
   minSalary: string;
 }
 
-export function JobFilters() {
+function JobFiltersContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -125,5 +126,13 @@ export function JobFilters() {
         </div>
       )}
     </div>
+  );
+}
+
+export function JobFilters() {
+  return (
+    <Suspense fallback={<LoadingScreen />}>
+      <JobFiltersContent />
+    </Suspense>
   );
 }
