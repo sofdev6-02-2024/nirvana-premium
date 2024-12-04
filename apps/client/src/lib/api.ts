@@ -92,6 +92,8 @@ export async function apiRequest<T>({
     if (response.status === 204) {
       return null as T;
     }
+
+    throw new Error(`Unhandled response status: ${response.status}`);
   } catch (error) {
     console.error(`❌ API Request Failed for ${url}:`, error);
     throw error;

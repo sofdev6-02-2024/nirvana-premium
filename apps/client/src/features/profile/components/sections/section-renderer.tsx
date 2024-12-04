@@ -1,5 +1,7 @@
+import { cn } from '@/lib/utils';
 import { Roles } from '@/types/globals';
-import { Section, SectionType } from '../../types';
+import { createSectionStyles } from '../../lib/common-styles';
+import { ProfileTheme, Section, SectionType } from '../../types';
 import { AboutSection } from './about-section';
 import { BenefitsSection } from './benefits-section';
 import { ContactSection } from './contact-section';
@@ -14,6 +16,7 @@ export interface SectionRendererProps {
   section: Section;
   className?: string;
   role: Roles;
+  theme: ProfileTheme;
 }
 
 const SECTION_RENDERERS: Record<SectionType, React.ComponentType<SectionRendererProps>> = {
@@ -30,15 +33,20 @@ const SECTION_RENDERERS: Record<SectionType, React.ComponentType<SectionRenderer
   culture: CultureSection,
 };
 
-export function SectionRenderer(props: SectionRendererProps) {
-  const Renderer = SECTION_RENDERERS[props.section.type];
-
+export function SectionRenderer({ section, className, role, theme }: SectionRendererProps) {
+  const Renderer = SECTION_RENDERERS[section.type];
   if (!Renderer) {
-    console.error(`No renderer found for section type: ${props.section.type}`);
+    console.error(`No renderer found for section type: ${section.type}`);
     return null;
   }
 
-  return <Renderer {...props} />;
+  const styles = createSectionStyles(theme);
+
+  return (
+    <div className={cn('transition-all duration-300', className)} style={styles.container}>
+      <Renderer section={section} role={role} theme={theme} className={className} />
+    </div>
+  );
 }
 
 export function getAvailableSections(role: Roles): SectionType[] {

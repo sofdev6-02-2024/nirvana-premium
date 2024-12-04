@@ -1,57 +1,62 @@
+'use client';
+
+import { useAuth } from '@clerk/nextjs';
+import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
+import { Download, Edit2, Eye, Loader2, Palette, Plus, Save } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+
+import LoadingScreen from '@/components/loading/loading-screen';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useUserStore } from '@/features/users/store/user-store';
 import { useToast } from '@/hooks/use-toast';
-import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
-import { Edit2, Eye, Loader2, Palette, Plus, Save } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
-import { profileService } from '../../lib/profile-service';
-
+import { Roles } from '@/types/globals';
+import { loadProfileData, saveProfileData } from '../../lib/profile-service';
 import { generateSectionId } from '../../lib/section';
 import { createDefaultContent, createDefaultProfileData } from '../../lib/utils';
-import {
-  ProfileBuilderProps,
-  ProfileData,
-  ProfileTheme,
-  Section,
-  SECTION_CONSTRAINTS,
-  SectionType,
-} from '../../types';
+import { PDFExportDialog } from '../../pdf/components/pdf-export-dialog';
+import { ProfileData, ProfileTheme, Section, SECTION_CONSTRAINTS, SectionType } from '../../types';
 import { ThemeCustomizer } from '../theme/theme-customizer';
 import { AddSectionDialog } from '../ui/add-section-dialog';
 import { ProfilePreview } from '../ui/profile-preview';
 import { SectionEditor } from '../ui/section-editor';
 
-export function ProfileBuilder({ userId, role }: ProfileBuilderProps) {
+interface ProfileBuilderPageProps {
+  role: Roles;
+}
+
+export default function ProfileBuilderPage({ role }: ProfileBuilderPageProps) {
   const [data, setData] = useState<ProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(true);
   const [isAddingSectionOpen, setIsAddingSectionOpen] = useState(false);
   const [isCustomizingTheme, setIsCustomizingTheme] = useState(false);
+  const [isPDFDialogOpen, setIsPDFDialogOpen] = useState(false);
+
+  const { user } = useUserStore();
   const { toast } = useToast();
+  const { getToken } = useAuth();
+
+  const userId = role.toLowerCase() === 'developer' ? user?.developerId : user?.recruiterId;
+
   useEffect(() => {
     const loadProfile = async () => {
+      if (!userId) {
+        setIsLoading(false);
+        return;
+      }
       try {
         setIsLoading(true);
-        const draft = await profileService.getDraft(userId);
-        if (draft) {
-          setData(draft);
-          toast({
-            title: 'Draft loaded',
-            description: 'Continuing from your last saved draft.',
-          });
-          return;
-        }
-
-        const profile = await profileService.getProfile(userId);
-        setData(profile || createDefaultProfileData());
+        const loadedData = await loadProfileData(userId, role);
+        setData(loadedData || createDefaultProfileData());
       } catch (error) {
-        console.error('Failed to load profile:', error);
+        console.error('Error loading profile:', error);
         toast({
-          variant: 'destructive',
           title: 'Error loading profile',
-          description: 'Failed to load your profile. Please try again.',
+          description: 'Failed to load your profile data.',
+          variant: 'destructive',
         });
       } finally {
         setIsLoading(false);
@@ -59,22 +64,32 @@ export function ProfileBuilder({ userId, role }: ProfileBuilderProps) {
     };
 
     loadProfile();
-  }, [userId, toast]);
+  }, [userId, role, toast]);
 
-  useEffect(() => {
-    if (!data) return;
+  const handleSaveAndPublish = async () => {
+    if (!userId || !data) return;
 
-    const saveDraft = async () => {
-      try {
-        await profileService.saveDraft(userId, data);
-      } catch (error) {
-        console.error('Failed to save draft:', error);
-      }
-    };
+    try {
+      setIsSaving(true);
+      const token = await getToken();
+      if (!token) throw new Error('Authentication token not available');
 
-    const timeoutId = setTimeout(saveDraft, 1000);
-    return () => clearTimeout(timeoutId);
-  }, [data, userId]);
+      await saveProfileData(userId, role, data, token);
+      toast({
+        title: 'Profile saved',
+        description: 'Your profile has been saved and published successfully.',
+      });
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      toast({
+        title: 'Error saving profile',
+        description: 'Failed to save your profile changes.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleAddSection = useCallback(
     (type: SectionType) => {
@@ -118,30 +133,6 @@ export function ProfileBuilder({ userId, role }: ProfileBuilderProps) {
     },
     [data, toast],
   );
-
-  const handleSaveAndPublish = async () => {
-    if (!data) return;
-
-    try {
-      setIsSaving(true);
-      const published = await profileService.publishProfile(userId, data);
-      setData(published);
-      await profileService.deleteDraft(userId);
-      toast({
-        title: 'Profile published',
-        description: 'Your profile has been saved and published successfully.',
-      });
-    } catch (error) {
-      console.error('Failed to publish profile:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Failed to publish',
-        description: 'There was an error publishing your profile. Please try again.',
-      });
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
   const handleDragEnd = useCallback(
     (result: DropResult) => {
@@ -227,9 +218,15 @@ export function ProfileBuilder({ userId, role }: ProfileBuilderProps) {
   }, []);
 
   if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  if (!userId) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin" />
+      <div className="p-6 text-center">
+        <p className="text-muted-foreground">
+          {role === 'developer' ? 'Developer profile not found.' : 'Recruiter profile not found.'}
+        </p>
       </div>
     );
   }
@@ -249,7 +246,7 @@ export function ProfileBuilder({ userId, role }: ProfileBuilderProps) {
     <div className="container mx-auto py-8 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">
-          {role === 'developer' ? 'Portfolio Builder' : 'Company Profile'}
+          {role === 'developer' ? 'CV Builder' : 'Company Profile'}
         </h1>
 
         <div className="flex items-center gap-4">
@@ -287,6 +284,11 @@ export function ProfileBuilder({ userId, role }: ProfileBuilderProps) {
               </>
             )}
           </Button>
+
+          <Button variant="outline" onClick={() => setIsPDFDialogOpen(true)}>
+            <Download className="w-4 h-4 mr-2" />
+            Export PDF
+          </Button>
         </div>
       </div>
 
@@ -296,13 +298,9 @@ export function ProfileBuilder({ userId, role }: ProfileBuilderProps) {
             <DialogTitle>Customize Theme</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-[300px,1fr] gap-6">
-            <ThemeCustomizer
-              theme={data.theme}
-              sections={data.sections}
-              onChange={handleThemeChange}
-            />
+            <ThemeCustomizer theme={data.theme} onChange={handleThemeChange} />
             <div className="overflow-auto max-h-[600px]">
-              <ProfilePreview data={data} role={role} />
+              <ProfilePreview data={data} role={role} isBuilder={true} />
             </div>
           </div>
         </DialogContent>
@@ -346,6 +344,13 @@ export function ProfileBuilder({ userId, role }: ProfileBuilderProps) {
         onAdd={handleAddSection}
         role={role}
         existingSections={data.sections}
+      />
+
+      <PDFExportDialog
+        open={isPDFDialogOpen}
+        onOpenChange={setIsPDFDialogOpen}
+        data={data}
+        role={role}
       />
     </div>
   );

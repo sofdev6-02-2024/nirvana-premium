@@ -74,6 +74,7 @@ export function ProfileView({ data, role }: ProfileViewProps) {
               },
               'p-6',
             )}
+            theme={theme}
           />
         ))}
     </div>

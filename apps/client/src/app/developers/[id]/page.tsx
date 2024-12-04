@@ -1,5 +1,6 @@
 import { DeveloperProfile } from '@/features/developer/components/developer-profile';
 import { getDeveloperById } from '@/features/developer/lib/developer-service';
+import { ProfileView } from '@/features/profile/components/profile-view';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -29,6 +30,7 @@ export async function generateMetadata(
 export default async function Page({ params }: Props) {
   try {
     const developer = await getDeveloperById(params.id);
+    const profileData = developer.description ? JSON.parse(developer.description) : null;
 
     return (
       <div className="min-h-[calc(100vh-4rem)] bg-muted/10">
@@ -39,7 +41,11 @@ export default async function Page({ params }: Props) {
             </div>
 
             <div className="rounded-lg border bg-card p-6 shadow-sm">
-              <p>{developer.description}</p>
+              {profileData ? (
+                <ProfileView data={profileData} role="developer" />
+              ) : (
+                <p className="text-muted-foreground">No profile information available.</p>
+              )}
             </div>
           </div>
         </main>

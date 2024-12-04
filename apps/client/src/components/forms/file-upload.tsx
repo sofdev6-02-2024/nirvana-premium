@@ -6,13 +6,13 @@ import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import type { UploadStatus } from '@/types/upload';
 import { Upload, X } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { DropzoneOptions, FileRejection, useDropzone } from 'react-dropzone';
 import { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
 
 interface FileUploadProps<T extends FieldValues> {
   field?: Partial<Omit<ControllerRenderProps<T, Path<T>>, 'ref'>> & {
-    value?: string;
+    value?: string | File | null | undefined;
     onChange?: (url: string) => void;
   };
   onUploadError?: (error: string) => void;
@@ -30,9 +30,11 @@ export function FileUpload<T extends FieldValues>({
 }: FileUploadProps<T>) {
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>({ progress: 0 });
 
-  const value = field?.value || externalValue || '';
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const onChange = field?.onChange || externalOnChange || (() => {});
+  const value = typeof field?.value === 'string' ? field.value : externalValue || '';
+  const onChange = useMemo(
+    () => field?.onChange || externalOnChange || (() => {}),
+    [field?.onChange, externalOnChange],
+  );
 
   const onDrop = useCallback(
     async (acceptedFiles: File[], fileRejections: FileRejection[]) => {

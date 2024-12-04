@@ -10,5 +10,5 @@ export default function RecruiterProfileBuilder() {
   if (!isLoaded) return null;
   if (!user) redirect('/sign-in');
 
-  return <ProfileBuilderPage role="Recruiter" />;
+  return <ProfileBuilderPage role="recruiter" />;
 }

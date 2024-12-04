@@ -226,16 +226,20 @@ const Navbar: React.FC = () => {
           </Sheet>
 
           <div className="hidden md:flex min-h-[44px] min-w-[44px] items-center">
-            <Button
-              variant="ghost"
-              size="icon"
-              className={cn('text-muted-foreground hover:text-accent-foreground hover:bg-accent')}
-              asChild
-            >
-              <Link href="/home">
-                <HomeIcon />
-              </Link>
-            </Button>
+            {isSignedIn ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn('text-muted-foreground hover:text-accent-foreground hover:bg-accent')}
+                asChild
+              >
+                <Link href="/home">
+                  <HomeIcon />
+                </Link>
+              </Button>
+            ) : (
+              <div></div>
+            )}
             <ModeToggle />
           </div>
 

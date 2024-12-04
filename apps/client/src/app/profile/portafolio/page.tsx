@@ -10,5 +10,5 @@ export default function PortafolioPage() {
   if (!isLoaded) return null;
   if (!user) redirect('/sign-in');
 
-  return <ProfileBuilderPage role="Developer" />;
+  return <ProfileBuilderPage role="developer" />;
 }

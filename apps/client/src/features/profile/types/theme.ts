@@ -12,18 +12,12 @@ export interface ColorScheme {
   };
 }
 
-export interface LayoutConfig {
-  spacing: 'compact' | 'comfortable' | 'spacious';
-  style: 'card' | 'flat' | 'minimal';
-  maxWidth: number;
-}
-
 export interface ProfileTheme {
   template: CompanyTemplate;
   colors: ColorScheme;
   layout: {
     spacing: 'compact' | 'comfortable' | 'spacious';
-    style: 'card' | 'minimal' | 'flat';
+    style: 'card' | 'minimal' | 'flat' | 'bordered';
     maxWidth: number;
   };
 }

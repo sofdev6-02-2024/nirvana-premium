@@ -56,12 +56,9 @@ export interface SaveProfileRequest {
 }
 
 export interface ProfileBuilderProps {
-  userId: string;
   role: Roles;
   initialData?: ProfileData;
   onSave: (data: ProfileData) => Promise<void>;
-  isDraft?: boolean;
-  isPublished?: boolean;
 }
 
 export interface DevCardProps {

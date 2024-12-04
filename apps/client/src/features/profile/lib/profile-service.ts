@@ -1,65 +1,49 @@
-import { ProfileData } from '../types';
+import { getDeveloperById } from '@/features/developer/lib/developer-service';
+import { getRecruiterById } from '@/features/recruiters/lib/recruiter-service';
+import { apiRequest } from '@/lib/api';
+import { Roles } from '@/types/globals';
+import type { ProfileData } from '../types';
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export async function loadProfileData(userId: string, role: Roles): Promise<ProfileData | null> {
+  try {
+    const userData =
+      role === 'developer' ? await getDeveloperById(userId) : await getRecruiterById(userId);
 
-const profileStore: Record<string, ProfileData> = {};
+    if (!userData?.description) {
+      return null;
+    }
 
-export const profileService = {
-  getProfile: async (userId: string): Promise<ProfileData | null> => {
-    await delay(800);
-    return profileStore[userId] || null;
-  },
+    try {
+      const profileData = JSON.parse(userData.description) as ProfileData;
+      return profileData;
+    } catch (error) {
+      console.error('Invalid profile data format:', error);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error loading profile data:', error);
+    return null;
+  }
+}
 
-  saveProfile: async (userId: string, data: ProfileData): Promise<ProfileData> => {
-    await delay(1000);
+export async function saveProfileData(
+  userId: string,
+  role: Roles,
+  data: ProfileData,
+  token: string,
+): Promise<void> {
+  const endpoint =
+    role === 'developer'
+      ? `/users-jobs/developers/${userId}/description`
+      : `/users-jobs/recruiters/${userId}/about`;
 
-    const updatedProfile = {
-      ...data,
-      metadata: {
-        ...data.metadata,
-        lastUpdated: new Date().toISOString(),
-      },
-    };
+  const payload =
+    role === 'developer' ? { description: JSON.stringify(data) } : { about: JSON.stringify(data) };
 
-    profileStore[userId] = updatedProfile;
-    return updatedProfile;
-  },
-
-  saveDraft: async (userId: string, data: ProfileData): Promise<void> => {
-    await delay(500);
-    profileStore[`${userId}_draft`] = {
-      ...data,
-      metadata: {
-        ...data.metadata,
-        isDraft: true,
-        lastUpdated: new Date().toISOString(),
-      },
-    };
-  },
-
-  getDraft: async (userId: string): Promise<ProfileData | null> => {
-    await delay(500);
-    return profileStore[`${userId}_draft`] || null;
-  },
-
-  deleteDraft: async (userId: string): Promise<void> => {
-    await delay(500);
-    delete profileStore[`${userId}_draft`];
-  },
-
-  publishProfile: async (userId: string, data: ProfileData): Promise<ProfileData> => {
-    await delay(1000);
-    const publishedProfile = {
-      ...data,
-      metadata: {
-        ...data.metadata,
-        isPublished: true,
-        publishedAt: new Date().toISOString(),
-        lastUpdated: new Date().toISOString(),
-      },
-    };
-
-    profileStore[userId] = publishedProfile;
-    return publishedProfile;
-  },
-};
+  await apiRequest({
+    endpoint,
+    method: 'PATCH',
+    body: payload,
+    token,
+  });
+}

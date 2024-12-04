@@ -10,10 +10,9 @@ interface ProfilePreviewProps {
   data: ProfileData;
   role: Roles;
   isBuilder?: boolean;
-  className?: string;
 }
 
-export function ProfilePreview({ data, role, isBuilder = false, className }: ProfilePreviewProps) {
+export function ProfilePreview({ data, role, isBuilder = false }: ProfilePreviewProps) {
   const [previewSize, setPreviewSize] = useState<PreviewSize>('desktop');
 
   return (
@@ -43,19 +42,24 @@ export function ProfilePreview({ data, role, isBuilder = false, className }: Pro
           </Button>
         </div>
       )}
-
       <div
-        className={cn(
-          'mx-auto transition-all duration-300',
-          {
-            'max-w-[375px]': isBuilder && previewSize === 'mobile',
-            'max-w-[768px]': isBuilder && previewSize === 'tablet',
-            'max-w-none': !isBuilder || previewSize === 'desktop',
-          },
-          className,
-        )}
+        className={cn('transition-all duration-300', {
+          'max-w-[375px]': isBuilder && previewSize === 'mobile',
+          'max-w-[768px]': isBuilder && previewSize === 'tablet',
+          'max-w-none': !isBuilder || previewSize === 'desktop',
+        })}
+        style={{
+          backgroundColor: data.theme.colors.background,
+          color: data.theme.colors.text.primary,
+        }}
       >
-        <div className="space-y-6">
+        <div
+          className={cn('space-y-6', {
+            'space-y-4': data.theme.layout.spacing === 'compact',
+            'space-y-6': data.theme.layout.spacing === 'comfortable',
+            'space-y-8': data.theme.layout.spacing === 'spacious',
+          })}
+        >
           {data.sections
             .sort((a, b) => a.layout.order - b.layout.order)
             .map((section) => (
@@ -63,15 +67,8 @@ export function ProfilePreview({ data, role, isBuilder = false, className }: Pro
                 key={section.id}
                 section={section}
                 role={role}
-                className={cn('transition-all duration-300', {
-                  'grid gap-6': section.layout.columns > 1,
-                  'grid-cols-1':
-                    section.layout.columns === 1 || (isBuilder && previewSize === 'mobile'),
-                  'grid-cols-2':
-                    section.layout.columns === 2 && (!isBuilder || previewSize !== 'mobile'),
-                  'grid-cols-3':
-                    section.layout.columns === 3 && (!isBuilder || previewSize !== 'mobile'),
-                })}
+                theme={data.theme}
+                className={cn('transition-all duration-300', 'p-6')}
               />
             ))}
         </div>
