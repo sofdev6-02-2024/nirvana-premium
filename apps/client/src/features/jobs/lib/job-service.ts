@@ -204,7 +204,7 @@ export class JobService {
     token: string,
   ) {
     return apiRequest<void>({
-      endpoint: `${this.BASE_PATH}/status/${jobId}`,
+      endpoint: `/user-jobs/status/${jobId}`,
       method: 'PATCH',
       token,
       body: {
