@@ -31,7 +31,7 @@ internal sealed class PatchDescription : IEndpoint
 
                     Result result = await sender.Send(command, cancellationToken);
 
-                    return result.Match(() => Results.Ok(), CustomResults.Problem);
+                    return result.Match(Results.NoContent, CustomResults.Problem);
                 }
             )
             .WithTags(Tags.Developers)

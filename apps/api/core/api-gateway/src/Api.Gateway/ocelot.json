@@ -7,7 +7,7 @@
       "DownstreamPathTemplate": "/api/users-jobs/{everything}",
       "UpstreamPathTemplate": "/api/users-jobs/{everything}",
 
-      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE", "PATCH"]
     }
   ],
 

@@ -7,9 +7,9 @@ using SkDomain.Results;
 using SkWeb.Api.Endpoints;
 using SkWeb.Api.Infrastructure;
 
-public sealed class PatchApply : IEndpoint
+internal sealed class PatchApply : IEndpoint
 {
-    internal sealed class Request
+    public sealed class Request
     {
         public required Guid DeveloperId { get; init; }
         public required string Status { get; init; }
@@ -36,7 +36,7 @@ public sealed class PatchApply : IEndpoint
 
                     Result result = await sender.Send(command, cancellationToken);
 
-                    return result.Match(Results.Created, CustomResults.Problem);
+                    return result.Match(Results.NoContent, CustomResults.Problem);
                 }
             )
             .WithTags(Tags.Jobs)
