@@ -1,7 +1,6 @@
 import { RecruiterListItem } from '@/features/recruiters/components/recruiter-item';
 import { getAllRecruiters } from '@/features/recruiters/lib/recruiter-service';
 import { Metadata } from 'next';
-import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Recruiters',
@@ -25,13 +24,7 @@ export default async function RecruitersPage() {
         <section className="mx-auto mt-8 max-w-4xl lg:mt-12">
           <div className="grid gap-4 sm:gap-6">
             {recruiters.map((recruiter) => (
-              <Link
-                key={recruiter.id}
-                href={`/recruiters/${recruiter.id}`}
-                className="block transition-colors hover:bg-accent/5 rounded-lg"
-              >
-                <RecruiterListItem recruiter={recruiter} />
-              </Link>
+              <RecruiterListItem key={recruiter.id} recruiter={recruiter} />
             ))}
           </div>
         </section>

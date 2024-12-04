@@ -1,40 +1,33 @@
 'use server';
 
-import { CreateDeveloperData } from '../lib/types';
+import { DeveloperService } from '../lib/api';
 import { DeveloperFormValues } from '../lib/validations';
-
-interface CreateDeveloperResponse {
-  success: boolean;
-  error?: string;
-  data?: CreateDeveloperData;
-}
 
 export async function createDeveloper(
   userId: string,
+  token: string,
   formData: DeveloperFormValues,
-): Promise<CreateDeveloperResponse> {
+): Promise<{ success: boolean; error?: string }> {
   try {
-    const developerData = {
-      userId,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      modality: formData.modality,
-      yearsOfExperience: Number(formData.yearsOfExperience),
-      salaryExpected: Number(formData.salaryExpected),
-      location: formData.location,
-      profilePicture: formData.profilePicture || null,
-      portfolioUrl: formData.portfolioUrl || null,
-      specializationId: formData.specializationId,
-      skills: formData.skills,
-      spokenLanguages: formData.spokenLanguages,
-    };
+    await DeveloperService.createDeveloper(
+      {
+        userId,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        modality: formData.modality,
+        yearsOfExperience: Number(formData.yearsOfExperience),
+        salaryExpected: Number(formData.salaryExpected),
+        location: formData.location,
+        profilePicture: formData.profilePicture || null,
+        portfolioUrl: formData.portfolioUrl || null,
+        specializationId: formData.specializationId,
+        skills: formData.skills,
+        spokenLanguages: formData.spokenLanguages,
+      },
+      token,
+    );
 
-    console.log('Developer data prepared for API:', developerData);
-
-    return {
-      success: true,
-      data: developerData,
-    };
+    return { success: true };
   } catch (error) {
     console.error('Error in createDeveloper:', error);
     return {

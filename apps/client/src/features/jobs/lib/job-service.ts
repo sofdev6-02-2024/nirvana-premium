@@ -1,6 +1,7 @@
-import { Job } from '@/features/jobs/lib/constants';
+import { ApplicationStatus, Job } from '@/features/jobs/lib/constants';
 import { apiRequest } from '@/lib/api';
 import { notFound } from 'next/navigation';
+import { JobFormValues } from './validation';
 
 interface JobsResponse {
   items: Job[];
@@ -18,6 +19,19 @@ interface FilterParams {
   minSalary?: string;
   page?: string;
   pageSize?: string;
+}
+
+export interface CreateJobRequest {
+  title: string;
+  salaryPerHour: number;
+  schedule: 'FullTime' | 'PartTime';
+  modality: 'Remote' | 'OnSite' | 'Hybrid';
+  location: string | null;
+  description: string;
+  skills: string[];
+  languages: string[];
+  recruiterId: string;
+  specializationId: string;
 }
 
 function normalizeModality(modality: string): string {
@@ -103,12 +117,9 @@ export async function readJobs(
   totalCount: number;
 }> {
   try {
-    console.log('Fetching jobs with params:', searchParams);
-
     const response = await apiRequest<JobsResponse>({
       endpoint: '/users-jobs/jobs',
       method: 'GET',
-      revalidate: 3600,
     });
 
     const filteredJobs = filterJobs(response.items, searchParams);
@@ -118,10 +129,6 @@ export async function readJobs(
     const endIndex = startIndex + pageSize;
     const paginatedJobs = filteredJobs.slice(startIndex, endIndex);
     const totalPages = Math.ceil(totalCount / pageSize);
-
-    console.log('Filtered jobs count:', filteredJobs.length);
-    console.log('Current page:', page);
-    console.log('Total pages:', totalPages);
 
     return {
       jobs: paginatedJobs,
@@ -158,5 +165,52 @@ export async function getJobById(id: string): Promise<Job> {
   } catch (error) {
     console.error(`❌ Error fetching job ${id}:`, error);
     notFound();
+  }
+}
+
+export class JobService {
+  private static BASE_PATH = '/users-jobs/jobs';
+
+  static async createJob(data: CreateJobRequest, token: string) {
+    return apiRequest<JobFormValues>({
+      endpoint: this.BASE_PATH,
+      method: 'POST',
+      token,
+      body: data,
+    });
+  }
+
+  static async applyToJob(jobId: string, developerId: string, token: string) {
+    return apiRequest<void>({
+      endpoint: `/users-jobs/jobs/apply/${jobId}`,
+      method: 'POST',
+      token,
+      body: { developerId },
+    });
+  }
+
+  static async checkApplicationStatus(jobId: string, developerId: string, token: string) {
+    return apiRequest<{ apply: boolean }>({
+      endpoint: `${this.BASE_PATH}/${jobId}/developer/${developerId}`,
+      method: 'GET',
+      token,
+    });
+  }
+
+  static async updateApplicationStatus(
+    jobId: string,
+    developerId: string,
+    status: ApplicationStatus,
+    token: string,
+  ) {
+    return apiRequest<void>({
+      endpoint: `/users-jobs/jobs/status/${jobId}`,
+      method: 'PATCH',
+      token,
+      body: {
+        developerId,
+        status,
+      },
+    });
   }
 }

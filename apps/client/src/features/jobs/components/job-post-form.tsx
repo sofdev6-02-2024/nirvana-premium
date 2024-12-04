@@ -21,30 +21,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { getLanguages, getSkills, getSpecializations } from '@/lib/developer-api';
-import { Language, Skill, Specialization } from '@/types/dev';
-import { useUser } from '@clerk/nextjs';
+import { useUserStore } from '@/features/users/store/user-store';
+import { useFormDataStore } from '@/stores/use-form-data-store';
+import { useAuth } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react';
 import { draftToMarkdown } from 'markdown-draft-js';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { createJobPosting } from '../actions/job-actions';
+import { CreateJobRequest, JobService } from '../lib/job-service';
 import { jobFormSchema, type JobFormValues } from '../lib/validation';
 import RichTextEditor from './rich-text-editor';
 
 export function JobPostForm() {
-  const { user } = useUser();
+  const { user } = useUserStore();
+  const { getToken } = useAuth();
   const router = useRouter();
+  const { skills, specializations, languages, isLoading, loadFormData } = useFormDataStore();
   const form = useForm<JobFormValues>({
     resolver: zodResolver(jobFormSchema),
     defaultValues: {
       title: '',
       specializationId: '',
       salaryPerHour: 0,
-      schedule: 'Full Time',
+      schedule: 'FullTime',
       modality: 'Remote',
       location: '',
       description: '',
@@ -53,39 +55,9 @@ export function JobPostForm() {
     },
   });
 
-  const [skills, setSkills] = useState<Skill[]>([]);
-  const [specializations, setSpecializations] = useState<Specialization[]>([]);
-  const [languages, setLanguages] = useState<Language[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
-    let mounted = true;
-    async function loadFormData() {
-      try {
-        const [skillsData, specializationsData, languagesData] = await Promise.all([
-          getSkills(),
-          getSpecializations(),
-          getLanguages(),
-        ]);
-
-        setSkills(skillsData);
-        setSpecializations(specializationsData);
-        setLanguages(languagesData);
-      } catch (error) {
-        console.error('Error loading form data:', error);
-        toast.error('Failed to load form data. Please refresh the page.');
-      } finally {
-        if (mounted) {
-          setIsLoading(false);
-        }
-      }
-    }
-
     loadFormData();
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  }, [loadFormData]);
 
   const {
     handleSubmit,
@@ -97,32 +69,46 @@ export function JobPostForm() {
   } = form;
 
   const onSubmit = async (data: JobFormValues) => {
-    if (!user) {
-      toast.error('You must be signed in to create a job');
+    if (!user?.recruiterId) {
+      toast.error('You must be signed in as a recruiter to create a job');
       return;
     }
+
     try {
-      const result = await createJobPosting(user.id, data);
-      if (!result.success) {
-        throw new Error(result.error || 'Failed to create job');
+      const token = await getToken();
+      if (!token) {
+        throw new Error('Authentication token not available');
       }
 
-      toast.success('Job  created successfully!');
-      console.log('Submission result:', result);
+      console.log('Retrieved token:', token); // Debug log
+
+      const jobData: CreateJobRequest = {
+        title: data.title,
+        salaryPerHour: data.salaryPerHour,
+        schedule: data.schedule,
+        modality: data.modality,
+        location: data.location || null,
+        description: data.description,
+        skills: data.skills,
+        languages: data.spokenLanguages,
+        recruiterId: user.recruiterId,
+        specializationId: data.specializationId,
+      };
+
+      console.log('Submitting job data:', jobData);
+
+      await JobService.createJob(jobData, token);
+
       toast.success('Job created successfully!');
-      return <LoadingScreen fullScreen text="Redirecting to home page..." />;
-      setTimeout(() => {
-        router.push('/home');
-      }, 1200);
+      router.push('/job-submitted');
     } catch (error) {
+      console.error('Error creating job:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to create job');
     }
   };
-
   if (isLoading) {
-    return <LoadingScreen fullScreen text="Loading developer data" />;
+    return <LoadingScreen fullScreen text="Loading form data" />;
   }
-
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -231,8 +217,8 @@ export function JobPostForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Full Time">Full Time</SelectItem>
-                    <SelectItem value="Part Time">Part Time</SelectItem>
+                    <SelectItem value="FullTime">Full Time</SelectItem>
+                    <SelectItem value="PartTime">Part Time</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -254,7 +240,7 @@ export function JobPostForm() {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="Remote">Remote</SelectItem>
-                    <SelectItem value="On Site">On Site</SelectItem>
+                    <SelectItem value="OnSite">On Site</SelectItem>
                     <SelectItem value="Hybrid">Hybrid</SelectItem>
                   </SelectContent>
                 </Select>

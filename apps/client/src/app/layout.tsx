@@ -1,8 +1,10 @@
 import Navbar from '@/components/navbar';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
+import { UserProvider } from '@/features/users/components/user-provider';
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
-import { Toaster } from 'sonner';
+import { Toaster as Sonner } from 'sonner';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -28,15 +30,20 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ClerkProvider
+            dynamic
             appearance={{
               variables: {
                 colorPrimary: 'hsl(263.4, 70%, 50.4%)',
               },
             }}
+            afterSignOutUrl="/"
           >
-            <Navbar />
-            {children}
-            <Toaster />
+            <UserProvider>
+              <Navbar />
+              {children}
+              <Sonner />
+              <Toaster />
+            </UserProvider>
           </ClerkProvider>
         </ThemeProvider>
       </body>

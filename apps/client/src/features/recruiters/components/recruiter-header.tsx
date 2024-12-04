@@ -1,8 +1,6 @@
-import companyLogoUrl from '@/assets/company-logo-placeholder.png';
 import Badge from '@/components/badge';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Building2, CheckCircle, Globe, MapPin, MessageSquare, Users } from 'lucide-react';
+import { CheckCircle, Globe, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import { Recruiter } from '../lib/constant';
 
@@ -19,7 +17,7 @@ export function RecruiterDetailHeader({ recruiter }: RecruiterDetailHeaderProps)
         <div className="relative -mt-16 flex justify-between">
           <div className="relative">
             <Image
-              src={companyLogoUrl}
+              src={recruiter.profilePictureUrl}
               alt={`${recruiter.name} logo`}
               width={120}
               height={120}
@@ -30,17 +28,6 @@ export function RecruiterDetailHeader({ recruiter }: RecruiterDetailHeaderProps)
                 <CheckCircle className="h-5 w-5 text-primary" />
               </div>
             )}
-          </div>
-
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="h-10">
-              <MessageSquare className="mr-2 h-4 w-4" />
-              Contact
-            </Button>
-            <Button size="sm" className="h-10">
-              <Users className="mr-2 h-4 w-4" />
-              Follow
-            </Button>
           </div>
         </div>
 
@@ -67,27 +54,7 @@ export function RecruiterDetailHeader({ recruiter }: RecruiterDetailHeaderProps)
                   company-website.com
                 </a>
               </div>
-              <div className="flex items-center gap-1">
-                <Building2 className="h-4 w-4" />
-                <span>50-100 employees</span>
-              </div>
             </div>
-          </div>
-
-          <p className="text-base text-muted-foreground">{recruiter.description}</p>
-
-          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {[
-              { label: 'Active Jobs', value: '15' },
-              { label: 'Total Hires', value: '120+' },
-              { label: 'Response Rate', value: '94%' },
-              { label: 'Avg. Response', value: '48h' },
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-lg border bg-muted/50 p-4 text-center">
-                <div className="text-2xl font-semibold">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </div>

@@ -1,4 +1,3 @@
-// components/JobListItem.tsx
 import defaultImage from '@/assets/company-logo-placeholder.png';
 import Badge from '@/components/badge';
 import { Card } from '@/components/ui/card';
@@ -30,7 +29,6 @@ export default function JobListItem({ job, className }: JobListItemProps) {
         </div>
 
         <div className={cn('flex-grow space-y-2 sm:space-y-3')}>
-          {/* Header Section */}
           <div className="space-y-2">
             <div className="flex items-start justify-between gap-2">
               <h2 className={cn('text-lg sm:text-xl font-bold text-foreground')}>{job.title}</h2>
@@ -42,7 +40,6 @@ export default function JobListItem({ job, className }: JobListItemProps) {
               </Badge>
             </div>
 
-            {/* Job Details */}
             <div className={cn('flex flex-wrap gap-2 sm:gap-3 text-sm text-muted-foreground')}>
               <div className="flex items-center gap-1">
                 <Building2 className="h-4 w-4 flex-shrink-0" />
@@ -58,12 +55,10 @@ export default function JobListItem({ job, className }: JobListItemProps) {
             </div>
           </div>
 
-          {/* Description */}
           <p className={cn('line-clamp-2 text-sm sm:text-base text-muted-foreground')}>
             {job.description}
           </p>
 
-          {/* Footer Section */}
           <div
             className={cn(
               'flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2',

@@ -1,3 +1,4 @@
+import { ApplicantsResponse, ApplicantsStats } from '@/features/home/types/recruiter';
 import { Job } from '@/features/jobs/lib/constants';
 import { apiRequest } from '@/lib/api';
 import { PaginatedResponse, Recruiter } from '../lib/constant';
@@ -17,6 +18,7 @@ export async function readCompany(page: number = 1, pageSize: number = 10): Prom
       params: {
         page,
         pageSize,
+        timestamp: Date.now(),
       },
     });
     return response.items || [];
@@ -75,7 +77,7 @@ export async function searchRecruiters({
 export async function getJobsByRecruiter(
   recruiterId: string,
   page: number = 1,
-  pageSize: number = 10,
+  pageSize: number = 100,
 ): Promise<Job[]> {
   try {
     const response = await apiRequest<PaginatedResponse<Job>>({
@@ -91,4 +93,30 @@ export async function getJobsByRecruiter(
     console.error(`Error fetching jobs for recruiter ${recruiterId}:`, error);
     return [];
   }
+}
+
+export async function getJobApplicants(
+  recruiterId: string,
+  jobId: string,
+  token: string,
+  params?: {
+    status?: 'Published' | 'Viewed' | 'Accepted' | 'Rejected';
+    page?: number;
+    pageSize?: number;
+  },
+) {
+  return apiRequest<ApplicantsResponse>({
+    endpoint: `/users-jobs/recruiters/${recruiterId}/applicants/${jobId}`,
+    method: 'GET',
+    token,
+    params,
+  });
+}
+
+export async function getJobStats(recruiterId: string, jobId: string, token: string) {
+  return apiRequest<ApplicantsStats>({
+    endpoint: `/users-jobs/recruiters/${recruiterId}/applicants/${jobId}/stats`,
+    method: 'GET',
+    token,
+  });
 }

@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { ApplyJobButton } from '@/features/jobs/components/apply-button';
 import JobPage from '@/features/jobs/components/job-page';
 import { getJobById } from '@/features/jobs/lib/job-service';
 import RecruiterInfo from '@/features/recruiters/components/recruiter-info';
@@ -33,7 +33,6 @@ export default async function Page({ params }: Props) {
   try {
     const job = await getJobById(params.id);
     const recruiter = job.recruiterId ? await getRecruiterById(job.recruiterId) : null;
-    const applicationLink = `/api/apply/${job.id}`;
 
     return (
       <div className="min-h-[calc(100vh-4rem)] bg-muted/10">
@@ -44,24 +43,7 @@ export default async function Page({ params }: Props) {
               <div className="rounded-lg border bg-card p-6 shadow-sm">
                 <JobPage job={job} />
                 <div className="mt-6 flex justify-center border-t pt-6 lg:justify-start">
-                  <Button size="lg" className="w-full sm:w-auto">
-                    <a href={applicationLink} className="flex items-center justify-center gap-2">
-                      Apply now
-                      <svg
-                        className="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M13 7l5 5m0 0l-5 5m5-5H6"
-                        />
-                      </svg>
-                    </a>
-                  </Button>
+                  <ApplyJobButton jobId={job.id} />
                 </div>
               </div>
             </div>

@@ -11,67 +11,29 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useRegistrationStore } from '@/stores/use-registration-store';
-import { SignUp, useSignUp } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { Roles } from '@/types/globals';
+import { SignUp } from '@clerk/nextjs';
+import { useEffect, useState } from 'react';
 
 const SignUpPage = () => {
-  const router = useRouter();
-  const [selectedRole, setSelectedRole] = useState<'developer' | 'recruiter' | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [selectedRole, setSelectedRole] = useState<Roles | null>(null);
+  const [error] = useState<string | null>(null);
   const [showRoleDialog, setShowRoleDialog] = useState(false);
-  const { isLoaded, signUp } = useSignUp();
-  const { setRegistrationData } = useRegistrationStore();
 
   useEffect(() => {
-    const hasRole = localStorage.getItem('selectedRole');
+    const hasRole = localStorage.getItem('selectedRole') as Roles | null;
     if (!hasRole) {
       setShowRoleDialog(true);
     } else {
-      setSelectedRole(hasRole as 'developer' | 'recruiter');
+      setSelectedRole(hasRole);
     }
   }, []);
 
-  const handleRoleSelect = (value: 'developer' | 'recruiter') => {
-    setSelectedRole(value);
-    localStorage.setItem('selectedRole', value);
+  const handleRoleSelect = (value: Roles) => {
+    const formattedRole = (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) as Roles;
+    setSelectedRole(formattedRole);
+    localStorage.setItem('selectedRole', formattedRole);
     setShowRoleDialog(false);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isLoaded || !selectedRole) return;
-
-    try {
-      const formData = new FormData(e.target as HTMLFormElement);
-      const email = formData.get('emailAddress') as string;
-      const password = formData.get('password') as string;
-
-      const result = await signUp.create({
-        emailAddress: email,
-        password,
-        unsafeMetadata: {
-          role: selectedRole,
-          onboardingComplete: false,
-        },
-      });
-
-      setRegistrationData({
-        id: result.createdUserId!,
-        role: selectedRole,
-        email,
-      });
-
-      router.push('/onboarding/');
-    } catch (err) {
-      console.error('Error during signup:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred during signup');
-    }
-  };
-
-  const handleChangeRole = () => {
-    setShowRoleDialog(true);
   };
 
   return (
@@ -79,7 +41,7 @@ const SignUpPage = () => {
       <div className="w-full max-w-md">
         <Card className="w-full">
           <CardHeader className="space-y-2">
-            <CardTitle className="text-xl md:text-2xl">Create your account</CardTitle>
+            <CardTitle className="text-xl md:text-2xl">Select your role</CardTitle>
             <CardDescription>
               Join our platform to find opportunities or great talent
             </CardDescription>
@@ -91,7 +53,7 @@ const SignUpPage = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={handleChangeRole}
+                  onClick={() => setShowRoleDialog(true)}
                   className="text-xs hover:bg-secondary"
                 >
                   Change role
@@ -114,12 +76,12 @@ const SignUpPage = () => {
                 </DialogHeader>
                 <RadioGroup
                   defaultValue={selectedRole || undefined}
-                  onValueChange={(value) => handleRoleSelect(value as 'developer' | 'recruiter')}
+                  onValueChange={(value) => handleRoleSelect(value as Roles)}
                   className="flex flex-col space-y-3"
                 >
                   <div
                     className="flex cursor-pointer items-center space-x-3 rounded-lg border p-4 transition-colors hover:bg-accent"
-                    onClick={() => handleRoleSelect('developer')}
+                    onClick={() => handleRoleSelect('Developer')}
                   >
                     <RadioGroupItem value="developer" id="developer" className="h-5 w-5" />
                     <Label
@@ -134,7 +96,7 @@ const SignUpPage = () => {
                   </div>
                   <div
                     className="flex cursor-pointer items-center space-x-3 rounded-lg border p-4 transition-colors hover:bg-accent"
-                    onClick={() => handleRoleSelect('recruiter')}
+                    onClick={() => handleRoleSelect('Recruiter')}
                   >
                     <RadioGroupItem value="recruiter" id="recruiter" className="h-5 w-5" />
                     <Label
@@ -152,17 +114,16 @@ const SignUpPage = () => {
             </Dialog>
 
             {selectedRole && (
-              <form onSubmit={handleSubmit}>
-                <SignUp
-                  path="/sign-up"
-                  routing="path"
-                  signInUrl="/sign-in"
-                  unsafeMetadata={{
-                    role: selectedRole,
-                    onboardingComplete: false,
-                  }}
-                />
-              </form>
+              <SignUp
+                path="/sign-up"
+                routing="path"
+                signInUrl="/sign-in"
+                forceRedirectUrl="/onboarding/create"
+                unsafeMetadata={{
+                  role: selectedRole,
+                  onboardingComplete: false,
+                }}
+              />
             )}
           </CardContent>
         </Card>

@@ -37,9 +37,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { getLanguages, getSkills, getSpecializations } from '@/lib/developer-api';
+import { useUserStore } from '@/features/users/store/user-store';
 import { cn } from '@/lib/utils';
-import { Language, Skill, Specialization } from '@/types/dev';
+import { useFormDataStore } from '@/stores/use-form-data-store';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { createDeveloper } from '../actions/create-developer-actions';
@@ -48,33 +48,12 @@ import { developerFormSchema, DeveloperFormValues } from '../lib/validations';
 
 export default function DeveloperOnboardingForm() {
   const { user, isSignedIn, isLoaded } = useUser();
+  const { user: backendUser, token } = useUserStore();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
-  const [skills, setSkills] = useState<Skill[]>([]);
-  const [specializations, setSpecializations] = useState<Specialization[]>([]);
-  const [languages, setLanguages] = useState<Language[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { skills, specializations, languages, isLoading, error, loadFormData } = useFormDataStore();
 
   useEffect(() => {
-    async function loadFormData() {
-      try {
-        const [skillsData, specializationsData, languagesData] = await Promise.all([
-          getSkills(),
-          getSpecializations(),
-          getLanguages(),
-        ]);
-
-        setSkills(skillsData);
-        setSpecializations(specializationsData);
-        setLanguages(languagesData);
-      } catch (error) {
-        console.error('Error loading form data:', error);
-        toast.error('Failed to load form data. Please refresh the page.');
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
     loadFormData();
   }, []);
 
@@ -102,13 +81,13 @@ export default function DeveloperOnboardingForm() {
   } = form;
 
   const onSubmit = async (data: DeveloperFormValues) => {
-    if (!user) {
-      toast.error('You must be signed in to create a profile');
+    if (!user || !backendUser || !token) {
+      toast.error('Missing user information. Please try again.');
       return;
     }
 
     try {
-      const result = await createDeveloper(user.id, data);
+      const result = await createDeveloper(backendUser.id, token, data);
       if (!result.success) {
         throw new Error(result.error || 'Failed to create profile');
       }
@@ -121,10 +100,7 @@ export default function DeveloperOnboardingForm() {
       });
 
       toast.success('Developer profile created successfully!');
-      return <LoadingScreen fullScreen text="Redirecting to home page..." />;
-      setTimeout(() => {
-        router.push('/home');
-      }, 2000);
+      router.push('/home');
     } catch (error) {
       console.error('Error creating developer profile:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to create profile');
@@ -170,7 +146,19 @@ export default function DeveloperOnboardingForm() {
   }
 
   if (isLoading) {
-    return <LoadingScreen fullScreen text="Loading  form..." />;
+    return <LoadingScreen fullScreen text="Loading  form data..." />;
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen items-center justify-center p-4">
+        <div className="w-full max-w-md rounded-lg bg-card p-6 text-center shadow-lg">
+          <h2 className="mb-4 text-lg font-semibold">Failed to load form data</h2>
+          <p className="text-muted-foreground mb-4">{error}</p>
+          <Button onClick={() => loadFormData()}>Try Again</Button>
+        </div>
+      </div>
+    );
   }
 
   return (

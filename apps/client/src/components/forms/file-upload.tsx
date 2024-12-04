@@ -6,22 +6,35 @@ import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import type { UploadStatus } from '@/types/upload';
 import { Upload, X } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { DropzoneOptions, FileRejection, useDropzone } from 'react-dropzone';
 import { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
 
 interface FileUploadProps<T extends FieldValues> {
-  field: Omit<ControllerRenderProps<T, Path<T>>, 'ref'>;
+  field?: Partial<Omit<ControllerRenderProps<T, Path<T>>, 'ref'>> & {
+    value?: string | File | null | undefined;
+    onChange?: (url: string) => void;
+  };
   onUploadError?: (error: string) => void;
   className?: string;
+  value?: string;
+  onChange?: (url: string) => void;
 }
 
 export function FileUpload<T extends FieldValues>({
   field,
   onUploadError,
   className,
+  value: externalValue,
+  onChange: externalOnChange,
 }: FileUploadProps<T>) {
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>({ progress: 0 });
+
+  const value = typeof field?.value === 'string' ? field.value : externalValue || '';
+  const onChange = useMemo(
+    () => field?.onChange || externalOnChange || (() => {}),
+    [field?.onChange, externalOnChange],
+  );
 
   const onDrop = useCallback(
     async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -48,14 +61,14 @@ export function FileUpload<T extends FieldValues>({
         }
 
         setUploadStatus({ progress: 100, url: result.data.secure_url });
-        field.onChange(result.data.secure_url);
+        onChange(result.data.secure_url);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Upload failed';
         setUploadStatus({ progress: 0, error: errorMessage });
         onUploadError?.(errorMessage);
       }
     },
-    [field, onUploadError],
+    [onChange, onUploadError],
   );
 
   const dropzoneOptions: DropzoneOptions = {
@@ -73,7 +86,7 @@ export function FileUpload<T extends FieldValues>({
 
   const clearUpload = (): void => {
     setUploadStatus({ progress: 0 });
-    field.onChange('');
+    onChange('');
   };
 
   return (
@@ -82,7 +95,7 @@ export function FileUpload<T extends FieldValues>({
         {...getRootProps()}
         className={`p-8 border-2 border-dashed rounded-lg cursor-pointer
           ${isDragActive ? 'border-primary bg-primary/10' : 'border-gray-300'}
-          ${uploadStatus.url ? 'hidden' : 'block'}`}
+          ${uploadStatus.url || value ? 'hidden' : 'block'}`}
       >
         <input {...getInputProps()} />
         <div className="flex flex-col items-center justify-center gap-4">
@@ -96,13 +109,13 @@ export function FileUpload<T extends FieldValues>({
         </div>
       </div>
 
-      {uploadStatus.progress > 0 && !uploadStatus.url && (
+      {uploadStatus.progress > 0 && !uploadStatus.url && !value && (
         <div className="p-4">
           <Progress value={uploadStatus.progress} className="w-full" />
         </div>
       )}
 
-      {uploadStatus.url && (
+      {(uploadStatus.url || value) && (
         <div className="relative p-4">
           <button
             type="button"
@@ -112,7 +125,7 @@ export function FileUpload<T extends FieldValues>({
             <X className="w-4 h-4" />
           </button>
           <img
-            src={uploadStatus.url}
+            src={uploadStatus.url || value}
             alt="Uploaded"
             className="w-full h-48 object-cover rounded-lg"
           />

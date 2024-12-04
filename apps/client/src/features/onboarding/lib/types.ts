@@ -35,3 +35,10 @@ export interface CreateDeveloperData {
   skills: string[];
   spokenLanguages: string[];
 }
+
+export interface CreateCompanyData {
+  userId: string;
+  name: string;
+  location: string;
+  profilePicture?: string | File | null;
+}

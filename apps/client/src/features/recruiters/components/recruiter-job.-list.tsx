@@ -1,6 +1,6 @@
-import JobListItem from '@/features/jobs/components/job-list-item';
 import Link from 'next/link';
 import { getJobsByRecruiter } from '../lib/recruiter-service';
+import RecruiterJobListItem from './recruiter-job-list-item';
 
 interface RecruiterJobListProps {
   recruiterId: string;
@@ -25,7 +25,7 @@ export async function RecruiterJobList({ recruiterId }: RecruiterJobListProps) {
           href={`/jobs/${job.id}`}
           className="block transition-colors hover:bg-accent/5 rounded-lg"
         >
-          <JobListItem job={job} />
+          <RecruiterJobListItem job={job} />
         </Link>
       ))}
     </div>
