@@ -12,10 +12,7 @@ export default function Page() {
       </p>
       <div className="flex justify-center gap-4">
         <Button asChild>
-          <Link href="/">Return to Home</Link>
-        </Button>
-        <Button variant="secondary" asChild>
-          <Link href="/home">View Dashboard</Link>
+          <Link href="/home">Return to Home</Link>
         </Button>
       </div>
     </main>

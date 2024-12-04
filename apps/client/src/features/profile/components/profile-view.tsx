@@ -1,4 +1,5 @@
 'use client';
+import LoadingScreen from '@/components/loading/loading-screen';
 import { cn } from '@/lib/utils';
 import { Roles } from '@/types/globals';
 import { useEffect, useState } from 'react';
@@ -16,8 +17,13 @@ export function ProfileView({ data, role }: ProfileViewProps) {
 
   useEffect(() => {
     try {
-      const parsed = JSON.parse(data) as ProfileData;
-      setProfile(parsed);
+      const parsed = JSON.parse(data);
+
+      if (!parsed.sections || !parsed.theme || !parsed.metadata) {
+        throw new Error('Invalid profile data structure');
+      }
+
+      setProfile(parsed as ProfileData);
       setError(null);
     } catch (error) {
       console.error('Failed to parse profile data:', error);
@@ -36,7 +42,7 @@ export function ProfileView({ data, role }: ProfileViewProps) {
   if (!profile) {
     return (
       <div className="p-6 bg-muted rounded-lg text-center">
-        <p className="text-muted-foreground">Loading profile...</p>
+        <LoadingScreen />
       </div>
     );
   }
@@ -67,6 +73,7 @@ export function ProfileView({ data, role }: ProfileViewProps) {
               },
               'p-6',
             )}
+            theme={theme}
           />
         ))}
     </div>

@@ -38,7 +38,9 @@ export async function saveProfileData(
       : `/users-jobs/recruiters/${userId}/about`;
 
   const payload =
-    role === 'developer' ? { description: JSON.stringify(data) } : { about: JSON.stringify(data) };
+    role === 'developer'
+      ? { description: JSON.stringify(data) }
+      : { description: JSON.stringify(data) };
 
   await apiRequest({
     endpoint,

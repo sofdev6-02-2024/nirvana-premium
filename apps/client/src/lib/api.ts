@@ -19,7 +19,6 @@ export async function apiRequest<T>({
   method,
   body,
   token,
-  revalidate,
   params,
 }: ApiRequestOptions): Promise<T> {
   const headers: HeadersInit = {
@@ -56,11 +55,6 @@ export async function apiRequest<T>({
     headers,
     body: method !== 'GET' && body ? JSON.stringify(body) : undefined,
   };
-
-  if (revalidate !== undefined) {
-    options.next = { revalidate };
-    console.log(`🔄 Revalidation Interval: ${revalidate} seconds`);
-  }
 
   try {
     const response = await fetch(url, options);

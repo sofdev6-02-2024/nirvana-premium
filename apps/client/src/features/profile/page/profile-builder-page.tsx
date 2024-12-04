@@ -94,7 +94,9 @@ export default function ProfileBuilderPage({ role }: ProfileBuilderPageProps) {
       setIsSaving(true);
       const token = await getToken();
       if (!token) throw new Error('Authentication token not available');
-
+      console.log('Token', token);
+      console.log('Body', data);
+      console.log('user id', userId);
       await saveProfileData(userId, role, data, token);
       toast({
         title: 'Profile saved',
@@ -125,14 +127,14 @@ export default function ProfileBuilderPage({ role }: ProfileBuilderPageProps) {
               maxWidth: 1200,
             },
             colors: {
-              primary: '#4285F4',
-              secondary: '#34A853',
-              accent: '#EA4335',
-              background: '#FFFFFF',
-              surface: '#F8F9FA',
+              primary: 'hsl(24.6 95% 53.1%)', // --primary
+              secondary: 'hsl(60 4.8% 95.9%)', // --secondary
+              accent: 'hsl(60 4.8% 95.9%)', // --accent
+              background: 'hsl(0 0% 100%)', // --background
+              surface: 'hsl(60 4.8% 95.9%)', // --muted
               text: {
-                primary: '#202124',
-                secondary: '#5F6368',
+                primary: 'hsl(20 14.3% 4.1%)', // --foreground
+                secondary: 'hsl(25 5.3% 44.7%)', // --muted-foreground
               },
             },
           },

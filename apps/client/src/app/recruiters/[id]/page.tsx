@@ -29,32 +29,45 @@ export async function generateMetadata(
     };
   }
 }
-
 export default async function RecruiterProfilePage({ params }: Props) {
   const [recruiter, jobs] = await Promise.all([
     getRecruiterById(params.id),
     getJobsByRecruiter(params.id),
   ]);
-
+  console.log('Recruiter data,', recruiter);
   if (!recruiter) {
     notFound();
   }
 
   let profileData = null;
-  if (recruiter && recruiter.description) {
+
+  if (recruiter.description) {
     try {
-      profileData = JSON.parse(recruiter.description);
-    } catch (jsonError) {
-      console.warn('Invalid JSON format in recruiter.description:', jsonError);
+      console.log('Raw description:', recruiter.description);
+
+      const parsedData =
+        typeof recruiter.description === 'string'
+          ? JSON.parse(recruiter.description)
+          : recruiter.description;
+
+      console.log('Parsed data:', parsedData);
+
+      if (parsedData.sections && parsedData.theme && parsedData.metadata) {
+        profileData =
+          typeof recruiter.description === 'string'
+            ? recruiter.description
+            : JSON.stringify(parsedData);
+      } else {
+        console.warn('Description is not in the expected profile format');
+      }
+    } catch (error) {
+      console.warn('Failed to parse description:', error);
     }
   }
-
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-muted/10">
       <main className="container py-6 lg:py-10">
-        {/* Profile Header Card */}
         <div className="rounded-lg border bg-card shadow-sm">
-          {/* Company Info Section */}
           <div className="p-6 border-b">
             <div className="flex items-start gap-6">
               <Image
@@ -82,8 +95,7 @@ export default async function RecruiterProfilePage({ params }: Props) {
             </div>
           </div>
 
-          <Tabs defaultValue="jobs" className="w-full">
-            {/* Navigation Tabs */}
+          <Tabs defaultValue="about" className="w-full">
             <div className="px-6 border-b">
               <TabsList className="w-full justify-start h-auto bg-transparent p-0 space-x-6">
                 <TabsTrigger
@@ -110,7 +122,6 @@ export default async function RecruiterProfilePage({ params }: Props) {
               </TabsList>
             </div>
 
-            {/* Tab Content */}
             <div className="p-6">
               <TabsContent value="jobs" className="m-0">
                 {jobs.length > 0 ? (
@@ -128,9 +139,14 @@ export default async function RecruiterProfilePage({ params }: Props) {
 
               <TabsContent value="about" className="m-0">
                 {profileData ? (
-                  <ProfileView data={profileData} role="recruiter" />
+                  <>
+                    <div className="hidden">
+                      <pre>{JSON.stringify(profileData, null, 2)}</pre>
+                    </div>
+                    <ProfileView data={profileData} role="recruiter" />
+                  </>
                 ) : (
-                  <p className="text-muted-foreground">No company profile information available.</p>
+                  <p className="text-muted-foreground">No profile information available.</p>
                 )}
               </TabsContent>
             </div>

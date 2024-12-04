@@ -18,6 +18,7 @@ export async function readCompany(page: number = 1, pageSize: number = 10): Prom
       params: {
         page,
         pageSize,
+        timestamp: Date.now(),
       },
     });
     return response.items || [];
