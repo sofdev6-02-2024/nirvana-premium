@@ -1,4 +1,4 @@
-export const API_PATH = process.env.PUBLIC_API_PATH ?? 'http://localhost:9500';
+export const API_PATH = process.env.PUBLIC_API_PATH;
 
 interface ApiRequestOptions {
   endpoint: string;
