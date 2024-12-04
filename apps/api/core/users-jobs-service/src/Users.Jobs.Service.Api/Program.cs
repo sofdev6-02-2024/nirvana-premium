@@ -35,8 +35,14 @@ app.MapEndpoints();
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     _ = app.UseSwaggerWithUi();
+}
 
-    await app.ApplyMigrations<ApplicationDbContext>(builder.Configuration);
+await app.ApplyMigrations<ApplicationDbContext>(builder.Configuration);
+
+if (app.Environment.IsProduction())
+{
+    app.UseSwaggerWithUi();
+    app.UseHttpsRedirection();
 }
 
 app.UseHealthChecksInternal();

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: users-jobs-service-config
+type: Opaque
+stringData:
+  ConnectionStrings__DefaultConnection: "Host=postgres-service;Port=5432;Database=chamba_users_jobs_db;Username=root;Password=root;"
+  ConnectionStrings__Redis: "redis-service:6379"
+  
+  Serilog__Using: "Serilog.Sinks.Console,Serilog.Sinks.Seq"
+  Serilog__MinimumLevel__Default: "Information"
+  Serilog__MinimumLevel__Override__Microsoft: "Information"
+  Serilog__WriteTo__Console__Name: "Console"
+  Serilog__WriteTo__Seq__Name: "Seq"
+  Serilog__WriteTo__Seq__Args__ServerUrl: "http://seq-service"
+  Serilog__Enrich: "FromLogContext,WithMachineName,WithThreadId"

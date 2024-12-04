@@ -17,19 +17,28 @@ public sealed class PatchApply : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        _ = app.MapPatch("api/user-jobs/jobs/status/{jobId:guid}",
-                static async (Guid jobId, Request request, ISender sender,
-                    CancellationToken cancellationToken) =>
+        _ = app.MapPatch(
+                "api/users-jobs/jobs/status/{jobId:guid}",
+                static async (
+                    Guid jobId,
+                    Request request,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) =>
                 {
-                    PatchCommand command = new()
-                    {
-                        JobId = jobId,
-                        DeveloperId = request.DeveloperId,
-                        Status = request.Status
-                    };
+                    PatchCommand command =
+                        new()
+                        {
+                            JobId = jobId,
+                            DeveloperId = request.DeveloperId,
+                            Status = request.Status,
+                        };
+
                     Result result = await sender.Send(command, cancellationToken);
+
                     return result.Match(Results.Created, CustomResults.Problem);
-                })
+                }
+            )
             .WithTags(Tags.Jobs)
             .RequireAuthorization();
     }
