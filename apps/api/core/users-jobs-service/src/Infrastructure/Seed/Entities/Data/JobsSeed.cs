@@ -3,6 +3,9 @@ namespace Infrastructure.Seed.Entities.Data;
 using Attributes.Ids;
 using Domain.Entities.Jobs;
 using Domain.Enums;
+using Domain.Joins.JobDevelopers;
+using Domain.Joins.JobLanguages;
+using Domain.Joins.JobSkills;
 using Ids;
 using SkInfrastructure.Seed;
 
@@ -24,6 +27,24 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Remote",
                 RecruiterId = RecruitersId.One,
                 SpecializationId = SpecializationsId.SoftwareEngineer,
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -38,6 +59,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "New York",
                 RecruiterId = RecruitersId.Two,
                 SpecializationId = SpecializationsId.SoftwareEngineer,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -66,6 +106,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Los Angeles",
                 RecruiterId = RecruitersId.Three,
                 SpecializationId = SpecializationsId.Marketing,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -93,6 +152,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Seattle",
                 RecruiterId = RecruitersId.Four,
                 SpecializationId = SpecializationsId.ProjectManagement,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -106,6 +184,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Remote",
                 RecruiterId = RecruitersId.Five,
                 SpecializationId = SpecializationsId.Cybersecurity,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -119,6 +216,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Chicago",
                 RecruiterId = RecruitersId.Six,
                 SpecializationId = SpecializationsId.CloudComputing,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -132,6 +248,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Phoenix",
                 RecruiterId = RecruitersId.Six,
                 SpecializationId = SpecializationsId.DevOps,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -145,6 +280,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Miami",
                 RecruiterId = RecruitersId.Seven,
                 SpecializationId = SpecializationsId.BusinessAnalysis,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -158,6 +312,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "San Diego",
                 RecruiterId = RecruitersId.Seven,
                 SpecializationId = SpecializationsId.ContentCreation,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -171,6 +344,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Houston",
                 RecruiterId = RecruitersId.Seven,
                 SpecializationId = SpecializationsId.SoftwareEngineer,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -184,6 +376,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Orlando",
                 RecruiterId = RecruitersId.Eight,
                 SpecializationId = SpecializationsId.Marketing,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -198,6 +409,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Denver",
                 RecruiterId = RecruitersId.Nine,
                 SpecializationId = SpecializationsId.DataScience,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -212,6 +442,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Philadelphia",
                 RecruiterId = RecruitersId.Ten,
                 SpecializationId = SpecializationsId.Cybersecurity,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
             new Job
             {
@@ -225,6 +474,25 @@ internal sealed class JobsSeed() : BaseSeedEntity<Job>(DbPriority.Three)
                 Location = "Boston",
                 RecruiterId = RecruitersId.Eleven,
                 SpecializationId = SpecializationsId.Design,
+
+                JobLanguages =
+                [
+                    new JobLanguage { LanguageId = LanguagesId.Spanish },
+                    new JobLanguage { LanguageId = LanguagesId.English },
+                ],
+                JobSkills =
+                [
+                    new JobSkill { SkillId = SkillsId.Java },
+                    new JobSkill { SkillId = SkillsId.CSharp },
+                    new JobSkill { SkillId = SkillsId.Python },
+                    new JobSkill { SkillId = SkillsId.JavaScript },
+                ],
+                JobDevelopers =
+                [
+                    new JobDeveloper { DeveloperId = DevelopersId.One },
+                    new JobDeveloper { DeveloperId = DevelopersId.Fifteen },
+                    new JobDeveloper { DeveloperId = DevelopersId.Two },
+                ],
             },
         ];
     }

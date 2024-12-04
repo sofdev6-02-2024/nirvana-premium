@@ -1,14 +1,14 @@
 namespace SkInfrastructure.Persistent;
 
 using System.Reflection;
+using Configurations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Seed;
 using SkApplication.Persistent;
 using SkDomain.Entities;
 using SkDomain.Events;
-using Configurations;
-using Microsoft.Extensions.DependencyInjection;
-using Seed;
 
 public abstract class BaseApplicationDbContext(
     DbContextOptions options,
@@ -22,7 +22,6 @@ public abstract class BaseApplicationDbContext(
 
         _ = modelBuilder.HasDefaultSchema(Constants.DefaultSchema);
     }
-
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -54,10 +53,10 @@ public abstract class BaseApplicationDbContext(
         }
     }
 
-    public  async Task SeedDataAsync(IServiceScope scope)
+    public async Task SeedDataAsync(IServiceScope scope)
     {
-        IOrderedEnumerable<ISeedEntity> seedEntities = scope.ServiceProvider
-            .GetServices<ISeedEntity>()
+        IOrderedEnumerable<ISeedEntity> seedEntities = scope
+            .ServiceProvider.GetServices<ISeedEntity>()
             .OrderBy(entity => entity.Priority);
 
         foreach (ISeedEntity seedEntity in seedEntities)

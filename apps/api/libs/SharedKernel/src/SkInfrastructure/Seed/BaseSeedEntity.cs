@@ -3,8 +3,7 @@ namespace SkInfrastructure.Seed;
 using SkApplication.Persistent;
 using SkDomain.Entities;
 
-public abstract class BaseSeedEntity<T>(DbPriority priority = DbPriority.One)
-    : ISeedEntity
+public abstract class BaseSeedEntity<T>(DbPriority priority = DbPriority.One) : ISeedEntity
     where T : BaseEntity
 {
     protected abstract IEnumerable<T> GetData();

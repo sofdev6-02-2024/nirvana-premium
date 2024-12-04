@@ -18,7 +18,9 @@ internal sealed class GetAllQueryHandler(IApplicationDbContext context)
         IQueryable<Developer> query = context
             .Developers.Include(developer => developer.Specialization)
             .Include(developer => developer.Languages)
-            .Include(developer => developer.Skills);
+            .Include(developer => developer.Skills)
+            .AsSplitQuery()
+            .AsNoTracking();
 
         if (!await query.AnyAsync(cancellationToken))
         {

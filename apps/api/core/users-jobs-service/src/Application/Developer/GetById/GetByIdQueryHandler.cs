@@ -18,6 +18,8 @@ internal sealed class GetByIdQueryHandler(IApplicationDbContext context)
             .Developers.Include(developer => developer.Specialization)
             .Include(developer => developer.Languages)
             .Include(developer => developer.Skills)
+            .AsSplitQuery()
+            .AsNoTracking()
             .FirstOrDefaultAsync(
                 developer => developer.Id == request.DeveloperId,
                 cancellationToken

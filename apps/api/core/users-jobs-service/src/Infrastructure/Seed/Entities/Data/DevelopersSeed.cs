@@ -3,6 +3,8 @@ namespace Infrastructure.Seed.Entities.Data;
 using Attributes.Ids;
 using Domain.Entities.Developers;
 using Domain.Enums;
+using Domain.Joins.DeveloperLanguages;
+using Domain.Joins.DeveloperSkills;
 using Ids;
 using SkInfrastructure.Seed;
 
@@ -32,6 +34,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.SoftwareEngineer,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -47,6 +63,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.DataScience,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -62,6 +92,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.Marketing,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -77,6 +121,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.Design,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -92,6 +150,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.ProjectManagement,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -107,6 +179,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.Cybersecurity,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -122,6 +208,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.CloudComputing,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -137,6 +237,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.DevOps,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -152,6 +266,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.BusinessAnalysis,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -167,6 +295,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.ContentCreation,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -182,6 +324,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.SoftwareEngineer,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -197,6 +353,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.Design,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -212,6 +382,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.SoftwareEngineer,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -227,6 +411,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.DataScience,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
             new Developer
             {
@@ -242,6 +440,20 @@ internal sealed class DevelopersSeed() : BaseSeedEntity<Developer>(DbPriority.Tw
                 PortfolioUrl = PortfolioUrl,
                 ProfilePictureUrl = ProfilePictureUrl,
                 SpecializationId = SpecializationsId.DevOps,
+                DeveloperLanguages =
+                [
+                    new DeveloperLanguage { LanguageId = LanguagesId.English },
+                    new DeveloperLanguage { LanguageId = LanguagesId.Spanish },
+                    new DeveloperLanguage { LanguageId = LanguagesId.French },
+                ],
+                DeveloperSkills =
+                [
+                    new DeveloperSkill { SkillId = SkillsId.CSharp },
+                    new DeveloperSkill { SkillId = SkillsId.Java },
+                    new DeveloperSkill { SkillId = SkillsId.Html },
+                    new DeveloperSkill { SkillId = SkillsId.JavaScript },
+                    new DeveloperSkill { SkillId = SkillsId.Css },
+                ],
             },
         ];
     }
