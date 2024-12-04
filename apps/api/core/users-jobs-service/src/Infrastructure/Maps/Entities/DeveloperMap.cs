@@ -38,11 +38,7 @@ internal sealed class DeveloperMap : BaseEntityMap<Developer>
             .HasDefaultValue(null)
             .ValueGeneratedOnAdd();
 
-        _ = builder
-            .Property(static u => u.Description)
-            .HasMaxLength(500)
-            .HasDefaultValue(null)
-            .ValueGeneratedOnAdd();
+        _ = builder.Property(static u => u.Description).HasDefaultValue(null).ValueGeneratedOnAdd();
 
         _ = builder
             .HasMany(static d => d.Jobs)

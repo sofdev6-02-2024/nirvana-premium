@@ -18,11 +18,7 @@ internal sealed class RecruiterMap : BaseEntityMap<Recruiter>
             .HasDefaultValue(null)
             .ValueGeneratedOnAdd();
 
-        _ = builder
-            .Property(static r => r.Description)
-            .HasMaxLength(500)
-            .HasDefaultValue(null)
-            .ValueGeneratedOnAdd();
+        _ = builder.Property(static r => r.Description).HasDefaultValue(null).ValueGeneratedOnAdd();
 
         _ = builder
             .Property(static r => r.ProfilePictureUrl)

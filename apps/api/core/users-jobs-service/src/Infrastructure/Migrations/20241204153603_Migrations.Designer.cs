@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241125150047_Migrations")]
+    [Migration("20241204153603_Migrations")]
     partial class Migrations
     {
         /// <inheritdoc />
@@ -338,8 +338,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("text")
                         .HasColumnName("description");
 
                     b.Property<bool>("IsActive")
@@ -512,8 +511,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("text")
                         .HasColumnName("description");
 
                     b.Property<bool>("IsActive")

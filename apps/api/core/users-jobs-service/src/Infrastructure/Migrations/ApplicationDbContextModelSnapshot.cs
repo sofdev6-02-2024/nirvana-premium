@@ -335,8 +335,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("text")
                         .HasColumnName("description");
 
                     b.Property<bool>("IsActive")
@@ -509,8 +508,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("text")
                         .HasColumnName("description");
 
                     b.Property<bool>("IsActive")

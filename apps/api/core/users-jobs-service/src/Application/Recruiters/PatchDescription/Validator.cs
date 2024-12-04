@@ -10,8 +10,6 @@ internal sealed class Validator : AbstractValidator<PatchDescriptionCommand>
             .NotEmpty()
             .WithMessage("The Description should not be empty")
             .NotNull()
-            .WithMessage("The Description is required")
-            .MaximumLength(400)
-            .WithMessage("The Description should not exceed 400 characters");
+            .WithMessage("The Description is required");
     }
 }
