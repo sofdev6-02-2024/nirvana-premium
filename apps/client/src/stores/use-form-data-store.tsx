@@ -1,4 +1,3 @@
-// stores/use-form-data-store.ts
 import { getLanguages, getSkills, getSpecializations } from '@/lib/developer-api';
 import { Language, Skill, Specialization } from '@/types/dev';
 import { create } from 'zustand';

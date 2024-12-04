@@ -106,3 +106,15 @@ export type SectionContent =
   | MissionContent
   | TeamContent
   | CultureContent;
+
+export type SectionContentMap = {
+  about: AboutContent;
+  skills: SkillContent;
+  experience: ExperienceContent;
+  projects: ProjectContent;
+  contact: ContactContent;
+  mission: MissionContent;
+  benefits: BenefitsContent;
+  team: TeamContent;
+  culture: CultureContent;
+};

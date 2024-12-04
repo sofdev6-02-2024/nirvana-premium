@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Draggable } from '@hello-pangea/dnd';
 import { Columns, Columns2, Columns3, GripVertical, Trash2 } from 'lucide-react';
-import { Section, SECTION_CONSTRAINTS, SectionType } from '../../types';
+import { Section, SECTION_CONSTRAINTS, SectionContent, SectionContentMap } from '../../types';
 import {
   AboutEditor,
   BenefitsEditor,
@@ -22,7 +22,14 @@ interface SectionEditorProps {
   onDelete: () => void;
 }
 
-const SECTION_EDITORS: Record<SectionType, React.ComponentType<any>> = {
+type SectionEditorComponentProps<T extends keyof SectionContentMap> = {
+  content: SectionContentMap[T];
+  onChange: (content: SectionContentMap[T]) => void;
+};
+
+const SECTION_EDITORS: {
+  [K in keyof SectionContentMap]: React.ComponentType<SectionEditorComponentProps<K>>;
+} = {
   about: AboutEditor,
   skills: SkillsEditor,
   experience: ExperienceEditor,
@@ -33,7 +40,6 @@ const SECTION_EDITORS: Record<SectionType, React.ComponentType<any>> = {
   team: TeamEditor,
   culture: CultureEditor,
 };
-
 export function SectionEditor({ section, index, onUpdate, onDelete }: SectionEditorProps) {
   const Editor = SECTION_EDITORS[section.type];
   const constraint = SECTION_CONSTRAINTS[section.type];
@@ -91,7 +97,10 @@ export function SectionEditor({ section, index, onUpdate, onDelete }: SectionEdi
               </div>
             </div>
 
-            <Editor content={section.content} onChange={(content) => onUpdate({ content })} />
+            <Editor
+              content={section.content as Extract<SectionContent, { type: typeof section.type }>}
+              onChange={(content) => onUpdate({ content })}
+            />
           </Card>
         </div>
       )}
