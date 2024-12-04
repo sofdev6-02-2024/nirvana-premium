@@ -1,6 +1,6 @@
 'use client';
 
-import { ProfileBuilder } from '@/features/profile/components/profile-builder';
+import ProfileBuilderPage from '@/features/profile/page/profile-builder-page';
 import { useUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 
@@ -10,5 +10,5 @@ export default function RecruiterProfileBuilder() {
   if (!isLoaded) return null;
   if (!user) redirect('/sign-in');
 
-  return <ProfileBuilder role="Recruiter" />;
+  return <ProfileBuilderPage role="Recruiter" />;
 }
