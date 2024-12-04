@@ -48,10 +48,6 @@ export function ProfilePreview({ data, role, isBuilder = false }: ProfilePreview
           'max-w-[768px]': isBuilder && previewSize === 'tablet',
           'max-w-none': !isBuilder || previewSize === 'desktop',
         })}
-        style={{
-          backgroundColor: data.theme.colors.background,
-          color: data.theme.colors.text.primary,
-        }}
       >
         <div
           className={cn('space-y-6', {

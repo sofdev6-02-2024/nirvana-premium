@@ -34,7 +34,7 @@ export async function saveProfileData(
 ): Promise<void> {
   const endpoint =
     role === 'developer'
-      ? `/users-jobs/developers/${userId}/description`
+      ? `/users-jobs/developers/${userId}/about`
       : `/users-jobs/recruiters/${userId}/about`;
 
   const payload =

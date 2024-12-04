@@ -232,6 +232,7 @@ const Navbar: React.FC = () => {
                 size="icon"
                 className={cn('text-muted-foreground hover:text-accent-foreground hover:bg-accent')}
                 asChild
+                aria-label="Home"
               >
                 <Link href="/home">
                   <HomeIcon />

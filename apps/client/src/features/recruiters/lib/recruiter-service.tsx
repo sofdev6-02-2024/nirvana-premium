@@ -76,7 +76,7 @@ export async function searchRecruiters({
 export async function getJobsByRecruiter(
   recruiterId: string,
   page: number = 1,
-  pageSize: number = 10,
+  pageSize: number = 100,
 ): Promise<Job[]> {
   try {
     const response = await apiRequest<PaginatedResponse<Job>>({

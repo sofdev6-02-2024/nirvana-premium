@@ -22,6 +22,13 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { ApplicantsStats, JobApplicant } from '../types/recruiter';
 
+type TabValue = 'all' | 'pending' | 'accepted' | 'rejected';
+const tabToStatusMap: Record<Exclude<TabValue, 'all'>, ApplicationStatus> = {
+  pending: 'Published',
+  accepted: 'Accepted',
+  rejected: 'Rejected',
+};
+
 export default function RecruiterHome() {
   const { user } = useUserStore();
   const { getToken } = useAuth();
@@ -31,6 +38,7 @@ export default function RecruiterHome() {
   const [applicants, setApplicants] = useState<JobApplicant[]>([]);
   const [stats, setStats] = useState<ApplicantsStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<TabValue>('all');
 
   useEffect(() => {
     loadInitialData();
@@ -54,7 +62,6 @@ export default function RecruiterHome() {
       }
     } catch (error) {
       console.error('Error loading data:', error);
-      toast.error('Failed to load data');
     } finally {
       setIsLoading(false);
     }
@@ -66,16 +73,43 @@ export default function RecruiterHome() {
     try {
       const token = await getToken();
       if (!token) throw new Error('Authentication token not available');
-      console.log(token);
+
       await JobService.updateApplicationStatus(selectedJob, developerId, newStatus, token);
 
-      await loadJobDetails(selectedJob);
+      setApplicants((prevApplicants) =>
+        prevApplicants.map((applicant) =>
+          applicant.developerId === developerId ? { ...applicant, status: newStatus } : applicant,
+        ),
+      );
+
+      if (stats) {
+        const updatedStats = { ...stats };
+        const prevApplicant = applicants.find((a) => a.developerId === developerId);
+        if (prevApplicant) {
+          if (prevApplicant.status === 'Published') updatedStats.pending--;
+          if (prevApplicant.status === 'Accepted') updatedStats.accepted--;
+        }
+        if (newStatus === 'Published') updatedStats.pending++;
+        if (newStatus === 'Accepted') updatedStats.accepted++;
+        setStats(updatedStats);
+      }
+
       toast.success(`Application ${newStatus.toLowerCase()}`);
     } catch (error) {
       console.error('Error updating status:', error);
       toast.error('Failed to update application status');
     }
   };
+
+  const getFilteredApplicants = (tabValue: TabValue) => {
+    if (tabValue === 'all') return applicants;
+    const status = tabToStatusMap[tabValue as Exclude<TabValue, 'all'>];
+    return applicants.filter((applicant) => applicant.status === status);
+  };
+
+  if (isLoading) {
+    return <LoadingScreen text="Loading..." />;
+  }
 
   const loadJobDetails = async (jobId: string) => {
     if (!user?.recruiterId) return;
@@ -157,35 +191,36 @@ export default function RecruiterHome() {
         <Card className="lg:col-span-2 p-6">
           <h2 className="text-lg font-semibold mb-4">Applications</h2>
           {selectedJob ? (
-            <Tabs defaultValue="all">
+            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TabValue)}>
               <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="pending">Pending</TabsTrigger>
-                <TabsTrigger value="accepted">Accepted</TabsTrigger>
-                <TabsTrigger value="rejected">Rejected</TabsTrigger>
+                <TabsTrigger value="all">All ({applicants.length})</TabsTrigger>
+                <TabsTrigger value="pending">
+                  Pending ({applicants.filter((a) => a.status === 'Published').length})
+                </TabsTrigger>
+                <TabsTrigger value="accepted">
+                  Accepted ({applicants.filter((a) => a.status === 'Accepted').length})
+                </TabsTrigger>
+                <TabsTrigger value="rejected">
+                  Rejected ({applicants.filter((a) => a.status === 'Rejected').length})
+                </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="all" className="mt-6 space-y-4">
-                {applicants.map((applicant) => (
-                  <ApplicantCard
-                    key={applicant.developerId}
-                    applicant={applicant}
-                    onStatusChange={(status) => handleStatusChange(applicant.developerId, status)}
-                  />
-                ))}
-              </TabsContent>
-
-              <TabsContent value="pending" className="mt-6 space-y-4">
-                {applicants
-                  .filter((a) => a.status === 'Published')
-                  .map((applicant) => (
+              {(['all', 'pending', 'accepted', 'rejected'] as const).map((tab) => (
+                <TabsContent key={tab} value={tab} className="mt-6 space-y-4">
+                  {getFilteredApplicants(tab).map((applicant) => (
                     <ApplicantCard
                       key={applicant.developerId}
                       applicant={applicant}
                       onStatusChange={(status) => handleStatusChange(applicant.developerId, status)}
                     />
                   ))}
-              </TabsContent>
+                  {getFilteredApplicants(tab).length === 0 && (
+                    <div className="text-center py-8 text-muted-foreground">
+                      No {tab === 'all' ? '' : tab} applications found
+                    </div>
+                  )}
+                </TabsContent>
+              ))}
             </Tabs>
           ) : (
             <div className="text-center py-8 text-muted-foreground">

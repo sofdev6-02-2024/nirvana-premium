@@ -200,16 +200,16 @@ export class JobService {
   static async updateApplicationStatus(
     jobId: string,
     developerId: string,
-    newStatus: ApplicationStatus,
+    status: ApplicationStatus,
     token: string,
   ) {
     return apiRequest<void>({
-      endpoint: `/user-jobs/status/${jobId}`,
+      endpoint: `/users-jobs/jobs/status/${jobId}`,
       method: 'PATCH',
       token,
       body: {
         developerId,
-        newStatus,
+        status,
       },
     });
   }

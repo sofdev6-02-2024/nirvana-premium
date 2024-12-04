@@ -1,3 +1,4 @@
+'use client';
 import { cn } from '@/lib/utils';
 import { Roles } from '@/types/globals';
 import { useEffect, useState } from 'react';
@@ -49,14 +50,6 @@ export function ProfileView({ data, role }: ProfileViewProps) {
         'space-y-6': theme.layout.spacing === 'comfortable',
         'space-y-8': theme.layout.spacing === 'spacious',
       })}
-      style={
-        {
-          maxWidth: theme.layout.maxWidth,
-          '--color-primary': theme.colors.primary,
-          '--color-secondary': theme.colors.secondary,
-          '--color-accent': theme.colors.accent,
-        } as React.CSSProperties
-      }
     >
       {sections
         .sort((a, b) => a.layout.order - b.layout.order)
@@ -74,7 +67,6 @@ export function ProfileView({ data, role }: ProfileViewProps) {
               },
               'p-6',
             )}
-            theme={theme}
           />
         ))}
     </div>

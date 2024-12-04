@@ -30,8 +30,14 @@ export async function generateMetadata(
 export default async function Page({ params }: Props) {
   try {
     const developer = await getDeveloperById(params.id);
-    const profileData = developer.description ? JSON.parse(developer.description) : null;
-
+    let profileData = null;
+    if (developer.description) {
+      try {
+        profileData = JSON.parse(developer.description);
+      } catch (jsonError) {
+        console.warn('Invalid JSON format in developer.description:', jsonError);
+      }
+    }
     return (
       <div className="min-h-[calc(100vh-4rem)] bg-muted/10">
         <main className="container py-6 lg:py-10">
