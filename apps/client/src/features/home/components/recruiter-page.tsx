@@ -6,12 +6,12 @@ import LoadingScreen from '@/components/loading/loading-screen';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Job } from '@/features/jobs/lib/constants';
+import { ApplicationStatus, Job } from '@/features/jobs/lib/constants';
+import { JobService } from '@/features/jobs/lib/job-service';
 import {
   getJobApplicants,
   getJobsByRecruiter,
   getJobStats,
-  updateApplicationStatus,
 } from '@/features/recruiters/lib/recruiter-service';
 import { useUserStore } from '@/features/users/store/user-store';
 import { cn } from '@/lib/utils';
@@ -60,6 +60,23 @@ export default function RecruiterHome() {
     }
   };
 
+  const handleStatusChange = async (developerId: string, newStatus: ApplicationStatus) => {
+    if (!selectedJob || !user?.recruiterId) return;
+
+    try {
+      const token = await getToken();
+      if (!token) throw new Error('Authentication token not available');
+      console.log(token);
+      await JobService.updateApplicationStatus(selectedJob, developerId, newStatus, token);
+
+      await loadJobDetails(selectedJob);
+      toast.success(`Application ${newStatus.toLowerCase()}`);
+    } catch (error) {
+      console.error('Error updating status:', error);
+      toast.error('Failed to update application status');
+    }
+  };
+
   const loadJobDetails = async (jobId: string) => {
     if (!user?.recruiterId) return;
 
@@ -77,23 +94,6 @@ export default function RecruiterHome() {
     } catch (error) {
       console.error('Error loading job details:', error);
       toast.error('Failed to load job details');
-    }
-  };
-
-  const handleStatusChange = async (developerId: string, status: JobApplicant['status']) => {
-    if (!user?.recruiterId || !selectedJob) return;
-
-    try {
-      const token = await getToken();
-      if (!token) throw new Error('Authentication token not available');
-
-      await updateApplicationStatus(user.recruiterId, selectedJob, developerId, status, token);
-
-      await loadJobDetails(selectedJob);
-      toast.success(`Application ${status.toLowerCase()}`);
-    } catch (error) {
-      console.error('Error updating status:', error);
-      toast.error('Failed to update application status');
     }
   };
 
@@ -170,16 +170,9 @@ export default function RecruiterHome() {
                   <ApplicantCard
                     key={applicant.developerId}
                     applicant={applicant}
-                    onStatusChange={async (status) => {
-                      toast.success(`Status updated to ${status}`);
-                    }}
+                    onStatusChange={(status) => handleStatusChange(applicant.developerId, status)}
                   />
                 ))}
-                {applicants.length === 0 && (
-                  <div className="text-center py-8 text-muted-foreground">
-                    No applications found
-                  </div>
-                )}
               </TabsContent>
 
               <TabsContent value="pending" className="mt-6 space-y-4">
@@ -282,14 +275,15 @@ function JobCard({
     </div>
   );
 }
-function ApplicantCard({
-  applicant,
-  onStatusChange,
-}: {
+
+interface ApplicantCardProps {
   applicant: JobApplicant;
-  onStatusChange: (status: JobApplicant['status']) => Promise<void>;
-}) {
+  onStatusChange: (status: JobApplicant['status']) => void;
+}
+
+function ApplicantCard({ applicant, onStatusChange }: ApplicantCardProps) {
   const router = useRouter();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   return (
     <Card>
@@ -297,7 +291,7 @@ function ApplicantCard({
         <div className="flex items-start justify-between">
           <div className="flex gap-4">
             <button
-              onClick={() => router.push(`/developer/${applicant.developerId}`)}
+              onClick={() => router.push(`/developers/${applicant.developerId}`)}
               className="focus:outline-none focus:ring-2 focus:ring-primary rounded-full"
             >
               {applicant.developerProfileUrl ? (
@@ -314,7 +308,7 @@ function ApplicantCard({
             </button>
             <div>
               <button
-                onClick={() => router.push(`/developer/${applicant.developerId}`)}
+                onClick={() => router.push(`/developers/${applicant.developerId}`)}
                 className="font-semibold hover:text-primary text-left"
               >
                 {applicant.developerName} {applicant.developerLastName}
@@ -329,19 +323,27 @@ function ApplicantCard({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => onStatusChange('Accepted')}
-              disabled={applicant.status === 'Accepted'}
+              onClick={async () => {
+                setIsUpdating(true);
+                await onStatusChange('Accepted');
+                setIsUpdating(false);
+              }}
+              disabled={applicant.status === 'Accepted' || isUpdating}
             >
-              Accept
+              {isUpdating ? 'Updating...' : 'Accept'}
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => onStatusChange('Rejected')}
-              disabled={applicant.status === 'Rejected'}
+              onClick={async () => {
+                setIsUpdating(true);
+                await onStatusChange('Rejected');
+                setIsUpdating(false);
+              }}
+              disabled={applicant.status === 'Rejected' || isUpdating}
               className="text-destructive hover:text-destructive"
             >
-              Reject
+              {isUpdating ? 'Updating...' : 'Reject'}
             </Button>
           </div>
         </div>

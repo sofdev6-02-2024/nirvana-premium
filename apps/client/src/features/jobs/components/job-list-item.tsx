@@ -1,107 +1,82 @@
+import defaultImage from '@/assets/company-logo-placeholder.png';
 import Badge from '@/components/badge';
 import { Card } from '@/components/ui/card';
-import { Developer } from '@/features/developer/types/developer';
-import { cn } from '@/lib/utils';
-import { Building2, Clock, Code2, Globe, MapPin } from 'lucide-react';
+import { Job } from '@/features/jobs/lib/constants';
+import { cn, formatMoney, relativeDate } from '@/lib/utils';
+import { Banknote, Building2, Clock, MapPin } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 
-interface DeveloperCardProps {
-  developer: Developer;
+interface JobListItemProps {
+  job: Job;
   className?: string;
 }
 
-export default function DeveloperCard({ developer, className }: DeveloperCardProps) {
+export default function JobListItem({ job, className }: JobListItemProps) {
   return (
-    <Link href={`/developers/${developer.id}`}>
-      <Card
-        className={cn(
-          'transition-all hover:shadow-md border-border/50',
-          'group relative overflow-hidden',
-          className,
-        )}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+    <Card className={cn('group transition-all hover:shadow-md', className)}>
+      <div className={cn('flex flex-col sm:flex-row w-full gap-4 sm:gap-5 p-4 sm:p-6')}>
+        <div className="flex justify-center sm:justify-start">
+          <Image
+            src={defaultImage || job.recruiterLogo}
+            alt={`${job.title} company logo`}
+            width={80}
+            height={80}
+            className={cn(
+              'rounded-xl border border-border bg-background shadow-sm',
+              'sm:w-[130px] sm:h-[130px] w-[80px] h-[80px] object-cover',
+            )}
+          />
+        </div>
 
-        <div className="relative flex flex-col sm:flex-row w-full gap-4 sm:gap-5 p-4 sm:p-6">
-          <div className="relative flex-shrink-0">
-            <div className="relative h-16 w-16 sm:h-20 sm:w-20">
-              <Image
-                src={developer.profilePictureUrl}
-                alt={`${developer.name} ${developer.lastName}`}
-                width={80}
-                height={80}
-                className={cn(
-                  'h-full w-full rounded-lg object-cover',
-                  'border-2 border-border bg-background',
-                  'transition-transform group-hover:scale-105',
-                )}
-              />
+        <div className={cn('flex-grow space-y-2 sm:space-y-3')}>
+          <div className="space-y-2">
+            <div className="flex items-start justify-between gap-2">
+              <h2 className={cn('text-lg sm:text-xl font-bold text-foreground')}>{job.title}</h2>
+              <Badge
+                variant={job.status === 'Open' ? 'success' : 'secondary'}
+                className="flex-shrink-0 mt-1"
+              >
+                {job.status}
+              </Badge>
+            </div>
+
+            <div className={cn('flex flex-wrap gap-2 sm:gap-3 text-sm text-muted-foreground')}>
+              <div className="flex items-center gap-1">
+                <Building2 className="h-4 w-4 flex-shrink-0" />
+                <span>{job.schedule}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <MapPin className="h-4 w-4 flex-shrink-0" />
+                <span>{job.location}</span>
+              </div>
+              <Badge variant="secondary" className="flex-shrink-0">
+                {job.modality}
+              </Badge>
             </div>
           </div>
 
-          <div className="flex-1 min-w-0 space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="font-semibold text-foreground truncate">
-                    {developer.name} {developer.lastName}
-                  </h3>
-                  <Badge variant="secondary" className="flex items-center gap-1 h-5 px-2">
-                    <span className="text-xs">${developer.salaryPerHourExpected}/hr</span>
-                  </Badge>
-                </div>
-                <div
-                  className={cn('flex items-center gap-2 text-sm text-muted-foreground flex-wrap')}
-                >
-                  <div className="flex items-center gap-1">
-                    <Building2 className="h-4 w-4 flex-shrink-0" />
-                    <span className="truncate">{developer.specialization.name}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4 flex-shrink-0" />
-                    <span className="truncate">{developer.location}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="h-4 w-4 flex-shrink-0" />
-                    <span className="truncate">
-                      {developer.yearsOfExperience} years of experience
-                    </span>
-                  </div>
-                </div>
-              </div>
+          <p className={cn('line-clamp-2 text-sm sm:text-base text-muted-foreground')}>
+            {job.description}
+          </p>
+
+          <div
+            className={cn(
+              'flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2',
+              'text-sm text-muted-foreground',
+            )}
+          >
+            <div className={cn('flex items-center gap-2')}>
+              <Banknote className="h-4 w-4 flex-shrink-0" />
+              <span>{formatMoney(job.salaryPerHour)} / hour</span>
             </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Code2 className="h-4 w-4 text-primary/70" />
-                <span className="text-sm font-medium">Skills</span>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {developer.skills.map((skill) => (
-                  <Badge key={skill.id} variant="secondary" className="text-xs">
-                    {skill.name}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Globe className="h-4 w-4 text-primary/70" />
-                <span className="text-sm font-medium">Languages</span>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {developer.spokenLanguages.map((language) => (
-                  <Badge key={language.id} variant="outline" className="text-xs">
-                    {language.name}
-                  </Badge>
-                ))}
-              </div>
+            <div className={cn('flex items-center gap-2')}>
+              <Clock className="h-4 w-4 flex-shrink-0" />
+              <span>Posted {relativeDate(new Date(job.createdAt))}</span>
             </div>
           </div>
         </div>
-      </Card>
-    </Link>
+      </div>
+    </Card>
   );
 }

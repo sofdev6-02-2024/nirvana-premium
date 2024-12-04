@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { useUserStore } from '@/features/users/store/user-store';
 import { cn } from '@/lib/utils';
 import { UserButton, useUser } from '@clerk/nextjs';
-import { Briefcase, Building2, Code2, LucideIcon, Menu, Plus } from 'lucide-react';
+import { Briefcase, Building2, Code2, HomeIcon, LucideIcon, Menu, Plus } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -226,6 +226,16 @@ const Navbar: React.FC = () => {
           </Sheet>
 
           <div className="hidden md:flex min-h-[44px] min-w-[44px] items-center">
+            <Button
+              variant="ghost"
+              size="icon"
+              className={cn('text-muted-foreground hover:text-accent-foreground hover:bg-accent')}
+              asChild
+            >
+              <Link href="/home">
+                <HomeIcon />
+              </Link>
+            </Button>
             <ModeToggle />
           </div>
 

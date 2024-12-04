@@ -119,19 +119,3 @@ export async function getJobStats(recruiterId: string, jobId: string, token: str
     token,
   });
 }
-
-export async function updateApplicationStatus(
-  recruiterId: string,
-  jobId: string,
-  developerId: string,
-  status: 'Published' | 'Viewed' | 'Accepted' | 'Rejected',
-  token: string,
-) {
-  console.log(token);
-  return apiRequest<void>({
-    endpoint: `/users-jobs/recruiters/${recruiterId}/applicants/${jobId}/${developerId}/status`,
-    method: 'PUT',
-    token,
-    body: { status },
-  });
-}

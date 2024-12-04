@@ -32,3 +32,5 @@ export interface JobFormData {
   languages: string[];
   specializationId: string;
 }
+
+export type ApplicationStatus = 'Published' | 'Viewed' | 'Accepted' | 'Rejected';

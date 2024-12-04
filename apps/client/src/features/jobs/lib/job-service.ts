@@ -1,4 +1,4 @@
-import { Job } from '@/features/jobs/lib/constants';
+import { ApplicationStatus, Job } from '@/features/jobs/lib/constants';
 import { apiRequest } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import { JobFormValues } from './validation';
@@ -186,6 +186,31 @@ export class JobService {
       method: 'POST',
       token,
       body: { developerId },
+    });
+  }
+
+  static async checkApplicationStatus(jobId: string, developerId: string, token: string) {
+    return apiRequest<{ apply: boolean }>({
+      endpoint: `${this.BASE_PATH}/${jobId}/developer/${developerId}`,
+      method: 'GET',
+      token,
+    });
+  }
+
+  static async updateApplicationStatus(
+    jobId: string,
+    developerId: string,
+    newStatus: ApplicationStatus,
+    token: string,
+  ) {
+    return apiRequest<void>({
+      endpoint: `${this.BASE_PATH}/status/${jobId}`,
+      method: 'PATCH',
+      token,
+      body: {
+        developerId,
+        newStatus,
+      },
     });
   }
 }
